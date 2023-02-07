@@ -27,6 +27,20 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return MaterialApp(
+      builder: (context, widget) {
+        Widget error = const
+        Text(
+          '예외오류가 발생했습니다. 이전버튼을 클릭하세요.',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold,  fontSize: 20, color: Colors.white),
+        );
+        if (widget is Scaffold || widget is Navigator) {
+          error = Scaffold(body: Center(child: error));
+        }
+        ErrorWidget.builder = (errorDetails) => error;
+        if (widget != null) return widget;
+        throw ('widget is null');
+      },
       scrollBehavior: MyCustomeScrollBehavior(),
       title: APP_NAME,
       debugShowCheckedModeBanner: false,

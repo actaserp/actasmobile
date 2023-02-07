@@ -4,20 +4,21 @@ import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/coupon_model.dart';
 import 'package:actasm/model/app01/e401list_model.dart';
-import 'package:actasm/ui/home/coupon_detail.dart';
+import 'package:actasm/ui/home/appPage02_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import '../../model/app01/e401list_model.dart';
+import '../account/set_address/edit_address.dart';
 
-class CouponPage extends StatefulWidget {
+class AppPage02 extends StatefulWidget {
   @override
-  _CouponPageState createState() => _CouponPageState();
+  _AppPage02State createState() => _AppPage02State();
 }
 
-class _CouponPageState extends State<CouponPage> {
+class _AppPage02State extends State<AppPage02> {
   TextEditingController _etSearch = TextEditingController();
 
   @override
@@ -72,9 +73,19 @@ class _CouponPageState extends State<CouponPage> {
           contcd:alllist[i]['contcd'],
           contnm:alllist[i]['contnm'],
           contremark:alllist[i]['contremark'] ,
-          recetime:alllist[i]['recetime']
+          recetime:alllist[i]['recetime'],
+            compdate:alllist[i]['compdate'],
+            comptime:alllist[i]['comptime'],
+            resuremark:alllist[i]['resuremark'],
+            resultcd:alllist[i]['resultcd'],
+            resucd:alllist[i]['resucd'],
+            regicd:alllist[i]['regicd'],
+            gregicd:alllist[i]['gregicd']
         );
-        e401Data.add(emObject);
+        setState(() {
+          e401Data.add(emObject);
+        });
+
       }
       return e401Data;
     }else{
@@ -97,7 +108,7 @@ class _CouponPageState extends State<CouponPage> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '고장 미처리 리스트 : ' + e401Data.length.toString(),
+            '고장 미처리 리스트 ' + e401Data.length.toString(),
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -160,8 +171,7 @@ class _CouponPageState extends State<CouponPage> {
             physics: AlwaysScrollableScrollPhysics(),
             // Add one more item for progress indicator
             itemBuilder: (BuildContext context, int index) {
-              print(index);
-              return _buildCouponCard(e401Data[index]);
+              return _buildListCard(e401Data[index]);
             },
           ),
 
@@ -169,7 +179,9 @@ class _CouponPageState extends State<CouponPage> {
         ));
   }
 
-  Widget _buildCouponCard(e401list_model e401Data){
+
+
+  Widget _buildListCard(e401list_model e401Data){
     return Card(
       margin: EdgeInsets.only(top: 16),
       shape: RoundedRectangleBorder(
@@ -180,24 +192,16 @@ class _CouponPageState extends State<CouponPage> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: (){
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => CouponDetailPage(couponData: e401list_data)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02Detail(e401Data: e401Data)));
         },
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: EdgeInsets.only(top: 5),
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                decoration: BoxDecoration(
-                    color: SOFT_BLUE,
-                    borderRadius: BorderRadius.circular(5)
-                ),
-                child: Text('Limited Offer', style: GlobalStyle.couponLimitedOffer),
-              ),
-              SizedBox(height: 12),
               Text(e401Data.actnm, style: GlobalStyle.couponName),
+              Text('[' + e401Data.contnm + '] ' + e401Data.contents, style: GlobalStyle.couponName),
+              // Text(e401Data.contents, style: GlobalStyle.couponName),
               SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,15 +212,15 @@ class _CouponPageState extends State<CouponPage> {
                       SizedBox(
                         width: 4,
                       ),
-                      Text('Expiring in '+e401Data.recedate+' days', style: GlobalStyle.couponExpired),
+                      Text('접수일자  '+e401Data.recedate+' ' + e401Data.recetime, style: GlobalStyle.couponExpired),
                     ],
                   ),
                   GestureDetector(
                     onTap: (){
-                      Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
+                      // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
                       Navigator.pop(context);
                     },
-                    child: Text('Use Now', style: TextStyle(
+                    child: Text(e401Data.actpernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
                     )),
                   ),

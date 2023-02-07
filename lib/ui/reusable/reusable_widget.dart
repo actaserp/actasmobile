@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:actasm/config/constant.dart';
 import 'package:flutter/material.dart';
-
+import '../../model/app01/e401list_model.dart';
 class ReusableWidget{
+
+  late final e401list_model e401Data;
   PreferredSizeWidget bottomAppBar(){
     return PreferredSize(
         child: Container(
@@ -110,7 +112,7 @@ class ReusableWidget{
   }
 
   // dummy loading
-  void startLoading(context, String textMessage, int backToPreviousPageStack){
+  void startLoading(context, String textMessage, int backToPreviousPageStack ){
     _showProgressDialog(context);
     Timer(Duration(seconds: 2), () {
       Navigator.pop(context);

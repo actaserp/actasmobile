@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'coupon.dart';
+import 'appPage02.dart';
 
 class TabHomePage extends StatefulWidget {
   @override
@@ -236,7 +236,7 @@ class _Home1PageState extends State<TabHomePage> {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => CouponPage()));
                   break;
                 case '고 장 처 리' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CouponPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
                   break;
                 case '점 검 계 획' :
                   break;
