@@ -12,7 +12,11 @@ import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../model/popup/Comm751_model.dart';
+
 class AppPage03Detail extends StatefulWidget {
+
+
   // final MhmanualList_model mhData;
   // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
@@ -21,8 +25,11 @@ class AppPage03Detail extends StatefulWidget {
 }
 
 class _AppPage03DetailState extends State<AppPage03Detail> {
-  // initialize reusable widget
+
+  final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
+  List<String> _goodParts = [];
+  int _maxgoodParts = 2;
 
   late String _setTime;
   late String _hour, _minute, _time;
@@ -36,16 +43,13 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   // 값매핑1
   TextEditingController _mhCustcd = TextEditingController();
   TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
-  TextEditingController _etRecipientName = TextEditingController(text: 'Robert Steven');
-  TextEditingController _etRecipientPhoneNumber = TextEditingController(text: '0811888999');
-  TextEditingController _etAddressLine1 = TextEditingController(text: '6019 Madison St');
-  TextEditingController  _etAddressLine2 = TextEditingController(text: 'West New York, NJ');
   TextEditingController _etPostalCode = TextEditingController(text: '07093');
   TextEditingController _etState = TextEditingController(text: 'USA');
 
 
   @override
   void initState() {
+    pop_Com751();
     setData();
     super.initState();
   }
@@ -53,20 +57,48 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   //값매핑2
   void setData(){
     _mhCustcd = TextEditingController(text: "dd");
-    // _etrecedate = widget.e401Data.recedate;
-    // _etrecenum = widget.e401Data.recenum;
-    //
-    // _etCompdate = TextEditingController(text: _selectedDate.toLocal().toString().split(' ')[0]);
-    // widget.e401Data.compdate = _selectedDate.toLocal().toString().split(' ')[0];
-    // _eCompdate = _selectedDate.toLocal().toString().split(' ')[0];
-    // _etComptime.text = formatDate(
-    //     DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
-    //     [hh, ':', nn, " ", am]).toString();
-    //
-    // widget.e401Data.comptime = _etComptime;
-    // _eComptime =  _etComptime.text;
   }
+  @override
+  Future pop_Com751()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/appmobile/Com751';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'greginm': '%',
+      },
+    );
+    if(response.statusCode == 200){
+      List<dynamic> alllist = [];
+      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      C751Data.clear();
+      _C751Data.clear();
+      for (int i = 0; i < alllist.length; i++) {
+        if (alllist[i]['gregicd'] != null || alllist[i]['gregicd'].length > 0 ){
+          Comm751_model emObject= Comm751_model(
+              code:alllist[i]['code'],
+              cnam:alllist[i]['cnam']
+          );
+          setState(() {
+            C751Data.add(emObject);
+            _C751Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']' );
+          });
+        }
+      }
 
+      return C751Data;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('고장부위 불러오는데 실패했습니다');
+    }
+  }
   //저장
   @override
   Future<bool> save_mhdata()async {
@@ -120,7 +152,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '공지등록',
+            '노하우 등록',
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -130,117 +162,97 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         body: ListView(
           padding: EdgeInsets.all(16),
           children: [
-            TextField(
-              controller: _etAddressTitle,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+            Card(
+              color: Colors.blue[800],
+              elevation: 5,
+              child:
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    dropdownColor: Colors.blue[800],
+                    iconEnabledColor: Colors.white,
+                    hint: Text("분류", style: TextStyle(color: Colors.white)),
+                    value: this._etGregicdTxt ,
+                    items: _C751Data.map((item) {
+                      return DropdownMenuItem<String>(
+                        child: Text(item, style: TextStyle(color: Colors.white)),
+                        value: item,
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        // this._etGregicdTxt = value;
+                        // widget.C751Data.code = value;
+                      });
+                      C751Data.clear();
+                      _C751Data.clear();
+                      pop_Com751();
+                    },
                   ),
-                  labelText: '제목 *',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
+                ),
+              ),
             ),
             SizedBox(
               height: 20,
             ),
-            TextField(
-              controller: _etRecipientName,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '분류(리스트팝업) *',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
+            _buildOptioncheckParts(),
             SizedBox(
               height: 20,
             ),
-            TextField(
-              controller: _etRecipientPhoneNumber,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: 'Recipient\'s 작성자',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _etAddressLine1,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '회원사공유(체크박스) *',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _etAddressLine2,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '내용',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _etState,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '첨부파일',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              controller: _etPostalCode,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: Colors.redAccent, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '첨부파일 리스트1',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
+                      TextField(
+                        controller: _etAddressTitle,
+                        decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                            ),
+                            labelText: '제목 *',
+                            labelStyle:
+                            TextStyle(color: BLACK_GREY)),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                    TextField(
+                      enabled: false,
+                      style: TextStyle(color: BLACK_GREY),
+                      controller: _etPostalCode,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                              BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                          ),
+                          labelText: '작성자 *',
+                          labelStyle:
+                          TextStyle(color: BLACK_GREY)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextField(
+                            controller: _etAddressTitle,
+                            decoration: InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                    BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                                ),
+                                labelText: '내용 *',
+                                labelStyle:
+                                TextStyle(color: BLACK_GREY)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
             SizedBox(
               height: 40,
             ),
@@ -277,59 +289,101 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         )
     );
   }
-  //getToday
 
-  // Future<Null> _selectDateWithMinMaxDate(BuildContext context) async {
-  //   var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
-  //   var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 7);
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: _selectedDate,
-  //     firstDate: firstDate,
-  //     lastDate: lastDate,
-  //     builder: (BuildContext context, Widget? child) {
-  //       return Theme(
-  //         data: ThemeData.light().copyWith(
-  //           primaryColor: Colors.pinkAccent,
-  //           colorScheme: ColorScheme.light(primary: Colors.pinkAccent, secondary: Colors.pinkAccent),
-  //           buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-  //         ),
-  //         child: child!,
-  //       );
-  //     },
-  //   );
-  //   if (picked != null && picked != _selectedDate) {
-  //     setState(() {
-  //       _selectedDate = picked;
-  //
-  //       widget.mhData.compdate  = picked.toLocal().toString().split(' ')[0];
-  //       _eCompdate = _selectedDate.toLocal().toString().split(' ')[0];
-  //       _etCompdate = TextEditingController(
-  //           text: _selectedDate.toLocal().toString().split(' ')[0]);
-  //     });
-  //   }
-  // }
-//timepickr
-//   Future<Null> _selectTime(BuildContext context) async {
-//     final TimeOfDay? picked = await showTimePicker(
-//       context: context,
-//       initialTime: selectedTime,
-//     );
-//     if (picked != null)
-//       setState(() {
-//         selectedTime = picked;
-//         _hour = selectedTime.hour.toString();
-//         _minute = selectedTime.minute.toString();
-//         _time = _hour + ' : ' + _minute;
-//         _etComptime.text = _time;
-//         _etrectime = _hour  + _minute;
-//         widget.e401Data.comptime  = _hour  + _minute;
-//         _eComptime =  _hour  + _minute;
-//         _etComptime.text = formatDate(
-//             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
-//             [hh, ':', nn, " ", am]).toString();
-//       });
-//   }
+  Widget _buildOptioncheckParts(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  // Text('회원사 공유 여부', style:
+                  // TextStyle(
+                  //     color: BLACK_GREY,
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 13
+                  // ),
+                  // ),
+                  SizedBox(width: 8),
+                ],
+              ),
+              SizedBox(height: 16),
+              _checboxgood(value: 'breast' , primaryText: '회원사 공유 여부'),
+              // Divider(
+              //   height: 32,
+              //   color: Colors.grey[400],
+              // ),
+              // _checboxgood(value: 'wings', primaryText: 'Chicken Wings', secondaryText: '0'),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+
+  //체크박스
+  Widget _checboxgood({value = 'breast' , primaryText: '회원사 공유 여부'}){
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: (){
+        setState(() { //tap 시에 value 다시 잡아주고
+          if(_goodParts.contains(value)){
+            _goodParts.remove(value);
+          } else {
+            if(_goodParts.length<_maxgoodParts){
+              _goodParts.add(value);
+            }
+          }
+        });
+      },
+      child: Row(
+        children: [
+          Text(primaryText, style: TextStyle(
+              fontSize: 13,
+              color: Color(0xFF0181cc),
+              fontWeight: (_goodParts.contains(value))?FontWeight.bold:FontWeight.normal
+          )),
+          Spacer(),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                  width: 1,
+                  color: (_goodParts.contains(value)) ? PRIMARY_COLOR : BLACK77
+              ),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(4.0)
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: (_goodParts.contains(value))
+                  ? Icon(
+                Icons.check,
+                size: 12.0,
+                color: PRIMARY_COLOR,
+              ):Icon(
+                Icons.check_box_outline_blank,
+                size: 12.0,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+
+
+          // Spacer(),
+          // Text(secondaryText, style: TextStyle( //수량나타내주는거
+          //   fontSize: 13,
+          //   color: BLACK77,
+          // ))
+        ],
+      ),
+    );
+  }
 
 //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
