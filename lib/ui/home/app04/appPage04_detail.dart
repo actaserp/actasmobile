@@ -14,17 +14,17 @@ import 'package:http/http.dart' as http;
 
 import '../../../model/popup/Comm751_model.dart';
 
-class AppPage03Detail extends StatefulWidget {
+class AppPage04Detail extends StatefulWidget {
 
 
   // final MhmanualList_model mhData;
   // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
-  _AppPage03DetailState createState() => _AppPage03DetailState();
+  _AppPage04DetailState createState() => _AppPage04DetailState();
 }
 
-class _AppPage03DetailState extends State<AppPage03Detail> {
+class _AppPage04DetailState extends State<AppPage04Detail> {
 
   final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
