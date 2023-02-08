@@ -10,6 +10,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'app04/appPage04.dart';
+import 'app05/appPage05.dart';
 import 'appPage02.dart';
 import 'app03/appPage03.dart';
 
@@ -260,6 +261,8 @@ class _Home1PageState extends State<TabHomePage> {
 
                   break;
                 case '수 리 Q  &  A' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage05()));
+
                   break;
                 case '직 원 정 보' :
                   break;
