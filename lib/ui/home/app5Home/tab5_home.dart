@@ -75,24 +75,24 @@ class _Home1PageState extends State<Tab5HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: Image.asset(LOCAL_IMAGES_URL+'/logo.png', height: 24, color: Colors.white),
-        backgroundColor: _color1,
-        leading: IconButton(onPressed: (){
-          Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
+          centerTitle: true,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          title: Image.asset(LOCAL_IMAGES_URL+'/logo.png', height: 24, color: Colors.white),
+          backgroundColor: _color1,
+          leading: IconButton(onPressed: (){
+            Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
 
-        }, icon: Icon(Icons.help_outline),),
-        actions: <Widget>[
-          IconButton(icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
-          onPressed: (){
-            Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
-          }),
-          IconButton(icon: Icon(Icons.settings),
-          onPressed: (){
-            Fluttertoast.showToast(msg: 'Click setting', toastLength: Toast.LENGTH_SHORT);
-          }),
-        ]),
+          }, icon: Icon(Icons.help_outline),),
+          actions: <Widget>[
+            IconButton(icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
+                onPressed: (){
+                  Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
+                }),
+            IconButton(icon: Icon(Icons.settings),
+                onPressed: (){
+                  Fluttertoast.showToast(msg: 'Click setting', toastLength: Toast.LENGTH_SHORT);
+                }),
+          ]),
       body: ListView(
         children: [
           _buildTop(),
@@ -104,7 +104,7 @@ class _Home1PageState extends State<Tab5HomePage> {
         ],
       ),
 
-      
+
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -145,12 +145,12 @@ class _Home1PageState extends State<Tab5HomePage> {
               )
           ),
           BottomNavigationBarItem(
-              label: 'Account',
-              icon: Icon(
-                  Icons.person_outline,
-                  color: _currentIndex == 3 ? PRIMARY_COLOR : CHARCOAL
+            label: 'Account',
+            icon: Icon(
+                Icons.person_outline,
+                color: _currentIndex == 3 ? PRIMARY_COLOR : CHARCOAL
 
-              ),
+            ),
 
 
           ),
@@ -170,56 +170,56 @@ class _Home1PageState extends State<Tab5HomePage> {
               Fluttertoast.showToast(msg: 'Click profile picture', toastLength: Toast.LENGTH_SHORT);
             },
             child: Hero(tag: 'profilePicture',
-                child: ClipOval(
-                  child: buildCacheNetworkImage(url: GLOBAL_URL+'/user/avatar.png', width: 50),
-                ),
+              child: ClipOval(
+                child: buildCacheNetworkImage(url: GLOBAL_URL+'/user/avatar.png', width: 50),
+              ),
             ),
           ),
           Expanded(child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    Fluttertoast.showToast(msg: 'Click name', toastLength: Toast.LENGTH_SHORT);
-                  },
-                  child: Text(
-                    _usernm + '님 반갑습니다.',
-                    style: TextStyle(
-                      color: _color2,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Fluttertoast.showToast(msg: 'Click name', toastLength: Toast.LENGTH_SHORT);
+                    },
+                    child: Text(
+                      _usernm + '님 반갑습니다.',
+                      style: TextStyle(
+                          color: _color2,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
 
-              ],
-                    )
+                ],
+              )
 
-            ),
           ),
-    Container(
-    margin: EdgeInsets.symmetric(horizontal: 32),
-    width: 1,
-    height: 40,
-    color: Colors.grey[300],
-    ),
-    GestureDetector(
-    onTap: (){
-      Fluttertoast.showToast(msg: "Click log out",toastLength: Toast.LENGTH_SHORT );
-    },
-    child: Text(
-    'Log Out',
-    style: TextStyle(color: _color2, fontWeight: FontWeight.bold)),
-    )
-    
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 32),
+            width: 1,
+            height: 40,
+            color: Colors.grey[300],
+          ),
+          GestureDetector(
+            onTap: (){
+              Fluttertoast.showToast(msg: "Click log out",toastLength: Toast.LENGTH_SHORT );
+            },
+            child: Text(
+                'Log Out',
+                style: TextStyle(color: _color2, fontWeight: FontWeight.bold)),
+          )
+
         ],
       ),
     );
   }
-  
+
   Widget _bulidHomeBanner(){
     return Stack(
       children: [
@@ -231,41 +231,41 @@ class _Home1PageState extends State<Tab5HomePage> {
               child: buildCacheNetworkImage(width: 0, height: 0, url: item.image)
           ),
         )).toList(),
-            options: CarouselOptions(
+          options: CarouselOptions(
               aspectRatio: 2,
               viewportFraction: 1.0,
               autoPlay: true,
               autoPlayInterval: Duration(seconds: 6),
               autoPlayAnimationDuration: Duration(milliseconds: 300),
               enlargeCenterPage: false,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentImageSlider = index;
-                  });
-                }
-            ),
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentImageSlider = index;
+                });
+              }
+          ),
         ),
         Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:  _bannerData.map((item) {
-                int index = _bannerData.indexOf(item);
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 150),
-                  width: _currentImageSlider == index?10:5,
-                  height: _currentImageSlider == index?10:5,
-                  margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                );
-              }).toList(),
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:  _bannerData.map((item) {
+              int index = _bannerData.indexOf(item);
+              return AnimatedContainer(
+                duration: Duration(milliseconds: 150),
+                width: _currentImageSlider == index?10:5,
+                height: _currentImageSlider == index?10:5,
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+              );
+            }).toList(),
 
-            ),
+          ),
         ),
       ],
     );
@@ -297,35 +297,35 @@ class _Home1PageState extends State<Tab5HomePage> {
           },
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[100]!, width: 0.5),
-              color: Colors.white),
+                border: Border.all(color: Colors.grey[100]!, width: 0.5),
+                color: Colors.white),
             padding: EdgeInsets.all(8),
-          child: Center(
-            child: Column(
+            child: Center(
+              child: Column(
 
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildCacheNetworkImage(width: 30, height: 30, url: _categoryData[index].image, plColor: Colors.transparent),
-                Container(
-                  margin: EdgeInsets.only(top: 12),
-                  child: Text(
-                    _categoryData[index].name,
-                    style: TextStyle(
-                      color: _color1,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildCacheNetworkImage(width: 30, height: 30, url: _categoryData[index].image, plColor: Colors.transparent),
+                  Container(
+                    margin: EdgeInsets.only(top: 12),
+                    child: Text(
+                      _categoryData[index].name,
+                      style: TextStyle(
+                          color: _color1,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
 
-              ],
+                ],
 
+              ),
             ),
           ),
-            ),
 
-          );
+        );
 
       }),
     );
@@ -333,6 +333,6 @@ class _Home1PageState extends State<Tab5HomePage> {
 
 
 
-  // initialize global widget
+// initialize global widget
 }
 

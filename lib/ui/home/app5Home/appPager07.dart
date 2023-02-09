@@ -125,78 +125,78 @@ class _AppPager07State extends State<AppPager07> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: GlobalStyle.appBarIconThemeColor,
-        ),
-        elevation: GlobalStyle.appBarElevation,
-        title: Text(
-          '고장부위별 현황' + e411Data.length.toString(),
-          style: GlobalStyle.appBarTitle,
-        ),
-        backgroundColor: GlobalStyle.appBarBackgroundColor,
-        systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-        bottom: PreferredSize(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.grey[100]!,
-                  width: 1.0,
-                )
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: GlobalStyle.appBarIconThemeColor,
+          ),
+          elevation: GlobalStyle.appBarElevation,
+          title: Text(
+            '고장부위별 현황' + e411Data.length.toString(),
+            style: GlobalStyle.appBarTitle,
+          ),
+          backgroundColor: GlobalStyle.appBarBackgroundColor,
+          systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+          bottom: PreferredSize(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[100]!,
+                      width: 1.0,
+                    )
+                ),
               ),
-            ),
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-            height: kToolbarHeight,
-            child: TextFormField(
-              controller: _etSearch,
-              textAlignVertical: TextAlignVertical.bottom,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-              onChanged: (textValue) {
-                setState(() {
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+              height: kToolbarHeight,
+              child: TextFormField(
+                controller: _etSearch,
+                textAlignVertical: TextAlignVertical.bottom,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                onChanged: (textValue) {
+                  setState(() {
 
-                },);
-              },
-              decoration: InputDecoration(
-                fillColor: Colors.grey[100],
-                filled:  true,
-                hintText: '보수현장명',
-                prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                suffixIcon: (_etSearch.text == '')
-                  ? null : GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _etSearch = TextEditingController(text: '');
-                    });
-                  },
-                  child: Icon(Icons.close, color: Colors.grey[500])),
+                  },);
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.grey[100],
+                  filled:  true,
+                  hintText: '보수현장명',
+                  prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                  suffixIcon: (_etSearch.text == '')
+                      ? null : GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          _etSearch = TextEditingController(text: '');
+                        });
+                      },
+                      child: Icon(Icons.close, color: Colors.grey[500])),
                   focusedBorder: UnderlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(color: Colors.grey[200]!)),
-                enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  borderSide: BorderSide(color: Colors.grey[200]!),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(color: Colors.grey[200]!),
+                  ),
                 ),
               ),
             ),
+            preferredSize: Size.fromHeight(kToolbarHeight),
           ),
-          preferredSize: Size.fromHeight(kToolbarHeight),
         ),
-      ),
-      body: WillPopScope(
-        onWillPop: (){
-          Navigator.pop(context);
-          return Future.value(true);
-        },
-        child: ListView.builder(itemCount: e411Data.length,
+        body: WillPopScope(
+          onWillPop: (){
+            Navigator.pop(context);
+            return Future.value(true);
+          },
+          child: ListView.builder(itemCount: e411Data.length,
             padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
             physics: AlwaysScrollableScrollPhysics(),
             itemBuilder: (BuildContext context, int index){
               return _buildListCard(e411Data[index]);
             },
-        ),
-      ));
+          ),
+        ));
   }
 
 
@@ -231,7 +231,7 @@ class _AppPager07State extends State<AppPager07> {
                       SizedBox(width: 4,
                       ),
                       Text('접수일자 ' + e411Data.compyear , style: GlobalStyle.couponExpired),
-                      
+
                     ],
                   ),
 
