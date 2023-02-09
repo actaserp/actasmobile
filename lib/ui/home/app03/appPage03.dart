@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 
 
 
+import '../tab_home.dart';
 import 'appPage03_detail.dart';
 
 class AppPage03 extends StatefulWidget {
@@ -23,7 +24,6 @@ class AppPage03 extends StatefulWidget {
 class _AppPage03State extends State<AppPage03> {
   // 이게뭔지모름
   TextEditingController _etSearch = TextEditingController();
-
 
   @override
   void initState() {
@@ -180,7 +180,7 @@ class _AppPage03State extends State<AppPage03> {
                 //누구의 sized box임 대체 list view
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPaymentMethodPage()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
                                   },
                                   child: Text('Edit', style: TextStyle(
                                       color: SOFT_BLUE
@@ -236,7 +236,7 @@ class _AppPage03State extends State<AppPage03> {
                                 ),
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPaymentMethodPage()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
                                   },
                                   child: Text('Edit', style: TextStyle(
                                       color: SOFT_BLUE
@@ -384,4 +384,90 @@ class _AppPage03State extends State<AppPage03> {
       },
     );
   }
+}
+
+
+//03 조회
+Widget pageDetail(){
+  return Scaffold(
+    appBar: AppBar(
+      iconTheme: IconThemeData(
+        color: GlobalStyle.appBarIconThemeColor,
+      ),
+      elevation: GlobalStyle.appBarElevation,
+      title: Text(
+        '수리노하우',
+        style: GlobalStyle.appBarTitle,
+      ),
+      backgroundColor: GlobalStyle.appBarBackgroundColor,
+      systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+      // bottom: _reusableWidget.bottomAppBar(),
+    ),
+  body: ListView(
+  padding: EdgeInsets.all(16),
+    children: [
+      Text('분류분류분류분류', style: TextStyle(
+          fontSize: 16, fontWeight: FontWeight.w700, color: SOFT_BLUE
+      )),
+      Container(
+        margin: EdgeInsets.only(top: 8),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xffcccccc),
+            width: 1.0,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text('글제목글제목글제목', style: TextStyle(
+                  fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+              )),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8),
+              child: Row(
+                children: [
+                  Text('작성자', style: TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                  ))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 24),
+              child: Text('글내용글내용글내용', style: TextStyle(
+                  fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+              )),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8),
+              child: Text('글내용글내용글내용2', style: TextStyle(
+                  fontSize: 14, color: CHARCOAL
+              )),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 24),
+              child: Text('첨부파일리스트', style: TextStyle(
+                  fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+              )),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8),
+              child: Text('첨부파일자리', style: TextStyle(
+                  fontSize: 14, color: CHARCOAL
+              )),
+            )
+          ],
+        ),
+      ),
+      SizedBox(
+        height: 32,
+      ),
+    ],
+  ),
+      );
 }

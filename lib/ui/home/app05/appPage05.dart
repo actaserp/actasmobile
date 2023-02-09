@@ -3,8 +3,11 @@ import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/chat_model.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:actasm/ui/reusable/cache_image_network.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../model/banner_slider_model.dart';
 
 class AppPage05 extends StatefulWidget {
   @override
@@ -33,6 +36,7 @@ class _AppPage05State extends State<AppPage05> {
 
   void _initForLang() {
     setState(() {
+
       // set chat dummy data
       _chatList.add(new ChatModel(1, null, 'date', '9 Sep 2019', null, null));
       _chatList.add(new ChatModel(2, 'buyer', 'text', 'Good morning', '13:59', true));
@@ -94,7 +98,7 @@ class _AppPage05State extends State<AppPage05> {
           child: Column(
             children: [
               Flexible(
-                child: ListView.builder(
+                child: ListView.builder( //ListView.builder 더 느리게 가져옴
                   reverse: true,
                   itemCount: _chatListReversed.length,
                   padding: EdgeInsets.all(16),
@@ -144,37 +148,37 @@ class _AppPage05State extends State<AppPage05> {
                     SizedBox(
                       width: 10,
                     ),
-              Container(
-                child: GestureDetector(
-                  onTap: (){
-                    if(_etChat.text != ''){
-                      print('send message : '+_etChat.text);
-                      setState(() {
-                        DateTime now = DateTime.now();
-                        String currentDate = DateFormat('d MMM yyyy').format(now);
-                        if(_lastDate!=currentDate){
-                          _lastDate = currentDate;
-                          _addDate(currentDate);
-                        }
-                        _addMessage(_etChat.text);
-                        _etChat.text = '';
-                      });
-                    }
-                  },
-                  child: ClipOval(
-                    child: Container(
-                        color: SOFT_BLUE,
-                        padding: EdgeInsets.all(10),
-                        child: Icon(Icons.send, color: Colors.white)
-                    ),
-                  ),
-                ),
-              ),
+                              Container(
+                                child: GestureDetector(
+                                  onTap: (){
+                                    if(_etChat.text != ''){
+                                      print('send message : '+_etChat.text);
+                                      setState(() {
+                                        DateTime now = DateTime.now();
+                                        String currentDate = DateFormat('d MMM yyyy').format(now);
+                                        if(_lastDate!=currentDate){
+                                          _lastDate = currentDate;
+                                          _addDate(currentDate);
+                                        }
+                                        _addMessage(_etChat.text);
+                                        _etChat.text = '';
+                                      });
+                                    }
+                                  },
+                                  child: ClipOval(
+                                    child: Container(
+                                        color: SOFT_BLUE,
+                                        padding: EdgeInsets.all(10),
+                                        child: Icon(Icons.send, color: Colors.white)
+                                    ),
+                                  ),
+                                ),
+                              ),
 
                    //endpoint
                   ],
                 ),
-              )
+              ),
             ],
           ),
         )
