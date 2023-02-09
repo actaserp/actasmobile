@@ -73,7 +73,9 @@ class _AppPage03State extends State<AppPage03> {
             hflag:alllist[i]['hflag'],
             yyyymm:alllist[i]['yyyymm'],
             cnam:alllist[i]['cnam'],
-            attcnt:alllist[i]['attcnt']
+            attcnt:alllist[i]['attcnt'],
+            compdate:alllist[i]['compdate'],
+            comptime:alllist[i]['comptime']
         );
         setState(() {
           MhData.add(emObject);
@@ -152,7 +154,6 @@ class _AppPage03State extends State<AppPage03> {
                           DataCell(Text("admin")),
                           DataCell(Text("1건", textAlign: TextAlign.center,)),
                           DataCell(Text("04/2023")),
-
                           DataCell(
                           Row(
                              children: [
@@ -366,7 +367,7 @@ class _AppPage03State extends State<AppPage03> {
         onPressed: () {
           Navigator.pop(context);
           if(index==0){
-            Fluttertoast.showToast(msg: 'Please change default payment method if you want to delete this payment method', toastLength: Toast.LENGTH_LONG);
+            Fluttertoast.showToast(msg: '삭제 되었습니다.', toastLength: Toast.LENGTH_LONG);
           } else {
             // _reusableWidget.startLoading(context, 'Delete Payment Method Success', 0);
           }
@@ -379,8 +380,8 @@ class _AppPage03State extends State<AppPage03> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      title: Text('Delete Payment Method', style: TextStyle(fontSize: 18),),
-      content: Text('Are you sure to delete this payment method ?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
+      title: Text('수리노하우 게시글 삭제', style: TextStyle(fontSize: 18),),
+      content: Text('해당 글을 삭제하시겠습니까?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
       actions: [
         cancelButton,
         continueButton,

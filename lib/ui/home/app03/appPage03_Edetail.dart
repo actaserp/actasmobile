@@ -19,9 +19,8 @@ import '../../reusable/cache_image_network.dart';
 
 class EAppPage03Detail extends StatefulWidget {
 
-
   // final MhmanualList_model mhData;
-  // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
+  // const EAppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
   _EAppPage03DetailState createState() => _EAppPage03DetailState();
@@ -48,6 +47,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
   TextEditingController _etPostalCode = TextEditingController(text: '07093');
   TextEditingController _etState = TextEditingController(text: 'USA');
+  TextEditingController _etCompdate = TextEditingController();
 
 
   @override
@@ -60,6 +60,9 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   //값매핑2
   void setData(){
     _mhCustcd = TextEditingController(text: "dd");
+    // _etCompdate = TextEditingController(text: _selectedDate.toLocal().toString().split(' ')[0]);
+    // widget.mhData.compdate = _selectedDate.toLocal().toString().split(' ')[0];
+
   }
   @override
   Future pop_Com751()async {
@@ -205,9 +208,39 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
             SizedBox(
               height: 20,
             ),
+            TextField(
+              controller: _etCompdate,
+              readOnly: true,
+              onTap: () {
+                // _selectDateWithMinMaxDate2(context);
+              },
+              maxLines: 1,
+              cursorColor: Colors.grey[600],
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              decoration: InputDecoration(
+                  fillColor: Colors.grey[200],
+                  filled: true,
+                  isDense: true,
+                  hintText: '작성일자를 입력하세요',
+                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  labelText: '작성일자 *',
+                  labelStyle:
+                  TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+            ),
+            SizedBox(
+              height: 20,
+            ),
                       TextField(
-                        controller: _etAddressTitle,
+                        controller: _etState,
                         decoration: InputDecoration(
+                            fillColor: Colors.grey[200],
+                            filled: true,
                             focusedBorder: UnderlineInputBorder(
                                 borderSide:
                                 BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -244,6 +277,8 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                           TextField(
                             controller: _etAddressTitle,
                             decoration: InputDecoration(
+                                fillColor: Colors.grey[200],
+                                filled: true,
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
                                     BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -257,18 +292,65 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                              TextField(
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  labelText: '첨부파일 리스트',
+                                  labelStyle:
+                                  TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
+                            ),
+                            ],
+                                  ),
+                          ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          Row(
+                            children: [
+                              SizedBox(width: 500),
+                              GestureDetector(
+                                onTap: (){
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: SOFT_BLUE,
+                                      border: Border.all(
+                                        color: SOFT_BLUE,
+                                      ),
+
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(7),
+                                  child: Text('업로드', style: TextStyle(
+                                      color: Colors.white, fontWeight: FontWeight.bold,
+                                  ),
+                                      textAlign: TextAlign.center
+                                  ),
+                                ),
+                                ),
+                              ),
+                            ],
+                          ),
+                            SizedBox(
+                              height: 20,
+                            ),
                           Container(
                             padding: EdgeInsets.all(16),
                             color: Colors.white,
+                           //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
                             child: Column(
                               children: List.generate(shoppingCartData.length,(index){
                                 return _buildItem(index, boxImageSize);
                               }),
                             ),
                           ),
-            SizedBox(
-              height: 40,
-            ),
+                          SizedBox(
+                            height: 40,
+                          ),
             Container(
               child: TextButton(
                   style: ButtonStyle(
@@ -308,7 +390,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   Column _buildItem(index, boxImageSize){
     int quantity = shoppingCartData[index].qty;
     return Column(
-      children: [
+      children: [       
         Container(
           child: Container(
             child: Row(
@@ -368,57 +450,6 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                                     color: BLACK_GREY, size: 20),
                               ),
                             ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    setState(() {
-                                      quantity--;
-                                      shoppingCartData[index].setQty(quantity);
-                                      // _countTotalPrice();
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                    height: 28,
-                                    decoration: BoxDecoration(
-                                        color: SOFT_BLUE,
-                                        borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    child: Icon(Icons.remove,
-                                        color: Colors.white, size: 20),
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Container(
-                                  child: Text(quantity.toString(), style: TextStyle(
-
-                                  )),
-                                ),
-                                SizedBox(width: 10),
-                                GestureDetector(
-                                  behavior: HitTestBehavior.translucent,
-                                  onTap: () {
-                                    setState(() {
-                                      quantity++;
-                                      shoppingCartData[index].setQty(quantity);
-                                      // _countTotalPrice();
-                                    });
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                    height: 28,
-                                    decoration: BoxDecoration(
-                                        color: SOFT_BLUE,
-                                        borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    child: Icon(Icons.add,
-                                        color: Colors.white, size: 20),
-                                  ),
-                                )
-                              ],
-                            ),
                           ],
                         ),
                       )
@@ -440,7 +471,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   }
 
   
-  //체크 박스
+  //체크박스
   Widget _buildOptioncheckParts(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -515,8 +546,6 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
             ),
           ),
           SizedBox(width: 16),
-
-
           // Spacer(),
           // Text(secondaryText, style: TextStyle( //수량나타내주는거
           //   fontSize: 13,
@@ -526,6 +555,48 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
       ),
     );
   }
+
+  //삭제시컨펌
+  void showPopupDelete(index, boxImageSize) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('No', style: TextStyle(color: SOFT_BLUE))
+    );
+    Widget continueButton = TextButton(
+        onPressed: () {
+          setState(() {
+            shoppingCartData.removeAt(index);
+          });
+          // _countTotalPrice();
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: '삭제되었습니다.', toastLength: Toast.LENGTH_LONG);
+        },
+        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
+    );
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('첨부파일 삭제', style: TextStyle(fontSize: 18),),
+      content: Text('이 파일을 삭제하시겠습니까?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+}
 
 //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
@@ -549,4 +620,42 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
     );
   }
 
-}
+
+
+
+
+
+
+
+
+
+//작성일자처리 null 들어오면 안되는데 null상태라 안됨
+// Future<Null> _selectDateWithMinMaxDate2(BuildContext context) async {
+//   var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
+//   var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 7);
+//   final DateTime? picked = await showDatePicker(
+//     context: context,
+//     initialDate: _selectedDate,
+//     firstDate: firstDate,
+//     lastDate: lastDate,
+//     builder: (BuildContext context, Widget? child) {
+//       return Theme(
+//         data: ThemeData.light().copyWith(
+//           primaryColor: Colors.pinkAccent,
+//           colorScheme: ColorScheme.light(primary: Colors.pinkAccent, secondary: Colors.pinkAccent),
+//           buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+//         ),
+//         child: child!,
+//       );
+//     },
+//   );
+//   if (picked != null && picked != _selectedDate) {
+//     setState(() {
+//       _selectedDate = picked;
+//       widget.mhData.compdate  = picked.toLocal().toString().split(' ')[0];
+//       _eCompdate = _selectedDate.toLocal().toString().split(' ')[0];
+//       _etCompdate = TextEditingController(
+//           text: _selectedDate.toLocal().toString().split(' ')[0]);
+//     });
+//   }
+// }

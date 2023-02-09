@@ -13,6 +13,9 @@ import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../model/popup/Comm751_model.dart';
+import '../../../model/shopping_cart_model.dart';
+import '../../general/product_detail/product_detail.dart';
+import '../../reusable/cache_image_network.dart';
 
 class AppPage03Detail extends StatefulWidget {
 
@@ -45,6 +48,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
   TextEditingController _etPostalCode = TextEditingController(text: '07093');
   TextEditingController _etState = TextEditingController(text: 'USA');
+  TextEditingController _etCompdate = TextEditingController();
 
 
   @override
@@ -145,6 +149,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
 
   @override
   Widget build(BuildContext context) {
+    final double boxImageSize = (MediaQuery.of(context).size.width / 5);
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -201,10 +206,38 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
             SizedBox(
               height: 20,
             ),
+                        TextField(
+                          controller: _etCompdate,
+                          readOnly: true,
+                          onTap: () {
+                            // _selectDateWithMinMaxDate2(context);
+                          },
+                          maxLines: 1,
+                          cursorColor: Colors.grey[600],
+                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          decoration: InputDecoration(
+                              fillColor: Colors.grey[200],
+                              filled: true,
+                              isDense: true,
+                              hintText: '작성일자를 입력하세요',
+                              suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey[600]!),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey[600]!),
+                              ),
+                              labelText: '작성일자 *',
+                              labelStyle:
+                              TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                       TextField(
-                        controller: _etPostalCode,
+                        controller: _etState,
                         decoration: InputDecoration(
-                            fillColor: Colors.green[200],
+                            fillColor: Colors.grey[200],
                             filled: true,
                             hintText: '제목을 작성하세요',
                             focusedBorder: UnderlineInputBorder(
@@ -261,7 +294,62 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-            _buildFileList(),
+            Expanded(
+              child: Column(
+                children: [
+                  TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                        labelText: '첨부파일 리스트',
+                        labelStyle:
+                        TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                SizedBox(width: 500),
+                GestureDetector(
+                  onTap: (){
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: SOFT_BLUE,
+                      border: Border.all(
+                        color: SOFT_BLUE,
+                      ),
+
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: Text('업로드', style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold,
+                      ),
+                          textAlign: TextAlign.center
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.white,
+              //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
+              child: Column(
+                children: List.generate(shoppingCartData.length,(index){
+                  return _buildItem(index, boxImageSize);
+                }),
+              ),
+            ),
             SizedBox(
               height: 40,
             ),
@@ -300,172 +388,89 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   }
 
 
-  //첨부파일리스트
-  Widget _buildFileList(){
+  //  첨부파일리스트 ~ network로 가져와야함
+  Column _buildItem(index, boxImageSize){
+    int quantity = shoppingCartData[index].qty;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-
-          padding: EdgeInsets.all(16),
-          color: Colors.white,
-          child: Column(
-                        children: [
-                        Row(
-                        children: [
-                        Text('첨부파일리스트자리입니다.', style:
-                        TextStyle(
-                            color: BLACK_GREY,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
+                  },
+                  child: ClipRRect(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(4)),
+                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: shoppingCartData[index].image)),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
+                        },
+                        child: Text(
+                          shoppingCartData[index].name,
+                          style: GlobalStyle.productName.copyWith(fontSize: 14),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                         ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 5),
+                        // child: Text('\$ '+_globalFunction.removeDecimalZeroFormat(shoppingCartData[index].price),
+                        //     style: GlobalStyle.productPrice),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                // showPopupDelete(index, boxImageSize);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey[300]!)),
+                                child: Icon(Icons.delete,
+                                    color: BLACK_GREY, size: 20),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8),
-                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-              ], //row-childeren
-              // children: List.generate(shoppingCartData.length,(index){
-              // return _buildItem(index, boxImageSize);
-              // }),
           ),
+        ),
+        (index == shoppingCartData.length - 1)
+            ? Wrap()
+            : Divider(
+          height: 32,
+          color: Colors.grey[400],
         )
       ],
     );
   }
-  //첨부파일리스트2 ~ network로 가져와야함
-  // Column _buildItem(index, boxImageSize){
-  //   int quantity = shoppingCartData[index].qty;
-  //   return Column(
-  //     children: [
-  //       Container(
-  //         child: Container(
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: <Widget>[
-  //               GestureDetector(
-  //                 onTap: (){
-  //                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-  //                 },
-  //                 child: ClipRRect(
-  //                     borderRadius:
-  //                     BorderRadius.all(Radius.circular(4)),
-  //                     child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: shoppingCartData[index].image)),
-  //               ),
-  //               SizedBox(
-  //                 width: 10,
-  //               ),
-  //               Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     GestureDetector(
-  //                       onTap: (){
-  //                         Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-  //                       },
-  //                       child: Text(
-  //                         shoppingCartData[index].name,
-  //                         style: GlobalStyle.productName.copyWith(fontSize: 14),
-  //                         maxLines: 3,
-  //                         overflow: TextOverflow.ellipsis,
-  //                       ),
-  //                     ),
-  //                     Container(
-  //                       margin: EdgeInsets.only(top: 5),
-  //                       child: Text('\$ '+_globalFunction.removeDecimalZeroFormat(shoppingCartData[index].price),
-  //                           style: GlobalStyle.productPrice),
-  //                     ),
-  //                     Container(
-  //                       margin: EdgeInsets.only(top: 16),
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                         children: [
-  //                           GestureDetector(
-  //                             behavior: HitTestBehavior.translucent,
-  //                             onTap: () {
-  //                               showPopupDelete(index, boxImageSize);
-  //                             },
-  //                             child: Container(
-  //                               padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-  //                               height: 30,
-  //                               decoration: BoxDecoration(
-  //                                   borderRadius: BorderRadius.circular(8),
-  //                                   border: Border.all(
-  //                                       width: 1, color: Colors.grey[300]!)),
-  //                               child: Icon(Icons.delete,
-  //                                   color: BLACK_GREY, size: 20),
-  //                             ),
-  //                           ),
-  //                           Row(
-  //                             children: [
-  //                               GestureDetector(
-  //                                 behavior: HitTestBehavior.translucent,
-  //                                 onTap: () {
-  //                                   setState(() {
-  //                                     quantity--;
-  //                                     shoppingCartData[index].setQty(quantity);
-  //                                     _countTotalPrice();
-  //                                   });
-  //                                 },
-  //                                 child: Container(
-  //                                   padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-  //                                   height: 28,
-  //                                   decoration: BoxDecoration(
-  //                                       color: SOFT_BLUE,
-  //                                       borderRadius: BorderRadius.circular(8)
-  //                                   ),
-  //                                   child: Icon(Icons.remove,
-  //                                       color: Colors.white, size: 20),
-  //                                 ),
-  //                               ),
-  //                               SizedBox(width: 10),
-  //                               Container(
-  //                                 child: Text(quantity.toString(), style: TextStyle(
-  //
-  //                                 )),
-  //                               ),
-  //                               SizedBox(width: 10),
-  //                               GestureDetector(
-  //                                 behavior: HitTestBehavior.translucent,
-  //                                 onTap: () {
-  //                                   setState(() {
-  //                                     quantity++;
-  //                                     shoppingCartData[index].setQty(quantity);
-  //                                     _countTotalPrice();
-  //                                   });
-  //                                 },
-  //                                 child: Container(
-  //                                   padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-  //                                   height: 28,
-  //                                   decoration: BoxDecoration(
-  //                                       color: SOFT_BLUE,
-  //                                       borderRadius: BorderRadius.circular(8)
-  //                                   ),
-  //                                   child: Icon(Icons.add,
-  //                                       color: Colors.white, size: 20),
-  //                                 ),
-  //                               )
-  //                             ],
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     )
-  //                   ],
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       (index == shoppingCartData.length - 1)
-  //           ? Wrap()
-  //           : Divider(
-  //         height: 32,
-  //         color: Colors.grey[400],
-  //       )
-  //     ],
-  //   );
-  // }
 
   Widget _buildOptioncheckParts(){
     return Column(
