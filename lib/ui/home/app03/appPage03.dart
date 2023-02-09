@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 
 
 import '../tab_home.dart';
+import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
 
 class AppPage03 extends StatefulWidget {
@@ -154,37 +155,24 @@ class _AppPage03State extends State<AppPage03> {
 
                           DataCell(
                           Row(
-                          children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 5),
-                                padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                decoration: BoxDecoration(
-                                  color: SOFT_BLUE,
-                                  borderRadius: BorderRadius.circular(2)
-                               ),
-                                child: Row(
-                                    children: [
-                                    Text('강조등록', style: TextStyle(
-                                    color: Colors.white, fontSize: 11
-                                    )),
-                                    SizedBox(
-                                    width: 4,
-                                    ),
-                                    Icon(Icons.done, color: Colors.white, size: 11)
-                                ],
-                          ),
-                              ),
-                            SizedBox(
-                              height: 32,
-                            ),
-                //누구의 sized box임 대체 list view
+                             children: [
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
                                   },
-                                  child: Text('Edit', style: TextStyle(
-                                      color: SOFT_BLUE
-                                  )),
+                                  child: Container(
+                                      margin: EdgeInsets.only(right: 5),
+                                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                      decoration: BoxDecoration(
+                                      color: SOFT_BLUE,
+                                      borderRadius: BorderRadius.circular(2)
+                                      ),
+
+                                      child: Text('Edit', style: TextStyle(
+                                          color: Colors.white
+                                      ),
+                                      ),
+                                ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(left: 5),
@@ -215,32 +203,55 @@ class _AppPage03State extends State<AppPage03> {
                             )
                         ),
                         DataCell(Text("Robert Steven")),
-                        DataCell(Text("11/2021")),
+                        DataCell(
+                            Row(
+                              children:[
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
+                                  },
+                                  child: Text('제목조회', style: TextStyle(
+                                      fontWeight: FontWeight.bold, color: SOFT_BLUE
+                                  )),
+                                ),   
+                            ],
+                           )),
                           DataCell(Text("04/2023")),
-                          DataCell(Text("04/2023")),
+                          DataCell(
+                              Row(
+                                children:[
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => attatchDetail()));
+                                    },
+                                    child: Text('건수조회', style: TextStyle(
+                                        fontWeight: FontWeight.bold, color: SOFT_BLUE
+                                    )),
+                                  ),
+                                ],
+                              )),
                           DataCell(Text("04/2023")),
 
                           DataCell(
                             Row(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      showPopupMakeDefault();
-                                    },
-                                    child: Text('일반글씨', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                ),
                                 GestureDetector(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
                                   },
-                                  child: Text('Edit', style: TextStyle(
-                                      color: SOFT_BLUE
-                                  )),
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 5),
+                                    padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                    decoration: BoxDecoration(
+                                        color: SOFT_BLUE,
+                                        borderRadius: BorderRadius.circular(2)
+                                    ),
+
+                                    child: Text('Edit', style: TextStyle(
+                                        color: Colors.white
+                                    ),
+                                    ),
+                                  ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(left: 5),
@@ -455,12 +466,10 @@ Widget pageDetail(){
                   fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
               )),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 8),
-              child: Text('첨부파일자리', style: TextStyle(
-                  fontSize: 14, color: CHARCOAL
-              )),
-            )
+            SizedBox(
+              height: 12,
+            ),
+            _buildFileList(),
           ],
         ),
       ),
@@ -470,4 +479,94 @@ Widget pageDetail(){
     ],
   ),
       );
+}
+
+
+//첨부파일만 조회
+Widget attatchDetail(){
+  return Scaffold(
+    appBar: AppBar(
+      iconTheme: IconThemeData(
+        color: GlobalStyle.appBarIconThemeColor,
+      ),
+      elevation: GlobalStyle.appBarElevation,
+      title: Text(
+        '수리노하우',
+        style: GlobalStyle.appBarTitle,
+      ),
+      backgroundColor: GlobalStyle.appBarBackgroundColor,
+      systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+      // bottom: _reusableWidget.bottomAppBar(),
+    ),
+    body: ListView(
+      padding: EdgeInsets.all(16),
+      children: [
+        Text('분류분류분류분류', style: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.w700, color: SOFT_BLUE
+        )),
+        Container(
+          margin: EdgeInsets.only(top:8),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(0xffcccccc),
+              width: 1.0,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top:8),
+                child: Text('글제목', style: TextStyle(
+                    fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+                )),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              _buildFileList(),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 32,
+        ),
+      ],
+    ),
+  );
+}
+
+//첨부파일리스트
+Widget _buildFileList(){
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+
+        padding: EdgeInsets.all(16),
+        color: Colors.white,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text('첨부파일리스트자리입니다.', style:
+                TextStyle(
+                    color: BLACK_GREY,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13
+                ),
+                ),
+                SizedBox(width: 8),
+              ],
+            ),
+          ], //row-childeren
+          // children: List.generate(shoppingCartData.length,(index){
+          // return _buildItem(index, boxImageSize);
+          // }),
+        ),
+      )
+    ],
+  );
 }

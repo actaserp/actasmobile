@@ -14,17 +14,17 @@ import 'package:http/http.dart' as http;
 
 import '../../../model/popup/Comm751_model.dart';
 
-class AppPage03Detail extends StatefulWidget {
+class EAppPage04Detail extends StatefulWidget {
 
 
   // final MhmanualList_model mhData;
   // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
-  _AppPage03DetailState createState() => _AppPage03DetailState();
+  _EAppPage04DetailState createState() => _EAppPage04DetailState();
 }
 
-class _AppPage03DetailState extends State<AppPage03Detail> {
+class _EAppPage04DetailState extends State<EAppPage04Detail> {
 
   final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
@@ -96,7 +96,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       return C751Data;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('고장부위 불러오는데 실패했습니다');
+      throw Exception('분류를 불러오는데 실패했습니다');
     }
   }
   //저장
@@ -131,7 +131,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('수리노하우 저장에 실패했습니다');
+      throw Exception('부품가이드 수정에 실패했습니다');
       return   false;
     }
   }
@@ -152,7 +152,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '노하우 등록',
+            '부품가이드 수정',
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -202,11 +202,8 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
               height: 20,
             ),
                       TextField(
-                        controller: _etPostalCode,
+                        controller: _etAddressTitle,
                         decoration: InputDecoration(
-                            fillColor: Colors.green[200],
-                            filled: true,
-                            hintText: '제목을 작성하세요',
                             focusedBorder: UnderlineInputBorder(
                                 borderSide:
                                 BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -227,7 +224,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                       controller: _etPostalCode,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
                               BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -244,11 +240,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           TextField(
                             controller: _etAddressTitle,
                             decoration: InputDecoration(
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                                hintText: '내용을 작성하세요',
                                 focusedBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                     borderSide:
                                     BorderSide(color: PRIMARY_COLOR, width: 2.0)),
                                 enabledBorder: UnderlineInputBorder(
@@ -271,7 +263,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) => SOFT_BLUE,
                     ),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
@@ -279,12 +270,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     ),
                   ),
                   onPressed: () {
-                    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                    _reusableWidget.startLoading(context, '수정 되었습니다.', 1);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Text(
-                      '등록하기',
+                      '수정하기',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
