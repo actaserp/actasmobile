@@ -18,9 +18,9 @@ import '../../general/product_detail/product_detail.dart';
 import '../../reusable/cache_image_network.dart';
 
 class EAppPage03Detail extends StatefulWidget {
+  final MhmanualList_model MhData;
+  const EAppPage03Detail({Key? key, required this.MhData}) : super(key: key);
 
-  // final MhmanualList_model mhData;
-  // const EAppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
   _EAppPage03DetailState createState() => _EAppPage03DetailState();
@@ -35,19 +35,29 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
 
   late String _setTime;
   late String _hour, _minute, _time;
-  late String _dbnm , _etrecedate, _etrecenum, _etrectime;
-  String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
+  late String _dbnm , _etrecedate, _etrectime;
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   // 값매핑1
-  TextEditingController _mhCustcd = TextEditingController();
-  TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
-  TextEditingController _etPostalCode = TextEditingController(text: '07093');
-  TextEditingController _etState = TextEditingController(text: 'USA');
-  TextEditingController _etCompdate = TextEditingController();
+  TextEditingController _mHCustcd = TextEditingController();
+  TextEditingController _mHSpjangcd = TextEditingController();
+  TextEditingController _mHRemark = TextEditingController();
+  TextEditingController _mHHseq = TextEditingController();
+  TextEditingController _mHHinputdate = TextEditingController();
+  TextEditingController _mHHgroupcd = TextEditingController();
+  TextEditingController _mHSubject = TextEditingController();
+  TextEditingController _mHFilename = TextEditingController();
+  TextEditingController _mHHPernm = TextEditingController();
+  TextEditingController _mHHmemo = TextEditingController();
+  TextEditingController _mHHflag = TextEditingController();
+  TextEditingController _mHAttcnt = TextEditingController();
+  TextEditingController _mHCnam = TextEditingController();
+
+
+  String? _mHCode;
 
 
   @override
@@ -59,9 +69,19 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   @override
   //값매핑2
   void setData(){
-    _mhCustcd = TextEditingController(text: "dd");
-    // _etCompdate = TextEditingController(text: _selectedDate.toLocal().toString().split(' ')[0]);
-    // widget.mhData.compdate = _selectedDate.toLocal().toString().split(' ')[0];
+    _mHCustcd = TextEditingController(text: widget.MhData.custcd);
+    _mHSpjangcd = TextEditingController(text: widget.MhData.spjangcd);
+    _mHRemark = TextEditingController(text: widget.MhData.remark);
+    _mHHseq = TextEditingController(text: widget.MhData.hseq);
+    _mHHinputdate = TextEditingController(text: widget.MhData.hinputdate);
+    _mHHgroupcd = TextEditingController(text: widget.MhData.hgroupcd);
+    _mHSubject = TextEditingController(text: widget.MhData.hsubject);
+    _mHFilename = TextEditingController(text: widget.MhData.hfilename);
+    _mHHPernm = TextEditingController(text: widget.MhData.hpernm);
+    _mHHmemo = TextEditingController(text: widget.MhData.hmemo);
+    _mHHflag = TextEditingController(text: widget.MhData.hflag);
+    _mHAttcnt = TextEditingController(text: '${widget.MhData.attcnt}');
+    _mHCnam = TextEditingController(text: widget.MhData.cnam); //분류코드
 
   }
   @override
@@ -78,7 +98,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'greginm': '%',
+        'cnam': '%',
       },
     );
     if(response.statusCode == 200){
@@ -106,41 +126,47 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
     }
   }
   //저장
-  @override
-  Future<bool> save_mhdata()async {
-    _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
-    var encoded = Uri.encodeFull(uritxt);
-    Uri uri = Uri.parse(encoded);
-    print("----------------------------");
-    //null처리
-    // if(widget.e401Data.compdate == null  ) {
-    //   showAlertDialog(context, "처리일자를 등록하세요");
-    //   return false;
-    // }
-    final response = await http.post(
-      uri,
-      headers: <String, String> {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept' : 'application/json'
-      },
-      body: <String, String> {
-        'dbnm': _dbnm,
-        // 'recedate': widget.e401Data.recedate.toString(),
-        // 'recenum': widget.e401Data.recenum.toString(),
-        // 'resuremark': widget.e401Data.resuremark.toString(),
-        'custcd': _mhCustcd.toString(),
-      },
-    );
-    if(response.statusCode == 200){
-      print("저장됨");
-      return   true;
-    }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('수리노하우 수정에 실패했습니다');
-      return   false;
-    }
-  }
+  // @override
+  // Future<bool> save_mhdata()async {
+  //   _dbnm = await  SessionManager().get("dbnm");
+  //   var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+  //   var encoded = Uri.encodeFull(uritxt);
+  //   Uri uri = Uri.parse(encoded);
+  //   print("----------------------------");
+  //   //null처리
+  //   if(widget.mHdata.hsubject == null  ){
+  //     showAlertDialog(context, "처리일자를 등록하세요");
+  //     return false;
+  //   }
+  //   if(widget.mHdata.hpernm == null  ){
+  //     showAlertDialog(context, "처리시간을 등록하세요");
+  //     return false;
+  //   }
+  //   if(widget.mHdata.hmemo == null ){
+  //     showAlertDialog(context, "고장부위를 등록하세요");
+  //     return false;
+  //   }
+  //   final response = await http.post(
+  //     uri,
+  //     headers: <String, String> {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //       'Accept' : 'application/json'
+  //     },
+  //     body: <String, String> {
+  //       //저장될값들
+  //       'dbnm': _dbnm,
+  //       'custcd': _mHCustcd.toString(),
+  //     },
+  //   );
+  //   if(response.statusCode == 200){
+  //     print("저장됨");
+  //     return   true;
+  //   }else{
+  //     //만약 응답이 ok가 아니면 에러를 던집니다.
+  //     throw Exception('수리노하우 수정에 실패했습니다');
+  //     return   false;
+  //   }
+  // }
 
 
   @override
@@ -181,7 +207,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                             dropdownColor: Colors.blue[800],
                             iconEnabledColor: Colors.white,
                             hint: Text("분류", style: TextStyle(color: Colors.white)),
-                            value: this._etGregicdTxt ,
+                            value: this._mHCode ,
                             items: _C751Data.map((item) {
                               return DropdownMenuItem<String>(
                                 child: Text(item, style: TextStyle(color: Colors.white)),
@@ -209,7 +235,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
               height: 20,
             ),
             TextField(
-              controller: _etCompdate,
+              // controller: _etCompdate,
               readOnly: true,
               onTap: () {
                 // _selectDateWithMinMaxDate2(context);
@@ -237,7 +263,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
               height: 20,
             ),
                       TextField(
-                        controller: _etState,
+                        // controller: _etState,
                         decoration: InputDecoration(
                             fillColor: Colors.grey[200],
                             filled: true,
@@ -258,7 +284,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                     TextField(
                       enabled: false,
                       style: TextStyle(color: BLACK_GREY),
-                      controller: _etPostalCode,
+                      // controller: _etPostalCode,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -275,7 +301,7 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                             height: 20,
                           ),
                           TextField(
-                            controller: _etAddressTitle,
+                            // controller: _etAddressTitle,
                             decoration: InputDecoration(
                                 fillColor: Colors.grey[200],
                                 filled: true,
@@ -292,19 +318,37 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-                          Expanded(
-                            child: Column(
+                          // Expanded( //하단줄있는버전
+                          //   child: Column(
+                          //     children: [
+                          //     TextField(
+                          //     enabled: false,
+                          //     decoration: InputDecoration(
+                          //         labelText: '첨부파일 리스트',
+                          //         labelStyle:
+                          //         TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
+                          //   ),
+                          //   ],
+                          //         ),
+                          // ),
+                            Row(
                               children: [
-                              TextField(
-                              enabled: false,
-                              decoration: InputDecoration(
-                                  labelText: '첨부파일 리스트',
-                                  labelStyle:
-                                  TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
+                                SizedBox(    //왼쪽 크기 정하기
+                                  width: 0,
+                                  height: 40,
+                                ),
+                                Text('첨부파일 목록', style: TextStyle(
+                                    fontSize: 16,
+                                    color: SOFT_BLUE,
+                                    fontWeight: FontWeight.bold
+                                ),
+                                    textAlign: TextAlign.center
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
                             ),
-                            ],
-                                  ),
-                          ),
                             SizedBox(
                               height: 20,
                             ),

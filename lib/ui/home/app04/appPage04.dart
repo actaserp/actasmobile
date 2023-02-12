@@ -71,8 +71,6 @@ class _AppPage04State extends State<AppPage04> {
             yyyymm:alllist[i]['yyyymm'],
             cnam:alllist[i]['cnam'],
             attcnt:alllist[i]['attcnt'],
-            compdate:alllist[i]['compdate'],
-            comptime:alllist[i]['comptime']
         );
         setState(() {
           MhData.add(emObject);

@@ -199,13 +199,13 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-            _buildOptioncheckParts(),
-            SizedBox(
-              height: 20,
-            ),
+                        SizedBox(
+                          height: 20,
+                        ),
+              _buildOptioncheckParts(),
+              SizedBox(
+                height: 20,
+              ),
                         TextField(
                           controller: _etCompdate,
                           readOnly: true,
@@ -254,7 +254,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                         height: 20,
                       ),
 
-                    TextField(
+                      TextField(
                       enabled: false,
                       style: TextStyle(color: BLACK_GREY),
                       controller: _etPostalCode,
@@ -294,25 +294,51 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-            Expanded(
-              child: Column(
-                children: [
-                  TextField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                        labelText: '첨부파일 리스트',
-                        labelStyle:
-                        TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20,
+                  // Column( //화면꽉차게 쓰기:expanded
+                  //   children:[
+                  //          Expanded(
+                  //                 child:
+                  //                   Text('첨부파일 리스트', style: TextStyle(
+                  //                       fontSize: 15,
+                  //                       color: SOFT_BLUE,
+                  //                       fontWeight: FontWeight.bold
+                  //                   ),
+                  //                       textAlign: TextAlign.center
+                  //                   ),
+                  //
+                  //             ),
+                  //     Text('첨부파일 목록', style: TextStyle(
+                  //         fontSize: 15,
+                  //         color: SOFT_BLUE,
+                  //         fontWeight: FontWeight.bold
+                  //     ),
+                  //         textAlign: TextAlign.center
+                  //     ),
+                  //
+                  //   ],
+                  // ),
+            Row(
+              children: [
+                            SizedBox(    //왼쪽 크기 정하기
+                              width: 0,
+                              height: 40,
+                            ),
+                            Text('첨부파일 목록', style: TextStyle(
+                                fontSize: 16,
+                                color: SOFT_BLUE,
+                                fontWeight: FontWeight.bold
+                            ),
+                                textAlign: TextAlign.center
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                      ],
             ),
             Row(
               children: [
-                SizedBox(width: 500),
+                SizedBox(width: 500
+                ),
                 GestureDetector(
                   onTap: (){
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));

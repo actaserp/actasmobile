@@ -1,4 +1,5 @@
 import 'dart:convert';
+// import 'dart:js';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
@@ -18,102 +19,122 @@ import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
 
 class AppPage03 extends StatefulWidget {
+
   @override
   _AppPage03State createState() => _AppPage03State();
 }
 
-class _AppPage03State extends State<AppPage03> {
-  // 이게뭔지모름
-  TextEditingController _etSearch = TextEditingController();
+class _AppPage03State extends State<AppPage03> {  // 컨트롤러
+
+  late String _dbnm;
+
+  // 저장할때값매핑1
+  // TextEditingController _mHCustcd = TextEditingController();
+  // TextEditingController _mHSpjangcd = TextEditingController();
+  // TextEditingController _mHRemark = TextEditingController();
+  // TextEditingController _mHHseq = TextEditingController();
+  // TextEditingController _mHHinputdate = TextEditingController();
+  // TextEditingController _mHHgroupcd = TextEditingController();
+  // TextEditingController _mHSubject = TextEditingController();
+  // TextEditingController _mHFilename = TextEditingController();
+  // TextEditingController _mHHPernm = TextEditingController();
+  // TextEditingController _mHHmemo = TextEditingController();
+  // TextEditingController _mHHflag = TextEditingController();
+  // TextEditingController _mHAttcnt = TextEditingController();
+  // TextEditingController _mHCnam = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    mhlist_getdata();
+
   }
 
   @override
   void dispose() {
-    _etSearch.dispose();
     super.dispose();
   }
 
   Future mhlist_getdata() async {
-    String _dbnm = await  SessionManager().get("dbnm");
-
+    String _dbnm = await SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/appmobile/mhlist';
     var encoded = Uri.encodeFull(uritxt);
-
     Uri uri = Uri.parse(encoded);
     final response = await http.post(
       uri,
-      headers: <String, String> {
+      headers: <String, String>{
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept' : 'application/json'
+        'Accept': 'application/json'
       },
-      body: <String, String> {
+      body: <String, String>{
         'dbnm': _dbnm,
       },
     );
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       List<dynamic> alllist = [];
-      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      alllist = jsonDecode(utf8.decode(response.bodyBytes));
       MhData.clear();
       for (int i = 0; i < alllist.length; i++) {
-        MhmanualList_model emObject= MhmanualList_model(
-            custcd:alllist[i]['custcd'],
-            spjangcd:alllist[i]['spjangcd'],
-            remark:alllist[i]['remark'],
-            hseq:alllist[i]['hseq'],
-            hinputdate:alllist[i]['hinputdate'],
-            hgroupcd:alllist[i]['hgroupcd'],
-            hsubject:alllist[i]['hsubject'],
-            hfilename:alllist[i]['hfilename'],
-            hpernm:alllist[i]['hpernm'],
-            hmemo:alllist[i]['hmemo'],
-            hflag:alllist[i]['hflag'],
-            yyyymm:alllist[i]['yyyymm'],
-            cnam:alllist[i]['cnam'],
-            attcnt:alllist[i]['attcnt'],
-            compdate:alllist[i]['compdate'],
-            comptime:alllist[i]['comptime']
+        MhmanualList_model emObject = MhmanualList_model(
+          custcd: alllist[i]['custcd'],
+          spjangcd: alllist[i]['spjangcd'],
+          remark: alllist[i]['remark'],
+          hseq: alllist[i]['hseq'],
+          hinputdate: alllist[i]['hinputdate'],
+          hgroupcd: alllist[i]['hgroupcd'],
+          hsubject: alllist[i]['hsubject'],
+          hfilename: alllist[i]['hfilename'],
+          hpernm: alllist[i]['hpernm'],
+          hmemo: alllist[i]['hmemo'],
+          hflag: alllist[i]['hflag'],
+          yyyymm: alllist[i]['yyyymm'],
+          cnam: alllist[i]['cnam'],
+          attcnt: alllist[i]['attcnt'],
         );
         setState(() {
           MhData.add(emObject);
         });
-
       }
       return MhData;
-    }else{
+    } else {
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('불러오는데 실패했습니다');
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: GlobalStyle.appBarIconThemeColor,
-          ),
-          elevation: GlobalStyle.appBarElevation,
-          title: Text(
-            '수리노하우',
-            style: GlobalStyle.appBarTitle,
-          ),
-          backgroundColor: GlobalStyle.appBarBackgroundColor,
-          systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-          // bottom: _reusableWidget.bottomAppBar(),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: GlobalStyle.appBarIconThemeColor,
         ),
-        body: ListView(
+        elevation: GlobalStyle.appBarElevation,
+        title: Text(
+          '수리노하우',
+          style: GlobalStyle.appBarTitle,
+        ),
+        backgroundColor: GlobalStyle.appBarBackgroundColor,
+        systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+        // bottom: _reusableWidget.bottomAppBar(),
+      ),
+      body:  WillPopScope(
+            onWillPop: (){
+            Navigator.pop(context);
+            return Future.value(true);
+            },
+        child: ListView( //여기서 null
           padding: EdgeInsets.all(16),
-          children: [
-            Text('수리 노하우 자료실', style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-            )),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-           child: Container(
+        children:  [
+          Text('수리 노하우 자료실', style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+          )),
+          Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+              child: Container(
               margin: EdgeInsets.only(top: 5),
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -121,12 +142,18 @@ class _AppPage03State extends State<AppPage03> {
                   top: BorderSide(
                     color: Color(0xffcccccc),
                     width: 1.0,
+                  ),
                 ),
               ),
-              ),
 
-             child: DataTable(
-                    columns: <DataColumn>[
+                child: ListView.builder(
+                  itemCount: MhData.length,
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  physics: NeverScrollableScrollPhysics(),
+                  // Add one more item for progress indicator
+                  itemBuilder: (BuildContext context, int index) {
+                    return
+                      DataTable(columns: <DataColumn>[
                       DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
                       DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
@@ -134,190 +161,183 @@ class _AppPage03State extends State<AppPage03> {
                       DataColumn(label: Text('첨부파일건수', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      // textAlign: TextAlign.center,
-                    ],
-                    rows: <DataRow>[
-                      DataRow(
-                        cells: <DataCell>[
-                           DataCell(
-                               Row(
-                               children: [
-                                  Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  ),
-                                 Text('4392')
-                        ],
-                   )
-                ),
-                        DataCell(Text("분류", textAlign: TextAlign.center)),
-                        DataCell(Text("제목")),
-                          DataCell(Text("admin")),
-                          DataCell(Text("1건", textAlign: TextAlign.center,)),
-                          DataCell(Text("04/2023")),
-                          DataCell(
-                          Row(
-                             children: [
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
-                                  },
-                                  child: Container(
-                                      margin: EdgeInsets.only(right: 5),
-                                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                      decoration: BoxDecoration(
-                                      color: SOFT_BLUE,
-                                      borderRadius: BorderRadius.circular(2)
-                                      ),
-
-                                      child: Text('Edit', style: TextStyle(
-                                          color: Colors.white
-                                      ),
-                                      ),
-                                ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      _showPopupDeletePayment(1);
-                                    },
-                                    child: Text('Delete', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                )
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 5)
-                                  ),
-                                  Text("dd")
-                                ],
-                            )
-                        ),
-                        DataCell(Text("Robert Steven")),
-                        DataCell(
-                            Row(
-                              children:[
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
-                                  },
-                                  child: Text('제목조회', style: TextStyle(
-                                      fontWeight: FontWeight.bold, color: SOFT_BLUE
-                                  )),
-                                ),   
-                            ],
-                           )),
-                          DataCell(Text("04/2023")),
-                          DataCell(
-                              Row(
-                                children:[
-                                  GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => attatchDetail()));
-                                    },
-                                    child: Text('건수조회', style: TextStyle(
-                                        fontWeight: FontWeight.bold, color: SOFT_BLUE
-                                    )),
-                                  ),
-                                ],
-                              )),
-                          DataCell(Text("04/2023")),
-
-                          DataCell(
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 5),
-                                    padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                    decoration: BoxDecoration(
-                                        color: SOFT_BLUE,
-                                        borderRadius: BorderRadius.circular(2)
-                                    ),
-
-                                    child: Text('Edit', style: TextStyle(
-                                        color: Colors.white
-                                    ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      _showPopupDeletePayment(2);
-                                    },
-                                    child: Text('Delete', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                )
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-
-            Container( //노하우등록임
-              margin: EdgeInsets.only(top: 32),
-              child: OutlinedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail()));
-
+                    ], rows: dataGrid(MhData[index]),
+                    );
                   },
-                  style: ButtonStyle(
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          )
-                      ),
-                      side: MaterialStateProperty.all(
-                        BorderSide(
-                            color: SOFT_BLUE,
-                            width: 1.0
-                        ),
-                      )
-                  ), //등록 스타일
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: Text(
-                      '노하우 등록',
-                      style: TextStyle(
-                          color: SOFT_BLUE,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13
-                      ),
-                      textAlign: TextAlign.center,
+                ),
+                //listview.builder endpoint
+          ),
+          ),
+      ),//single~view endpoint
+          //여기까지 dataRow
+          Container( //노하우등록임
+            margin: EdgeInsets.only(top: 32),
+            child: OutlinedButton(
+                onPressed: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => AppPage03Detail()));
+                },
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        )
                     ),
-                  )
-              ),
-            )
-      ],
-        ),
-        );
+                    side: MaterialStateProperty.all(
+                      BorderSide(
+                          color: SOFT_BLUE,
+                          width: 1.0
+                      ),
+                    )
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  child: Text(
+                    '노하우 등록',
+                    style: TextStyle(
+                        color: SOFT_BLUE,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                ),
+          )
+        ],
+      ),
+      ),
+    );
   }
 
-  void showPopupMakeDefault() {
+//////////////////////datacolumn list 시작
+
+  List<DataRow> dataGrid(MhmanualList_model MhData) {
+          return [
+             DataRow(
+            cells: [
+             DataCell(
+                    Row(
+                    children: [
+                          Container(
+                          margin: EdgeInsets.only(right: 5),
+                          ),
+                          Text(MhData.hseq)
+                    ],
+                    )
+                    ),
+              DataCell(
+                    Row(
+                          children: [
+                          Container(
+                          margin: EdgeInsets.only(right: 5),
+                          ),
+                          Text('${MhData.hgroupcd}')
+                          ],
+                    )
+                    ),
+              DataCell(
+                    Row(
+                        children: [
+                        Container(
+                        margin: EdgeInsets.only(right: 5),
+                        ),
+                        Text('${MhData.hsubject}')
+                        ],
+                    )
+              ),
+              DataCell(
+                    Row(
+                        children: [
+                        Container(
+                        margin: EdgeInsets.only(right: 5),
+                        ),
+                        Text('${MhData.hpernm}')
+                        ],
+                    )
+              ),
+              DataCell(
+                    Row(
+                        children: [
+                        Container(
+                        margin: EdgeInsets.only(right: 5),
+                        ),
+                        Text('${MhData.hinputdate}')
+                        ],
+                    )
+              ),
+             DataCell(
+                 Row(
+                   children: [
+                     Container(
+                       margin: EdgeInsets.only(right: 5),
+                     ),
+                     Text('${MhData.attcnt}')
+                   ],
+                 )
+             ),
+              DataCell(
+                            Row(
+                               children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail(MhData: MhData,)));
+                                    },
+                                    child: Container(
+                                        margin: EdgeInsets.only(right: 5),
+                                        padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                                        decoration: BoxDecoration(
+                                        color: SOFT_BLUE,
+                                        borderRadius: BorderRadius.circular(2)
+                                        ),
+
+                                        child: Text('Edit', style: TextStyle(
+                                            color: Colors.white
+                                        ),
+                                        ),
+                                  ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        _showPopupDeletePayment(1);
+                                      },
+                                      child: Text('Delete', style: TextStyle(
+                                          color: SOFT_BLUE
+                                      )),
+                                    ),
+                                  )
+                                ],
+                              )
+                   ),
+                        ],
+      ),
+  ];
+
+}
+
+
+// Widget _buildList(BuildContext context, int index){
+//   return DataTable(columns:
+//     const <DataColumn>[
+//         DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
+//         DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//         DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//         DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//         DataColumn(label: Text('첨부파일건수', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//         DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//         DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+//   ],
+//
+//       rows: dataGrid(MhData[index])
+//   );
+// }
+
+
+void showPopupMakeDefault() {
     // set up the buttons
     Widget cancelButton = TextButton(
         onPressed: () {
@@ -470,7 +490,7 @@ Widget pageDetail(){
             SizedBox(
               height: 12,
             ),
-            _buildFileList(),
+            // _buildFileList(),
           ],
         ),
       ),
@@ -527,7 +547,7 @@ Widget attatchDetail(){
               SizedBox(
                 height: 12,
               ),
-              _buildFileList(),
+              // _buildFileList(),
             ],
           ),
         ),
@@ -540,34 +560,161 @@ Widget attatchDetail(){
 }
 
 //첨부파일리스트
-Widget _buildFileList(){
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
+// Widget _buildFileList(){
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Container(
+//
+//         padding: EdgeInsets.all(16),
+//         color: Colors.white,
+//         child: Column(
+//           children: [
+//             Row(
+//               children: [
+//                 SizedBox(    //왼쪽 크기 정하기
+//                   width: 0,
+//                   height: 40,
+//                 ),
+//                 Text('첨부파일 목록', style: TextStyle(
+//                     fontSize: 16,
+//                     color: SOFT_BLUE,
+//                     fontWeight: FontWeight.bold
+//                 ),
+//                     textAlign: TextAlign.center
+//                 ),
+//                 SizedBox(
+//                   height: 20,
+//                 ),
+//               ],
+//             ),
+//           ], //row-childeren
+//           // children: List.generate(shoppingCartData.length,(index){
+//           // return _buildItem(index, boxImageSize);
+//           // }),
+//         ),
+//       )
+//     ],
+//   );
+// }
 
-        padding: EdgeInsets.all(16),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text('첨부파일리스트자리입니다.', style:
-                TextStyle(
-                    color: BLACK_GREY,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13
-                ),
-                ),
-                SizedBox(width: 8),
-              ],
-            ),
-          ], //row-childeren
-          // children: List.generate(shoppingCartData.length,(index){
-          // return _buildItem(index, boxImageSize);
-          // }),
-        ),
-      )
-    ],
-  );
-}
+//             DataCell(Text("분류", textAlign: TextAlign.center)),
+//             DataCell(Text("제목")),
+//               DataCell(Text("admin")),
+//               DataCell(Text("1건", textAlign: TextAlign.center,)),
+//               DataCell(Text("04/2023")),
+//               DataCell(
+//               Row(
+//                  children: [
+//                     GestureDetector(
+//                       onTap: (){
+//                         Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
+//                       },
+//                       child: Container(
+//                           margin: EdgeInsets.only(right: 5),
+//                           padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+//                           decoration: BoxDecoration(
+//                           color: SOFT_BLUE,
+//                           borderRadius: BorderRadius.circular(2)
+//                           ),
+//
+//                           child: Text('Edit', style: TextStyle(
+//                               color: Colors.white
+//                           ),
+//                           ),
+//                     ),
+//                     ),
+//                     Container(
+//                       margin: EdgeInsets.only(left: 5),
+//                       child: GestureDetector(
+//                         onTap: (){
+//                           _showPopupDeletePayment(1);
+//                         },
+//                         child: Text('Delete', style: TextStyle(
+//                             color: SOFT_BLUE
+//                         )),
+//                       ),
+//                     )
+//                   ],
+//                 )
+//             ),
+//           ],
+//         ),
+//           DataRow(
+//             cells: <DataCell>[
+//               DataCell(
+//                   Row(
+//                     children: [
+//                       Container(
+//                         margin: EdgeInsets.only(right: 5)
+//                       ),
+//                       Text("dd")
+//                     ],
+//                 )
+//             ),
+//             DataCell(Text("Robert Steven")),
+//             DataCell(
+//                 Row(
+//                   children:[
+//                     GestureDetector(
+//                       onTap: (){
+//                         Navigator.push(context, MaterialPageRoute(builder: (context) => pageDetail()));
+//                       },
+//                       child: Text('제목조회', style: TextStyle(
+//                           fontWeight: FontWeight.bold, color: SOFT_BLUE
+//                       )),
+//                     ),
+//                 ],
+//                )),
+//               DataCell(Text("04/2023")),
+//               DataCell(
+//                   Row(
+//                     children:[
+//                       GestureDetector(
+//                         onTap: (){
+//                           Navigator.push(context, MaterialPageRoute(builder: (context) => attatchDetail()));
+//                         },
+//                         child: Text('건수조회', style: TextStyle(
+//                             fontWeight: FontWeight.bold, color: SOFT_BLUE
+//                         )),
+//                       ),
+//                     ],
+//                   )),
+//               DataCell(Text("04/2023")),            //
+//               DataCell(
+//                 Row(
+//                   children: [
+//                     GestureDetector(
+//                       onTap: (){
+//                         Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
+//                       },
+//                       child: Container(
+//                         margin: EdgeInsets.only(right: 5),
+//                         padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+//                         decoration: BoxDecoration(
+//                             color: SOFT_BLUE,
+//                             borderRadius: BorderRadius.circular(2)
+//                         ),
+//
+//                         child: Text('Edit', style: TextStyle(
+//                             color: Colors.white
+//                         ),
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       margin: EdgeInsets.only(left: 5),
+//                       child: GestureDetector(
+//                         onTap: (){
+//                           _showPopupDeletePayment(2);
+//                         },
+//                         child: Text('Delete', style: TextStyle(
+//                             color: SOFT_BLUE
+//                         )),
+//                       ),
+//                     )
+//                   ],
+//                 )
+//             ),
+//           ],
+//         ),
