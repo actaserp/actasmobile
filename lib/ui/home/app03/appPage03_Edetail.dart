@@ -71,17 +71,15 @@ class _EAppPage03DetailState extends State<EAppPage03Detail> {
   void setData(){
     _mHCustcd = TextEditingController(text: widget.MhData.custcd);
     _mHSpjangcd = TextEditingController(text: widget.MhData.spjangcd);
-    _mHRemark = TextEditingController(text: widget.MhData.remark);
     _mHHseq = TextEditingController(text: widget.MhData.hseq);
     _mHHinputdate = TextEditingController(text: widget.MhData.hinputdate);
     _mHHgroupcd = TextEditingController(text: widget.MhData.hgroupcd);
     _mHSubject = TextEditingController(text: widget.MhData.hsubject);
-    _mHFilename = TextEditingController(text: widget.MhData.hfilename);
     _mHHPernm = TextEditingController(text: widget.MhData.hpernm);
     _mHHmemo = TextEditingController(text: widget.MhData.hmemo);
     _mHHflag = TextEditingController(text: widget.MhData.hflag);
-    _mHAttcnt = TextEditingController(text: '${widget.MhData.attcnt}');
-    _mHCnam = TextEditingController(text: widget.MhData.cnam); //분류코드
+    // _mHAttcnt = TextEditingController(text: '${widget.MhData.attcnt}');
+    // _mHCnam = TextEditingController(text: widget.MhData.cnam); //분류코드
 
   }
   @override

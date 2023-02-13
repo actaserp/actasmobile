@@ -59,18 +59,16 @@ class _AppPage04State extends State<AppPage04> {
         MhmanualList_model emObject= MhmanualList_model(
             custcd:alllist[i]['custcd'],
             spjangcd:alllist[i]['spjangcd'],
-            remark:alllist[i]['remark'],
             hseq:alllist[i]['hseq'],
             hinputdate:alllist[i]['hinputdate'],
             hgroupcd:alllist[i]['hgroupcd'],
             hsubject:alllist[i]['hsubject'],
-            hfilename:alllist[i]['hfilename'],
             hpernm:alllist[i]['hpernm'],
             hmemo:alllist[i]['hmemo'],
             hflag:alllist[i]['hflag'],
-            yyyymm:alllist[i]['yyyymm'],
-            cnam:alllist[i]['cnam'],
-            attcnt:alllist[i]['attcnt'],
+            // yyyymm:alllist[i]['yyyymm'],
+            // cnam:alllist[i]['cnam'],
+            // attcnt:alllist[i]['attcnt'],
         );
         setState(() {
           MhData.add(emObject);
@@ -119,7 +117,6 @@ class _AppPage04State extends State<AppPage04> {
                 ),
               ),
               ),
-
              child: DataTable(
                     columns: <DataColumn>[
                       DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),

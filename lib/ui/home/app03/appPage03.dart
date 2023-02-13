@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
-import 'package:actasm/ui/account/payment_method/add_payment_method.dart';
-import 'package:actasm/ui/account/payment_method/edit_payment_method.dart';
+
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -24,30 +23,115 @@ class AppPage03 extends StatefulWidget {
   _AppPage03State createState() => _AppPage03State();
 }
 
-class _AppPage03State extends State<AppPage03> {  // 컨트롤러
+class _AppPage03State extends State<AppPage03> {
+  // 컨트롤러
 
-  late String _dbnm;
+  List<DataRow> _dataGrid(MhmanualList_model MhData) {
+    debugPrint('The value of a is $_dataGrid(MhData)');
+    return [
+      DataRow(
+        cells: <DataCell>[
+          DataCell(
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text(MhData.hseq)
+                ],
+              )
+          ),
+          DataCell(
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${MhData.hgroupcd}')
+                ],
+              )
+          ),
 
-  // 저장할때값매핑1
-  // TextEditingController _mHCustcd = TextEditingController();
-  // TextEditingController _mHSpjangcd = TextEditingController();
-  // TextEditingController _mHRemark = TextEditingController();
-  // TextEditingController _mHHseq = TextEditingController();
-  // TextEditingController _mHHinputdate = TextEditingController();
-  // TextEditingController _mHHgroupcd = TextEditingController();
-  // TextEditingController _mHSubject = TextEditingController();
-  // TextEditingController _mHFilename = TextEditingController();
-  // TextEditingController _mHHPernm = TextEditingController();
-  // TextEditingController _mHHmemo = TextEditingController();
-  // TextEditingController _mHHflag = TextEditingController();
-  // TextEditingController _mHAttcnt = TextEditingController();
-  // TextEditingController _mHCnam = TextEditingController();
+          DataCell(
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${MhData.hsubject}')
+                ],
+              )
+          ),
+
+          DataCell(
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 2),
+                  ),
+                  Text('${MhData.hpernm}')
+                ],
+              )
+
+          ),
+          DataCell(
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${MhData.hinputdate}')
+                ],
+              )
+
+          ),
+          DataCell(
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              EAppPage03Detail(MhData: MhData,)));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(right: 5),
+                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                      decoration: BoxDecoration(
+                          color: SOFT_BLUE,
+                          borderRadius: BorderRadius.circular(2)
+                      ),
+
+                      child: Text('Edit', style: TextStyle(
+                          color: Colors.white
+                      ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        _showPopupDeletePayment(1);
+                      },
+                      child: Text('Delete', style: TextStyle(
+                          color: SOFT_BLUE
+                      )),
+                    ),
+                  )
+                ],
+              )
+          ),
+
+        ],
+      ),
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
     mhlist_getdata();
-
   }
 
   @override
@@ -57,50 +141,58 @@ class _AppPage03State extends State<AppPage03> {  // 컨트롤러
 
   Future mhlist_getdata() async {
     String _dbnm = await SessionManager().get("dbnm");
+
     var uritxt = CLOUD_URL + '/appmobile/mhlist';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
-    final response = await http.post(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      },
-      body: <String, String>{
-        'dbnm': _dbnm,
-      },
-    );
-    if (response.statusCode == 200) {
-      List<dynamic> alllist = [];
-      alllist = jsonDecode(utf8.decode(response.bodyBytes));
-      MhData.clear();
-      for (int i = 0; i < alllist.length; i++) {
-        MhmanualList_model emObject = MhmanualList_model(
-          custcd: alllist[i]['custcd'],
-          spjangcd: alllist[i]['spjangcd'],
-          remark: alllist[i]['remark'],
-          hseq: alllist[i]['hseq'],
-          hinputdate: alllist[i]['hinputdate'],
-          hgroupcd: alllist[i]['hgroupcd'],
-          hsubject: alllist[i]['hsubject'],
-          hfilename: alllist[i]['hfilename'],
-          hpernm: alllist[i]['hpernm'],
-          hmemo: alllist[i]['hmemo'],
-          hflag: alllist[i]['hflag'],
-          yyyymm: alllist[i]['yyyymm'],
-          cnam: alllist[i]['cnam'],
-          attcnt: alllist[i]['attcnt'],
-        );
-        setState(() {
-          MhData.add(emObject);
-        });
+    // try {
+      final response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
+        body: <String, String>{
+          'dbnm': _dbnm
+        },
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> alllist = [];
+        alllist = jsonDecode(utf8.decode(response.bodyBytes));
+        MhData.clear();
+        for (int i = 0; i < alllist.length; i++) {
+          MhmanualList_model MhObject = MhmanualList_model(
+            custcd: alllist[i]['custcd'],
+            spjangcd: alllist[i]['spjangcd'],
+            hseq: alllist[i]['hseq'],
+            hinputdate: alllist[i]['hinputdate'],
+            hgroupcd: alllist[i]['hgroupcd'],
+            hsubject: alllist[i]['hsubject'],
+            hpernm: alllist[i]['hpernm'],
+            hmemo: alllist[i]['hmemo'],
+            hflag: alllist[i]['hflag'],
+          );
+          setState(() {
+            MhData.add(MhObject);
+          });
+        }
+        return
+          // Fluttertoast.showToast(msg: '성공입니다.');
+        MhData;
+        //   debugPrint('The value of a is $MhData');
+
+      } else {
+        // Fluttertoast.showToast(msg: e.toString());
+        throw Exception('불러오는데 실패했습니다');
+
       }
-      return MhData;
-    } else {
-      //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('불러오는데 실패했습니다');
-    }
+    // } catch (e) {
+    //   //만약 응답이 ok가 아니면 에러를 던집니다.
+    //   Fluttertoast.showToast(msg: '에러입니다.');
+    //   return <MhmanualList_model>[];
+    // }
   }
+
 
 
 
@@ -120,23 +212,18 @@ class _AppPage03State extends State<AppPage03> {  // 컨트롤러
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
         // bottom: _reusableWidget.bottomAppBar(),
       ),
-      body:  WillPopScope(
-            onWillPop: (){
-            Navigator.pop(context);
-            return Future.value(true);
-            },
-        child: ListView( //여기서 null
+      body:
+        ListView(
           padding: EdgeInsets.all(16),
-        children:  [
+          children:  [
           Text('수리 노하우 자료실', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
           )),
-          Expanded(
-          child: SingleChildScrollView(
+          SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-              child: Container(
+              child: Container( //높이랑 너비가 없었음
               margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
@@ -145,33 +232,48 @@ class _AppPage03State extends State<AppPage03> {  // 컨트롤러
                   ),
                 ),
               ),
-
-                child: ListView.builder(
-                  itemCount: MhData.length,
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  physics: NeverScrollableScrollPhysics(),
-                  // Add one more item for progress indicator
-                  itemBuilder: (BuildContext context, int index) {
-                    return
-                      DataTable(columns: <DataColumn>[
-                      DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
-                      DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('첨부파일건수', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                    ], rows: dataGrid(MhData[index]),
-                    );
-                  },
-                ),
-                //listview.builder endpoint
-          ),
-          ),
-      ),//single~view endpoint
+                height: 700,
+                width: 700,
+                child: ListView.builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
+                      shrinkWrap: true,
+                      itemCount: MhData.length,
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      // physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return DataTable (
+                          columnSpacing: 0,
+                          dataRowHeight: 40,
+                          columns:
+                           <DataColumn>[
+                                  DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
+                                  DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                          ], rows:
+                           _dataGrid(MhData[index]),
+                          );
+                      },
+                    ),
+                    ),  //listview.builder endpoint
+              ),
+         //single~view endpoint
           //여기까지 dataRow
+                Container( //높이랑 너비가 없었음
+                  margin: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Color(0xffcccccc),
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
           Container( //노하우등록임
-            margin: EdgeInsets.only(top: 32),
+            margin: EdgeInsets.only(top: 10),
             child: OutlinedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
@@ -207,117 +309,14 @@ class _AppPage03State extends State<AppPage03> {  // 컨트롤러
                 ),
           )
         ],
-      ),
+
       ),
     );
   }
 
 //////////////////////datacolumn list 시작
 
-  List<DataRow> dataGrid(MhmanualList_model MhData) {
-          return [
-             DataRow(
-            cells: [
-             DataCell(
-                    Row(
-                    children: [
-                          Container(
-                          margin: EdgeInsets.only(right: 5),
-                          ),
-                          Text(MhData.hseq)
-                    ],
-                    )
-                    ),
-              DataCell(
-                    Row(
-                          children: [
-                          Container(
-                          margin: EdgeInsets.only(right: 5),
-                          ),
-                          Text('${MhData.hgroupcd}')
-                          ],
-                    )
-                    ),
-              DataCell(
-                    Row(
-                        children: [
-                        Container(
-                        margin: EdgeInsets.only(right: 5),
-                        ),
-                        Text('${MhData.hsubject}')
-                        ],
-                    )
-              ),
-              DataCell(
-                    Row(
-                        children: [
-                        Container(
-                        margin: EdgeInsets.only(right: 5),
-                        ),
-                        Text('${MhData.hpernm}')
-                        ],
-                    )
-              ),
-              DataCell(
-                    Row(
-                        children: [
-                        Container(
-                        margin: EdgeInsets.only(right: 5),
-                        ),
-                        Text('${MhData.hinputdate}')
-                        ],
-                    )
-              ),
-             DataCell(
-                 Row(
-                   children: [
-                     Container(
-                       margin: EdgeInsets.only(right: 5),
-                     ),
-                     Text('${MhData.attcnt}')
-                   ],
-                 )
-             ),
-              DataCell(
-                            Row(
-                               children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail(MhData: MhData,)));
-                                    },
-                                    child: Container(
-                                        margin: EdgeInsets.only(right: 5),
-                                        padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                        decoration: BoxDecoration(
-                                        color: SOFT_BLUE,
-                                        borderRadius: BorderRadius.circular(2)
-                                        ),
 
-                                        child: Text('Edit', style: TextStyle(
-                                            color: Colors.white
-                                        ),
-                                        ),
-                                  ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        _showPopupDeletePayment(1);
-                                      },
-                                      child: Text('Delete', style: TextStyle(
-                                          color: SOFT_BLUE
-                                      )),
-                                    ),
-                                  )
-                                ],
-                              )
-                   ),
-                        ],
-      ),
-  ];
-
-}
 
 
 // Widget _buildList(BuildContext context, int index){
