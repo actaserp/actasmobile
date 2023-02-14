@@ -90,38 +90,14 @@ class _AppPage05State extends State<AppPage05> {
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: _reusableWidget.bottomAppBar(),
         ),
-        body: WillPopScope(
-          onWillPop: (){
-            Navigator.pop(context);
-            return Future.value(true);
-          },
-          child: Column(
-            children: [
-              Flexible(
-                child: ListView.builder( //ListView.builder 더 느리게 가져옴
-                  reverse: true,
-                  itemCount: _chatListReversed.length,
-                  padding: EdgeInsets.all(16),
-                  itemBuilder: (context, index) {
-                    if(_chatListReversed[index].getTextImageDate=='date'){
-                      return _buildDate(_chatListReversed[index].getMessage);
-                    } else if(_chatListReversed[index].getTextImageDate=='image'){
-                      return _buildImage(_chatListReversed[index].getMessage);
-                    } else {
-                      if(_chatListReversed[index].getType=='buyer'){
-                        return _buildChatBuyer(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!, _chatListReversed[index].getRead!);
-                      } else {
-                        return _buildChatSeller(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!);
-                      }
-                    }
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.all(16),
-                child: Row(
+        body:
+
+              ListView(
+                padding: EdgeInsets.all(16),
                   children: [
-                    Flexible(
+                    Container(
+                      width: 500,
+                      height: 100,
                       child: TextFormField(
                         controller: _etChat,
                         minLines: 1,
@@ -148,8 +124,8 @@ class _AppPage05State extends State<AppPage05> {
                     SizedBox(
                       width: 10,
                     ),
-                              Container(
-                                child: GestureDetector(
+                     Container(
+                          child: GestureDetector(
                                   onTap: (){
                                     if(_etChat.text != ''){
                                       print('send message : '+_etChat.text);
@@ -175,13 +151,56 @@ class _AppPage05State extends State<AppPage05> {
                                 ),
                               ),
 
+                SafeArea(
+                  child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container( //높이랑 너비가 없었음
+                          margin: EdgeInsets.only(top: 15),
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Color(0xffcccccc),
+                                width: 1.0,
+
+                              ),
+                              bottom:BorderSide(
+                                color: Color(0xffcccccc),
+                                width: 1.0,
+
+                              ),
+                            ),
+                          ),
+                          height: 800,
+                          width: 570,//ListView.builder 더 느리게 가져옴
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            reverse: true,
+                            itemCount: _chatListReversed.length,
+                            itemBuilder: (context, index) {
+                              if(_chatListReversed[index].getTextImageDate=='date'){
+                                return _buildDate(_chatListReversed[index].getMessage);
+                              } else if(_chatListReversed[index].getTextImageDate=='image'){
+                                return _buildImage(_chatListReversed[index].getMessage);
+                              } else {
+                                if(_chatListReversed[index].getType=='buyer'){
+                                  return _buildChatBuyer(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!, _chatListReversed[index].getRead!);
+                                } else {
+                                  return _buildChatSeller(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!);
+                                }
+                              }
+                            },
+                          ),
+
+                          ),
+
+
+                  ),
                    //endpoint
-                  ],
+
                 ),
+                  ],
               ),
-            ],
-          ),
-        )
     );
   }
 

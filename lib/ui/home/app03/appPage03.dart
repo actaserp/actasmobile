@@ -20,6 +20,7 @@ import 'appPage03_view.dart';
 
 class AppPage03 extends StatefulWidget {
 
+
   @override
   _AppPage03State createState() => _AppPage03State();
 }
@@ -27,7 +28,8 @@ class AppPage03 extends StatefulWidget {
 class _AppPage03State extends State<AppPage03> {
   // 컨트롤러
 
-
+  String _subsubsub = '';
+  //초기화하고 값실어서 보내면
 
   List<DataRow> _dataGrid(MhmanualList_model MhData) {
     debugPrint('The value of a is $_dataGrid(MhData)');
@@ -35,9 +37,16 @@ class _AppPage03State extends State<AppPage03> {
       DataRow(
         cells: <DataCell>[
           DataCell(
-              Row(
+              Row(                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
+                          Container(
+                      decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.orange,
+                      ),
+                      ),
                     // margin: EdgeInsets.only(right: 5),
                   ),
                   Text(MhData.hseq)
@@ -46,8 +55,16 @@ class _AppPage03State extends State<AppPage03> {
           ),
           DataCell(
               Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.orange,
+                      ),
+                    ),
                     // margin: EdgeInsets.only(right: 5),
                   ),
                   Text('${MhData.hgroupcd}')
@@ -57,18 +74,33 @@ class _AppPage03State extends State<AppPage03> {
 
           DataCell(
               Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    // margin: EdgeInsets.only(right: 5),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    margin: EdgeInsets.only(right: 5),
                   ),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view()));
+                  setState(() {
+                    this._subsubsub = '${MhData.hsubject}';
+                    debugPrint('테스트 값 $_subsubsub(MhData)');
+                  });
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view(MhData: MhData)));
+                  debugPrint('테스트 값 ${MhData.hsubject}(ㅜㅜ)');
+
                 },
 
                  child: Text('${MhData.hsubject}', style: TextStyle(
                     color: SOFT_BLUE, fontSize: 11, fontWeight: FontWeight.bold
-                    )),
+                    )
+                 ),
               ),
                 ],
               )
@@ -76,6 +108,7 @@ class _AppPage03State extends State<AppPage03> {
 
           DataCell(
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     // margin: EdgeInsets.only(right: 2),
@@ -87,6 +120,7 @@ class _AppPage03State extends State<AppPage03> {
           ),
           DataCell(
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     // margin: EdgeInsets.only(right: 5),
@@ -94,49 +128,12 @@ class _AppPage03State extends State<AppPage03> {
                   Text('${MhData.hinputdate}')
                 ],
               )
-
           ),
-          DataCell(
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              EAppPage03Detail(MhData: MhData,)));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 5),
-                      padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                      decoration: BoxDecoration(
-                          color: SOFT_BLUE,
-                          borderRadius: BorderRadius.circular(2)
-                      ),
 
-                      child: Text('Edit', style: TextStyle(
-                          color: Colors.white
-                      ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 5),
-                    child: GestureDetector(
-                      onTap: () {
-                        _showPopupDeletePayment(1);
-                      },
-                      child: Text('Delete', style: TextStyle(
-                          color: SOFT_BLUE
-                      )),
-                    ),
-                  )
                 ],
-              )
-          ),
 
-        ],
-      ),
-    ];
+          ),
+        ];
   }
 
   @override
@@ -233,7 +230,7 @@ class _AppPage03State extends State<AppPage03> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
               child: Container( //높이랑 너비가 없었음
-              margin: EdgeInsets.only(top: 5),
+              margin: EdgeInsets.only(top: 15),
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border(
@@ -253,6 +250,7 @@ class _AppPage03State extends State<AppPage03> {
                         return DataTable (
                           columnSpacing: 0,
                           dataRowHeight: 40,
+
                           columns:
                            <DataColumn>[
                                   DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
@@ -260,7 +258,6 @@ class _AppPage03State extends State<AppPage03> {
                                   DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                                  DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                           ], rows:
                            _dataGrid(MhData[index]),
                           );

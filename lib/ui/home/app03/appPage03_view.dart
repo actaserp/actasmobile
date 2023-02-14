@@ -18,18 +18,25 @@ import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
 
 class AppPage03view extends StatefulWidget {
+  final MhmanualList_model MhData;
+  const AppPage03view({Key? key, required this.MhData}) : super(key: key);
 
   @override
   _AppPage03ViewState createState() => _AppPage03ViewState();
 }
 
 class _AppPage03ViewState extends State<AppPage03view> {
-  // 컨트롤러
+
+  String? _MHhgpTxt;
+
+  //if hseq = hseq 일때, set해주기.
+  // String toString()=> 'Weather for ${MhData ?? 'dd'}';
 
   @override
   void initState() {
     super.initState();
-    mhlist_getdata();
+    // widget.MhData.hgroupcd = _MHhgpTxt;
+
   }
 
   @override
@@ -37,52 +44,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
     super.dispose();
   }
 
-  Future mhlist_getdata() async {
-    String _dbnm = await SessionManager().get("dbnm");
-
-    var uritxt = CLOUD_URL + '/appmobile/mhlist';
-    var encoded = Uri.encodeFull(uritxt);
-    Uri uri = Uri.parse(encoded);
-    // try {
-      final response = await http.post(
-        uri,
-        headers: <String, String>{
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json'
-        },
-        body: <String, String>{
-          'dbnm': _dbnm
-        },
-      );
-      if (response.statusCode == 200) {
-        List<dynamic> alllist = [];
-        alllist = jsonDecode(utf8.decode(response.bodyBytes));
-        MhData.clear();
-        for (int i = 0; i < alllist.length; i++) {
-          MhmanualList_model MhObject = MhmanualList_model(
-            custcd: alllist[i]['custcd'],
-            spjangcd: alllist[i]['spjangcd'],
-            hseq: alllist[i]['hseq'],
-            hinputdate: alllist[i]['hinputdate'],
-            hgroupcd: alllist[i]['hgroupcd'],
-            hsubject: alllist[i]['hsubject'],
-            hpernm: alllist[i]['hpernm'],
-            hmemo: alllist[i]['hmemo'],
-            hflag: alllist[i]['hflag'],
-          );
-          setState(() {
-            MhData.add(MhObject);
-          });
-        }
-        return
-        MhData;
-
-      } else {
-        throw Exception('불러오는데 실패했습니다');
-
-      }
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +61,11 @@ class _AppPage03ViewState extends State<AppPage03view> {
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
         // bottom: _reusableWidget.bottomAppBar(),
       ),
-      body: ListView(
+      body:
+     ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Text('ㅇㅇ', style: TextStyle(
+          Text('${MhData}', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w700, color: SOFT_BLUE
           )),
           Container(
@@ -115,12 +77,13 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 width: 1.0,
               ),
             ),
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('글제목글제목글제목', style: TextStyle(
+                  child: Text('hsubject', style: TextStyle(
                       fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
                   )),
                 ),
@@ -128,7 +91,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: [
-                      Text('작성자', style: TextStyle(
+                      Text('hpernm', style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                       ))
                     ],
@@ -148,7 +111,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
-                  child: Text('글내용글내용글내용2글내용글내용글내용2글내용글내용글내용2글내용글내용글내용2글내용글내용글내용2글내용글내용글내용2', style: TextStyle(
+                  child: Text('hmemo', style: TextStyle(
                       fontSize: 14, color: CHARCOAL
                   )),
                 ),
@@ -167,107 +130,38 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Text('첨부파일리스트', style: TextStyle(
-                      fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+                      fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
                   )),
                 ),
                 SizedBox(
                   height: 12,
                 ),
                 _buildFileList(),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+
+            ),
+
+            // child:  ListView.builder(
+            //       shrinkWrap: true,
+            //       itemCount: 1,
+            //       // physics: NeverScrollableScrollPhysics(),
+            //       itemBuilder: (BuildContext context, int index) {
+            //         return _veiwdetail(MhData[index]);
+            //       },
+            //     ),
+          ),
+             SizedBox(
+                  height: 12,
+                ),
+
               ],
             ),
-          ),
-          SizedBox(
-            height: 32,
-          ),
-        ],
-      ),
-    );
+          );
+
   }
-
-
-
-void showPopupMakeDefault() {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text('No', style: TextStyle(color: SOFT_BLUE))
-    );
-    Widget continueButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-          // _reusableWidget.startLoading(context, 'Success', 0);
-        },
-        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      title: Text('Make Default', style: TextStyle(fontSize: 18),),
-      content: Text('Are you sure to make this card as a default payment ?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void _showPopupDeletePayment(int index) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text('No', style: TextStyle(color: SOFT_BLUE))
-    );
-    Widget continueButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-          if(index==0){
-            Fluttertoast.showToast(msg: '삭제 되었습니다.', toastLength: Toast.LENGTH_LONG);
-          } else {
-            // _reusableWidget.startLoading(context, 'Delete Payment Method Success', 0);
-          }
-        },
-        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      title: Text('수리노하우 게시글 삭제', style: TextStyle(fontSize: 18),),
-      content: Text('해당 글을 삭제하시겠습니까?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-
 
 
 //첨부파일리스트
@@ -308,5 +202,72 @@ Widget _buildFileList() {
   );
 }
 
+  Widget _veiwdetail(MhmanualList_model MhData){
+    return  Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                child: Text('${MhData.hsubject}', style: TextStyle(
+                    fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+                )),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 8),
+                child: Row(
+                  children: [
+                    Text('${MhData.hpernm}', style: TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                    ))
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Color(0xffcccccc),
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 8),
+                child: Text('${MhData.hmemo}', style: TextStyle(
+                    fontSize: 14, color: CHARCOAL
+                )),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Color(0xffcccccc),
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text('첨부파일리스트', style: TextStyle(
+                    fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
+                )),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              _buildFileList(),
+              SizedBox(
+          height: 20,
+        ),
+        ],
 
+    );
+
+  }
 }
