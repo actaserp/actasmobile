@@ -33,90 +33,62 @@ class _AppPage03State extends State<AppPage03> {
 
   List<DataRow> _dataGrid(MhmanualList_model MhData) {
     debugPrint('The value of a is $_dataGrid(MhData)');
+    // Text(MhData.hseq) ${MhData.hgroupcd}
     return [
       DataRow(
         cells: <DataCell>[
           DataCell(
-              Row(                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                          Container(
-                      decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.orange,
-                      ),
-                      ),
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text(MhData.hseq)
-                ],
-              )
+               ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 50), //SET max width
+              child: Text('${MhData.hseq}',
+              overflow: TextOverflow.ellipsis)),
+          ),
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 50), //SET max width
+                    child: Text('${MhData.hgroupcd}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
           ),
           DataCell(
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.orange,
-                      ),
-                    ),
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text('${MhData.hgroupcd}')
-                ],
-              )
-          ),
-
-          DataCell(
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.orange,
-                      ),
-                    ),
-                    margin: EdgeInsets.only(right: 5),
-                  ),
-              GestureDetector(
-                onTap: (){
-                  setState(() {
-                    this._subsubsub = '${MhData.hsubject}';
-                    debugPrint('테스트 값 $_subsubsub(MhData)');
-                  });
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view(MhData: MhData)));
-                  debugPrint('테스트 값 ${MhData.hsubject}(ㅜㅜ)');
-
-                },
-
-                 child: Text('${MhData.hsubject}', style: TextStyle(
-                    color: SOFT_BLUE, fontSize: 11, fontWeight: FontWeight.bold
-                    )
-                 ),
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        this._subsubsub = '${MhData.hsubject}';
+                      });
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view(MhData: MhData)));
+                    },
+                   child: ConstrainedBox(
+                     constraints:  BoxConstraints(maxWidth: 50),
+                     child: Text('${MhData.hsubject}',
+                        overflow: TextOverflow.ellipsis,
+                         style: TextStyle(
+                        color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                        )
+                     ),
+                   ),
               ),
                 ],
               )
           ),
-
           DataCell(
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    // margin: EdgeInsets.only(right: 2),
-                  ),
-                  Text('${MhData.hpernm}')
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 50), //SET max width
+                      child: Text('${MhData.hpernm}',
+                          overflow: TextOverflow.ellipsis)),
                 ],
               )
-
           ),
           DataCell(
               Row(
@@ -129,9 +101,7 @@ class _AppPage03State extends State<AppPage03> {
                 ],
               )
           ),
-
                 ],
-
           ),
         ];
   }
@@ -231,7 +201,7 @@ class _AppPage03State extends State<AppPage03> {
             scrollDirection: Axis.horizontal,
               child: Container( //높이랑 너비가 없었음
               margin: EdgeInsets.only(top: 15),
-              padding: EdgeInsets.all(12),
+              // padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
@@ -250,11 +220,16 @@ class _AppPage03State extends State<AppPage03> {
                         return DataTable (
                           columnSpacing: 0,
                           dataRowHeight: 40,
-
                           columns:
                            <DataColumn>[
-                                  DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
-                                  DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  DataColumn(label:
+                                  Container(
+                                      width: 30,
+                                  child: Text('번호',
+                                      style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
+                                  ),
+                                  DataColumn(label:
+                                  Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),

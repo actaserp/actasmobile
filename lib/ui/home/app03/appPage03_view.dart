@@ -63,10 +63,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
       ),
       body:
      ListView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(26),
         children: [
-          Text('${MhData}', style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w700, color: SOFT_BLUE
+          Text('No.${widget.MhData.hseq}', style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
           )),
           Container(
             margin: EdgeInsets.only(top: 8),
@@ -83,16 +83,16 @@ class _AppPage03ViewState extends State<AppPage03view> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('hsubject', style: TextStyle(
-                      fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
+                  child: Text('제목: ${widget.MhData.hsubject}', style: TextStyle(
+                      fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
                   )),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: [
-                      Text('hpernm', style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                      Text('작성자 <${widget.MhData.hpernm}>', style: TextStyle(
+                          fontSize: 11, color: CHARCOAL
                       ))
                     ],
                   ),
@@ -111,7 +111,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
-                  child: Text('hmemo', style: TextStyle(
+                  child: Text('내용: ${widget.MhData.hmemo}', style: TextStyle(
                       fontSize: 14, color: CHARCOAL
                   )),
                 ),
@@ -127,6 +127,12 @@ class _AppPage03ViewState extends State<AppPage03view> {
                     ),
                   ),
                 ),
+                // Container(
+                //   margin: EdgeInsets.only(top: 8),
+                //   child: Text('${widget.MhData.hmemo}', style: TextStyle(
+                //       fontSize: 14, color: CHARCOAL
+                //   )),
+                // ),
                 Container(
                   margin: EdgeInsets.only(top: 10),
                   child: Text('첨부파일리스트', style: TextStyle(
