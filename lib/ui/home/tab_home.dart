@@ -9,6 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'app03/appPage03.dart';
+import 'app04/appPage04.dart';
+import 'app05/appPage05.dart';
 import 'app5Home/tab5_home.dart';
 import 'appPage02.dart';
 
@@ -252,10 +255,13 @@ class _Home1PageState extends State<TabHomePage> {
                 case '현장정보 승강기번호조회 비상통화조회' :
                   break;
                 case '수 리 노 하 우' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03()));
                   break;
                 case '부 품 가 이 드' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04()));
                   break;
                 case '수 리 Q  &  A' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage05()));
                   break;
                 case '직 원 정 보' :
                   break;

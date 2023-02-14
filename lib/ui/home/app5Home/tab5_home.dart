@@ -14,6 +14,8 @@ import '../../../model/banner_slider_model.dart';
 import '../../reusable/cache_image_network.dart';
 import '../../reusable/global_widget.dart';
 import 'appPager07.dart';
+import 'appPager08.dart';
+
 
 
 class Tab5HomePage extends StatefulWidget {
@@ -49,9 +51,9 @@ class _Home1PageState extends State<Tab5HomePage> {
     _bannerData.add(BannerSliderModel(id: 4, image: HYUNDAI_URL + '/product_gallery/THE EL_2(1).jpg'));
     _bannerData.add(BannerSliderModel(id: 5, image: HYUNDAI_URL + '/product_characteristic/특징_02(0).jpg'));
 
-    _categoryData.add(CategoryModel(id: 1, name:'현장별고장구분별현황', image: GLOBAL_URL+'/menu/credit_application_status.png', color: 0xffffff));
-    _categoryData.add(CategoryModel(id: 2, name: '현장별고장원인별현황', image:GLOBAL_URL+'/menu/credit_payment.png', color: 0xffffff));
-    _categoryData.add(CategoryModel(id: 2, name: '현장별고장내용별현황', image:GLOBAL_URL+'/menu/store.png', color: 0xD3D3D3));
+    _categoryData.add(CategoryModel(id: 1, name:'현장별고장내용별현황', image: GLOBAL_URL+'/menu/credit_application_status.png', color: 0xffffff));
+    _categoryData.add(CategoryModel(id: 2, name: '현장별고장부위별현황', image:GLOBAL_URL+'/menu/credit_payment.png', color: 0xffffff));
+    _categoryData.add(CategoryModel(id: 2, name: '현장별고장원인별현황', image:GLOBAL_URL+'/menu/store.png', color: 0xD3D3D3));
 
 
     super.initState();
@@ -59,7 +61,7 @@ class _Home1PageState extends State<Tab5HomePage> {
 
   }
 
-  Future<void> setData() async {
+  Future<void> setData() async {   
     _usernm = await SessionManager().get("username");
 
   }
@@ -284,12 +286,14 @@ class _Home1PageState extends State<Tab5HomePage> {
           onTap: (){
             String ls_name = _categoryData[index].name.replaceAll('\n', ' ');
             switch (ls_name){
-              case '현장별고장구분별현황' :
+              case '현장별고장내용별현황' :
                 Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager07()));
                 break;
-              case '현장별고장원인별현황' :
+              case '현장별고장부위별현황' :
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager08()));
+
                 break;
-              case '현장별고장내용별현황' :
+              case '현장별고장원인별현황' :
                 break;
               default:
                 break;
