@@ -96,8 +96,7 @@ class _AppPage05State extends State<AppPage05> {
                 padding: EdgeInsets.all(16),
                   children: [
                     Container(
-                      width: 500,
-                      height: 100,
+                      height: 60,
                       child: TextFormField(
                         controller: _etChat,
                         minLines: 1,
@@ -110,7 +109,7 @@ class _AppPage05State extends State<AppPage05> {
                         decoration: InputDecoration(
                           fillColor: Colors.grey[200],
                           filled: true,
-                          hintText: 'Q&A를 작성하세요',
+                          hintText: 'textfield',
                           focusedBorder: UnderlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(5.0)),
                               borderSide: BorderSide(color: Colors.grey[200]!)),
@@ -121,57 +120,24 @@ class _AppPage05State extends State<AppPage05> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                     Container(
-                          child: GestureDetector(
-                                  onTap: (){
-                                    if(_etChat.text != ''){
-                                      print('send message : '+_etChat.text);
-                                      setState(() {
-                                        DateTime now = DateTime.now();
-                                        String currentDate = DateFormat('d MMM yyyy').format(now);
-                                        if(_lastDate!=currentDate){
-                                          _lastDate = currentDate;
-                                          _addDate(currentDate);
-                                        }
-                                        _addMessage(_etChat.text);
-                                        _etChat.text = '';
-                                      });
-                                    }
-                                  },
-                                  child: ClipOval(
-                                    child: Container(
-                                        color: SOFT_BLUE,
-                                        padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.send, color: Colors.white)
-                                    ),
-                                  ),
-                                ),
-                              ),
-
                 SafeArea(
                   child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Container( //높이랑 너비가 없었음
-                          margin: EdgeInsets.only(top: 15),
-                          padding: EdgeInsets.all(12),
+                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             border: Border(
                               top: BorderSide(
                                 color: Color(0xffcccccc),
                                 width: 1.0,
-
                               ),
                               bottom:BorderSide(
                                 color: Color(0xffcccccc),
                                 width: 1.0,
-
                               ),
                             ),
                           ),
-                          height: 800,
+                          height: 820,
                           width: 570,//ListView.builder 더 느리게 가져옴
                           child: ListView.builder(
                             shrinkWrap: true,
@@ -207,12 +173,33 @@ class _AppPage05State extends State<AppPage05> {
   Widget _buildDate(String date){
     return Container(
       margin: EdgeInsets.all(16),
-      child: Center(
-        child: Text(date, style: TextStyle(
-            color: SOFT_GREY, fontSize: 11
-        )),
+      decoration: BoxDecoration(
+        border: Border(
+        bottom: BorderSide(
+        color: Color(0xffcccccc),
+        width: 1.5
+        ),
+        ),
+    ),
+      child: Row(
+        children: [
+          Center(
+            child: Text(date, style: TextStyle(
+                color: SOFT_GREY, fontSize: 11
+            )),
+          ),
+        SizedBox(
+          width: 130,
+        ),
+        Center(
+          child: Text('아무개가 작성한 질문입니다.', style: TextStyle(
+              color: SOFT_GREY, fontSize: 11
+          )),
+        ),
+        ],
       ),
-    );
+      );
+
   }
 
   Widget _buildChatBuyer(String message, String time, bool read){

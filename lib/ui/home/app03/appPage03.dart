@@ -10,9 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-
-
 import '../tab_home.dart';
 import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
@@ -39,7 +36,7 @@ class _AppPage03State extends State<AppPage03> {
         cells: <DataCell>[
           DataCell(
                ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 50), //SET max width
+                constraints: BoxConstraints(maxWidth: 75), //SET max width
               child: Text('${MhData.hseq}',
               overflow: TextOverflow.ellipsis)),
           ),
@@ -48,7 +45,7 @@ class _AppPage03State extends State<AppPage03> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 50), //SET max width
+                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50), //SET max width
                     child: Text('${MhData.hgroupcd}',
                         overflow: TextOverflow.ellipsis)),
               ],
@@ -67,7 +64,7 @@ class _AppPage03State extends State<AppPage03> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view(MhData: MhData)));
                     },
                    child: ConstrainedBox(
-                     constraints:  BoxConstraints(maxWidth: 50),
+                     constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
                      child: Text('${MhData.hsubject}',
                         overflow: TextOverflow.ellipsis,
                          style: TextStyle(
@@ -84,7 +81,7 @@ class _AppPage03State extends State<AppPage03> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 50), //SET max width
+                      constraints: BoxConstraints(minWidth: 50), //SET max width
                       child: Text('${MhData.hpernm}',
                           overflow: TextOverflow.ellipsis)),
                 ],
@@ -218,18 +215,18 @@ class _AppPage03State extends State<AppPage03> {
                       // physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
                         return DataTable (
-                          columnSpacing: 0,
+                          columnSpacing: 10,
                           dataRowHeight: 40,
                           columns:
                            <DataColumn>[
-                                  DataColumn(label:
-                                  Container(
-                                      width: 30,
-                                  child: Text('번호',
-                                      style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
-                                  ),
-                                  DataColumn(label:
-                                  Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                                  // DataColumn(label:
+                                  // Container(
+                                  //     width: 30,
+                                  // child: Text('번호',
+                                  //     style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
+                                  // ),
+                             DataColumn(label: Text('번호',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                             DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                                   DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),

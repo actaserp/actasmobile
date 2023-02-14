@@ -10,32 +10,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-
-
+import '../../../model/app04/BmanualList_model.dart';
 import '../tab_home.dart';
-import 'appPage03_Edetail.dart';
-import 'appPage03_detail.dart';
 
-class AppPage03view extends StatefulWidget {
-  final MhmanualList_model MhData;
-  const AppPage03view({Key? key, required this.MhData}) : super(key: key);
+class AppPage04view extends StatefulWidget {
+  final BmanualList_model BData;
+  const AppPage04view({Key? key, required this.BData}) : super(key: key);
 
   @override
-  _AppPage03ViewState createState() => _AppPage03ViewState();
+  _AppPage04ViewState createState() => _AppPage04ViewState();
 }
 
-class _AppPage03ViewState extends State<AppPage03view> {
-
-  String? _MHhgpTxt;
-
-  //if hseq = hseq 일때, set해주기.
-  // String toString()=> 'Weather for ${MhData ?? 'dd'}';
+class _AppPage04ViewState extends State<AppPage04view> {
 
   @override
   void initState() {
     super.initState();
-    // widget.MhData.hgroupcd = _MHhgpTxt;
 
   }
 
@@ -65,7 +55,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
      ListView(
         padding: EdgeInsets.all(26),
         children: [
-          Text('No.${widget.MhData.hseq}', style: TextStyle(
+          Text('No.${widget.BData.bseq}', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
           )),
           Container(
@@ -83,7 +73,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('제목: ${widget.MhData.hsubject}', style: TextStyle(
+                  child: Text('제목: ${widget.BData.bsubject}', style: TextStyle(
                       fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
                   )),
                 ),
@@ -91,7 +81,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: [
-                      Text('작성자 <${widget.MhData.hpernm}> , 구분[${widget.MhData.hgroupcd}]', style: TextStyle(
+                      Text('작성자 <${widget.BData.bpernm}>, 구분[${widget.BData.bgourpcd}]',style: TextStyle(
                           fontSize: 11, color: CHARCOAL
                       ))
                     ],
@@ -111,7 +101,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 8),
-                  child: Text('내용: ${widget.MhData.hmemo}', style: TextStyle(
+                  child: Text('내용: ${widget.BData.bmemo}', style: TextStyle(
                       fontSize: 14, color: CHARCOAL
                   )),
                 ),
@@ -183,81 +173,10 @@ Widget _buildFileList() {
               ],
             ),
           ], //row-childeren
-          // children: List.generate(shoppingCartData.length,(index){
-          // return _buildItem(index, boxImageSize);
-          // }),
         ),
       )
     ],
   );
 }
 
-  Widget _veiwdetail(MhmanualList_model MhData){
-    return  Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: Text('${MhData.hsubject}', style: TextStyle(
-                    fontSize:14, fontWeight: FontWeight.bold, color: CHARCOAL
-                )),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 8),
-                child: Row(
-                  children: [
-                    Text('${MhData.hpernm}', style: TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                    ))
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5),
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xffcccccc),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 8),
-                child: Text('${MhData.hmemo}', style: TextStyle(
-                    fontSize: 14, color: CHARCOAL
-                )),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15),
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xffcccccc),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: Text('첨부파일리스트', style: TextStyle(
-                    fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
-                )),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              _buildFileList(),
-              SizedBox(
-          height: 20,
-        ),
-        ],
-
-    );
-
-  }
 }
