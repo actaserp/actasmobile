@@ -27,11 +27,6 @@ class AppPage03view extends StatefulWidget {
 
 class _AppPage03ViewState extends State<AppPage03view> {
 
-  String? _MHhgpTxt;
-
-  //if hseq = hseq 일때, set해주기.
-  // String toString()=> 'Weather for ${MhData ?? 'dd'}';
-
   @override
   void initState() {
     super.initState();
@@ -91,7 +86,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: [
-                      Text('작성자 <${widget.MhData.hpernm}> , 구분[${widget.MhData.hgroupcd}]', style: TextStyle(
+                      Text('작성자 <${widget.MhData.hpernm}> , 구분 [${widget.MhData.hgroupcd}]', style: TextStyle(
                           fontSize: 11, color: CHARCOAL
                       ))
                     ],

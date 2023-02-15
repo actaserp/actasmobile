@@ -90,39 +90,36 @@ class _AppPage05State extends State<AppPage05> {
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: _reusableWidget.bottomAppBar(),
         ),
-        body:
-
-              ListView(
+        body:ListView(
                 padding: EdgeInsets.all(16),
                   children: [
-                    Container(
-                      height: 60,
-                      child: TextFormField(
-                        controller: _etChat,
-                        minLines: 1,
-                        maxLines: 4,
-                        textAlignVertical: TextAlignVertical.bottom,
-                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                        onChanged: (textValue) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.grey[200],
-                          filled: true,
-                          hintText: 'textfield',
-                          focusedBorder: UnderlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                              borderSide: BorderSide(color: Colors.grey[200]!)),
-                          enabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            borderSide: BorderSide(color: Colors.grey[200]!),
-                          ),
-                        ),
-                      ),
-                    ),
-                SafeArea(
-                  child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                    // Container(
+                    //   height: 60,
+                    //   child: TextFormField(
+                    //     controller: _etChat,
+                    //     minLines: 1,
+                    //     maxLines: 4,
+                    //     textAlignVertical: TextAlignVertical.bottom,
+                    //     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    //     onChanged: (textValue) {
+                    //       setState(() {});
+                    //     },
+                    //     decoration: InputDecoration(
+                    //       fillColor: Colors.grey[200],
+                    //       filled: true,
+                    //       hintText: 'textfield',
+                    //       focusedBorder: UnderlineInputBorder(
+                    //           borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    //           borderSide: BorderSide(color: Colors.grey[200]!)),
+                    //       enabledBorder: UnderlineInputBorder(
+                    //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    //         borderSide: BorderSide(color: Colors.grey[200]!),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                  SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
                         child: Container( //높이랑 너비가 없었음
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -131,21 +128,22 @@ class _AppPage05State extends State<AppPage05> {
                                 color: Color(0xffcccccc),
                                 width: 1.0,
                               ),
-                              bottom:BorderSide(
-                                color: Color(0xffcccccc),
-                                width: 1.0,
-                              ),
                             ),
                           ),
-                          height: 820,
-                          width: 570,//ListView.builder 더 느리게 가져옴
-                          child: ListView.builder(
+                          height: MediaQuery.of(context).size.height,
+                         child: Column(
+                          children: [
+                           ListView.builder(
                             shrinkWrap: true,
                             reverse: true,
                             itemCount: _chatListReversed.length,
                             itemBuilder: (context, index) {
                               if(_chatListReversed[index].getTextImageDate=='date'){
-                                return _buildDate(_chatListReversed[index].getMessage);
+                                return
+                                  Column(
+                                    children:[
+                                  _buildDate(_chatListReversed[index].getMessage),
+                                      _buildList(),]);
                               } else if(_chatListReversed[index].getTextImageDate=='image'){
                                 return _buildImage(_chatListReversed[index].getMessage);
                               } else {
@@ -157,15 +155,11 @@ class _AppPage05State extends State<AppPage05> {
                               }
                             },
                           ),
-
+                         ],
                           ),
-
-
+                        ),
                   ),
-                   //endpoint
-
-                ),
-                  ],
+                   ],
               ),
     );
   }
@@ -202,6 +196,57 @@ class _AppPage05State extends State<AppPage05> {
 
   }
 
+
+
+
+  //게시글 디자인
+  Widget _buildList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 8),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(0xffcccccc),
+              width: 1.0,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SizedBox( //왼쪽 크기 정하기
+                    width: 0,
+                    height: 40,
+                  ),
+                  Container(
+                    child: Text('제목:', style: TextStyle(
+                        fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                    )),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        Text('작성자 , 구분 ', style: TextStyle(
+                            fontSize: 11, color: CHARCOAL
+                        ))
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildChatBuyer(String message, String time, bool read){
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
@@ -236,7 +281,7 @@ class _AppPage05State extends State<AppPage05> {
                 Wrap(
                   children: [
                     SizedBox(width: 4),
-                    Icon(Icons.done_all, color: read==true?PRIMARY_COLOR:SOFT_GREY, size: 11),
+                    Icon(Icons.done_all, color: SOFT_BLUE, size: 11),
                     SizedBox(width: 2),
                     Text(time, style: TextStyle(
                         color: SOFT_GREY, fontSize: 9
