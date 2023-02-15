@@ -294,29 +294,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-                  // Column( //화면꽉차게 쓰기:expanded
-                  //   children:[
-                  //          Expanded(
-                  //                 child:
-                  //                   Text('첨부파일 리스트', style: TextStyle(
-                  //                       fontSize: 15,
-                  //                       color: SOFT_BLUE,
-                  //                       fontWeight: FontWeight.bold
-                  //                   ),
-                  //                       textAlign: TextAlign.center
-                  //                   ),
-                  //
-                  //             ),
-                  //     Text('첨부파일 목록', style: TextStyle(
-                  //         fontSize: 15,
-                  //         color: SOFT_BLUE,
-                  //         fontWeight: FontWeight.bold
-                  //     ),
-                  //         textAlign: TextAlign.center
-                  //     ),
-                  //
-                  //   ],
-                  // ),
             Row(
               children: [
                             SizedBox(    //왼쪽 크기 정하기

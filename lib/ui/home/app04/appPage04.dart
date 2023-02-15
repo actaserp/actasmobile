@@ -165,7 +165,6 @@ class _AppPage04State extends State<AppPage04> {
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-          // bottom: _reusableWidget.bottomAppBar(),
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
@@ -177,21 +176,23 @@ class _AppPage04State extends State<AppPage04> {
           scrollDirection: Axis.horizontal,
            child: Container(
               margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
+             decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
                     color: Color(0xffcccccc),
                     width: 1.0,
                 ),
+                  bottom: BorderSide(
+                    color: Color(0xffcccccc),
+                    width: 1.0,
+                  ),
               ),
               ),
              height: 700,
              width: 750,
-             child: ListView.builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
+             child: ListView.builder(
                shrinkWrap: true,
                itemCount: BData.length,
-               // physics: NeverScrollableScrollPhysics(),
                itemBuilder: (BuildContext context, int index) {
                  return DataTable (
                    columnSpacing: 10,
@@ -211,20 +212,8 @@ class _AppPage04State extends State<AppPage04> {
                  );
                },
              ),
-           ),  //listview.builder endpoint
+           ),
         ),
-            Container(
-              margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                  ),
-                ),
-              ),
-            ),
             Container( //등록임
               margin: EdgeInsets.only(top: 10),
               child: OutlinedButton(

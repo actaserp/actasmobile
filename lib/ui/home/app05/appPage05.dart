@@ -93,31 +93,32 @@ class _AppPage05State extends State<AppPage05> {
         body:ListView(
                 padding: EdgeInsets.all(16),
                   children: [
-                    // Container(
-                    //   height: 60,
-                    //   child: TextFormField(
-                    //     controller: _etChat,
-                    //     minLines: 1,
-                    //     maxLines: 4,
-                    //     textAlignVertical: TextAlignVertical.bottom,
-                    //     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                    //     onChanged: (textValue) {
-                    //       setState(() {});
-                    //     },
-                    //     decoration: InputDecoration(
-                    //       fillColor: Colors.grey[200],
-                    //       filled: true,
-                    //       hintText: 'textfield',
-                    //       focusedBorder: UnderlineInputBorder(
-                    //           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    //           borderSide: BorderSide(color: Colors.grey[200]!)),
-                    //       enabledBorder: UnderlineInputBorder(
-                    //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    //         borderSide: BorderSide(color: Colors.grey[200]!),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Container(
+                      height: 60,
+                      child: TextFormField(
+                        enabled: false,
+                        controller: _etChat,
+                        minLines: 1,
+                        maxLines: 4,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                        onChanged: (textValue) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          hintText: '수리 Q&A 게시판',
+                          focusedBorder: UnderlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                              borderSide: BorderSide(color: Colors.grey[200]!)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                            borderSide: BorderSide(color: Colors.grey[200]!),
+                          ),
+                        ),
+                      ),
+                    ),
                   SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Container( //높이랑 너비가 없었음
@@ -128,11 +129,16 @@ class _AppPage05State extends State<AppPage05> {
                                 color: Color(0xffcccccc),
                                 width: 1.0,
                               ),
+                              bottom: BorderSide(
+                                color: Color(0xffcccccc),
+                                width: 1.0,
+                              ),
                             ),
                           ),
-                          height: MediaQuery.of(context).size.height,
-                         child: Column(
-                          children: [
+                          width: 750,
+                          height: 870,
+                          // height: MediaQuery.of(context).size.height,
+                          child:
                            ListView.builder(
                             shrinkWrap: true,
                             reverse: true,
@@ -155,12 +161,11 @@ class _AppPage05State extends State<AppPage05> {
                               }
                             },
                           ),
-                         ],
-                          ),
                         ),
                   ),
                    ],
               ),
+
     );
   }
 
@@ -212,48 +217,58 @@ class _AppPage05State extends State<AppPage05> {
               color: Color(0xffcccccc),
               width: 1.0,
             ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(12),
+              ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                children: [
-                  SizedBox( //왼쪽 크기 정하기
-                    width: 0,
-                    height: 40,
-                  ),
+               children: [
                   Container(
-                    child: Text('제목:', style: TextStyle(
+                  padding:EdgeInsets.all(16),
+                   color: Color(0xfff9fafd),
+                   // decoration: BoxDecoration(
+                   //        color: Color(0xfff9fafd),
+                   //                            ),
+                    child: Text('내용:', style: TextStyle(
                         fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
                     )),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 8),
-                    child: Row(
-                      children: [
-                        Text('작성자 , 구분 ', style: TextStyle(
-                            fontSize: 11, color: CHARCOAL
-                        ))
-                      ],
-                    ),
+                  ],
                   ),
-                ],
-              ),
-            ],
+                  ],
+                  ),
+                  // Container(
+                  //   padding:EdgeInsets.all(16),
+                  //   child: Text('작성자  ', style: TextStyle(
+                  //       fontSize: 11, color: CHARCOAL
+                  //   )),
+                    // child: Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: [
+                    //     Text('작성자  ', style: TextStyle(
+                    //         fontSize: 11, color: CHARCOAL
+                    //     )),
+                    //   ],
+                    // ),
+                  // ),
+
+
           ),
-        )
       ],
-    );
+                  );
+
   }
 
   Widget _buildChatBuyer(String message, String time, bool read){
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
       margin:EdgeInsets.only(top: 4),
-      child: Wrap(
-        alignment: WrapAlignment.end,
-        children: [
+      child:
           Container(
             constraints: BoxConstraints(maxWidth: boxChatSize),
             padding: EdgeInsets.all(8),
@@ -291,8 +306,6 @@ class _AppPage05State extends State<AppPage05> {
               ],
             ),
           ),
-        ],
-      ),
     );
   }
 
@@ -300,8 +313,7 @@ class _AppPage05State extends State<AppPage05> {
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
       margin:EdgeInsets.only(top: 4),
-      child: Wrap(
-        children: [
+      child:
           Container(
               constraints: BoxConstraints(maxWidth: boxChatSize),
               padding: EdgeInsets.all(8),
@@ -335,15 +347,14 @@ class _AppPage05State extends State<AppPage05> {
                   )
                 ],
               )
-          ),
-        ],
+
       ),
     );
   }
 
   Widget _buildImage(String imageUrl){
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
-    final double boxImageSize = (MediaQuery.of(context).size.width / 6);
+    final double boxImageSize = (MediaQuery.of(context).size.width / 2);
     return Container(
       margin:EdgeInsets.only(top: 4),
       child: Wrap(
