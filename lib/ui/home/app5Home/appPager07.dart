@@ -307,7 +307,7 @@ class _AppPager07State extends State<AppPager07> {
                       SizedBox(
                         width: 4,
                       ),
-                      Text('접수일자  '+e411Data.compdate+' ', style: GlobalStyle.couponExpired),
+                      Text('처리일자  '+e411Data.compdate+' ', style: GlobalStyle.couponExpired),
                     ],
                   ),
                   GestureDetector(

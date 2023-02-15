@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -5,40 +6,40 @@ import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/app02/e411list_model.dart';
 
-class AppPager08Detail extends StatefulWidget{
+class AppPager09Detail extends StatefulWidget{
 
   final e411list_model e411Data;
 
-  const AppPager08Detail({Key? key, required this.e411Data}) : super(key: key);
-
+  const AppPager09Detail({Key? key, required this.e411Data}) : super(key: key);
+  
 
   @override
-  _AppPager08DetailState createState() => _AppPager08DetailState();
+  _AppPager09DetailState createState() => _AppPager09DetailState();
 
 }
 
-class _AppPager08DetailState extends State<AppPager08Detail> {
+class _AppPager09DetailState extends State<AppPager09Detail> {
 
   TextEditingController _etActnm     = TextEditingController();
-  TextEditingController _etGreginm    = TextEditingController();
-  TextEditingController _etReginm  = TextEditingController();
+  TextEditingController _etremonm    = TextEditingController();
+  TextEditingController _etremoremark  = TextEditingController();
   TextEditingController _etRecedate  = TextEditingController();
   TextEditingController _etresunm  = TextEditingController();
   TextEditingController _etresuremark  = TextEditingController();
   TextEditingController _etpernm  = TextEditingController();
   TextEditingController _etCompdate  = TextEditingController();
 
+
   @override
   void initState(){
     setData();
     super.initState();
   }
-
   @override
   void setData(){
     _etActnm = TextEditingController(text: widget.e411Data.actnm);
-    _etGreginm = TextEditingController(text: widget.e411Data.greginm);
-    _etReginm = TextEditingController(text: widget.e411Data.reginm);
+    _etremonm = TextEditingController(text: widget.e411Data.remonm);
+    _etremoremark = TextEditingController(text: widget.e411Data.remoremark);
     _etRecedate = TextEditingController(text: widget.e411Data.recedate);
     _etresunm = TextEditingController(text: widget.e411Data.resunm);
     _etresuremark = TextEditingController(text: widget.e411Data.resuremark);
@@ -51,8 +52,9 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
     super.dispose();
   }
 
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext buildContext){
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -60,7 +62,7 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
 
         ),
         elevation: GlobalStyle.appBarElevation,
-        title: Text('고장부위상세조회',
+        title: Text('고장요인상세조회',
           style: GlobalStyle.appBarTitle,
         ),
         backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -87,7 +89,7 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
             height: 20,
           ),
           TextField(
-            controller: _etGreginm,
+            controller: _etremonm,
             readOnly: true,
             maxLines: 1,
             cursorColor: Colors.grey[600],
@@ -100,7 +102,7 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '고장부위',
+                labelText: '고장요인',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),
@@ -108,7 +110,7 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
             height: 20,
           ),
           TextField(
-            controller: _etReginm,
+            controller: _etremoremark,
             readOnly: true,
             maxLines: 1,
             cursorColor: Colors.grey[600],
@@ -121,7 +123,7 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '고장부위상세',
+                labelText: '고장요인내용',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),
@@ -212,27 +214,27 @@ class _AppPager08DetailState extends State<AppPager08Detail> {
           SizedBox(
             height: 20,
           ),
-          TextField(
-            controller: _etpernm,
-            readOnly: true,
-            maxLines: 1,
-            cursorColor: Colors.grey[600],
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            decoration: InputDecoration(
-                isDense: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                labelText: '처리자',
-                labelStyle:
-                TextStyle(color: BLACK_GREY)),
-          ),
+      TextField(
+        controller: _etpernm,
+        readOnly: true,
+        maxLines: 1,
+        cursorColor: Colors.grey[600],
+        style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        decoration: InputDecoration(
+            isDense: true,
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[600]!),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[600]!),
+            ),
+            labelText: '처리자',
+            labelStyle:
+            TextStyle(color: BLACK_GREY)),
+      ),
+
         ],
       ),
     );
   }
-
 }

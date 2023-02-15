@@ -15,6 +15,7 @@ import '../../reusable/cache_image_network.dart';
 import '../../reusable/global_widget.dart';
 import 'appPager07.dart';
 import 'appPager08.dart';
+import 'appPager09.dart';
 
 
 
@@ -61,7 +62,7 @@ class _Home1PageState extends State<Tab5HomePage> {
 
   }
 
-  Future<void> setData() async {   
+  Future<void> setData() async {
     _usernm = await SessionManager().get("username");
 
   }
@@ -294,6 +295,7 @@ class _Home1PageState extends State<Tab5HomePage> {
 
                 break;
               case '현장별고장원인별현황' :
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager09()));
                 break;
               default:
                 break;

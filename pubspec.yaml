@@ -49,6 +49,7 @@ dependencies:
   shimmer: 2.0.0
   universal_io: 2.0.4
   flutter_session_manager: ^1.0.1
+  url_launcher: ^6.1.9
 
 dev_dependencies:
   flutter_test:
