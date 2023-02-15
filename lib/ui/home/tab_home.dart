@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'app03/appPage03.dart';
 import 'app04/appPage04.dart';
 import 'app05/appPage05.dart';
+import 'app5Home/appPager10.dart';
 import 'app5Home/tab5_home.dart';
 import 'appPage02.dart';
 
@@ -264,6 +265,7 @@ class _Home1PageState extends State<TabHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage05()));
                   break;
                 case '직 원 정 보' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager10()));
                   break;
                 case '고 장 이 력' :
                   break;
