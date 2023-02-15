@@ -13,31 +13,103 @@ import 'package:http/http.dart' as http;
 
 
 
+import '../../../model/app04/BmanualList_model.dart';
 import 'appPage04_detail.dart';
+import 'appPage04_view.dart';
 
 class AppPage04 extends StatefulWidget {
+
   @override
   _AppPage04State createState() => _AppPage04State();
 }
 
 class _AppPage04State extends State<AppPage04> {
-  TextEditingController _etSearch = TextEditingController();
+
+  List<DataRow> _dataGrid(BmanualList_model BData) {
+    debugPrint('The value of a is $_dataGrid(BData)');
+    return [
+      DataRow(
+        cells: <DataCell>[
+          DataCell(
+            ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 75, maxWidth: 75), //SET max width
+                child: Text('${BData.bseq}',
+                    overflow: TextOverflow.ellipsis)),
+          ),
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50), //SET max width
+                    child: Text('${BData.bgourpcd}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04view(BData: BData)));
+                    },
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
+                      child: Text('${BData.bsubject}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 50), //SET max width
+                      child: Text('${BData.bpernm}',
+                          overflow: TextOverflow.ellipsis)),
+                ],
+              )
+          ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    // margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${BData.binputdate}')
+                ],
+              )
+          ),
+        ],
+      ),
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
+    blist_getdata();
   }
 
   @override
   void dispose() {
-    _etSearch.dispose();
     super.dispose();
   }
 
-  Future mhlist_getdata() async {
+  Future blist_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
 
-    var uritxt = CLOUD_URL + '/appmobile/mhlist';
+    var uritxt = CLOUD_URL + '/appmobile/Blist';
     var encoded = Uri.encodeFull(uritxt);
 
     Uri uri = Uri.parse(encoded);
@@ -56,28 +128,23 @@ class _AppPage04State extends State<AppPage04> {
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
       MhData.clear();
       for (int i = 0; i < alllist.length; i++) {
-        MhmanualList_model emObject= MhmanualList_model(
+        BmanualList_model BObject= BmanualList_model(
             custcd:alllist[i]['custcd'],
             spjangcd:alllist[i]['spjangcd'],
-            remark:alllist[i]['remark'],
-            hseq:alllist[i]['hseq'],
-            hinputdate:alllist[i]['hinputdate'],
-            hgroupcd:alllist[i]['hgroupcd'],
-            hsubject:alllist[i]['hsubject'],
-            hfilename:alllist[i]['hfilename'],
-            hpernm:alllist[i]['hpernm'],
-            hmemo:alllist[i]['hmemo'],
-            hflag:alllist[i]['hflag'],
-            yyyymm:alllist[i]['yyyymm'],
-            cnam:alllist[i]['cnam'],
-            attcnt:alllist[i]['attcnt']
+          bseq:alllist[i]['bseq'],
+          binputdate:alllist[i]['binputdate'],
+          bgourpcd:alllist[i]['bgourpcd'],
+          bsubject:alllist[i]['bsubject'],
+          bpernm:alllist[i]['bpernm'],
+          bmemo:alllist[i]['bmemo'],
+          bflag:alllist[i]['bflag'],
         );
         setState(() {
-          MhData.add(emObject);
+          BData.add(BObject);
         });
 
       }
-      return MhData;
+      return BData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('불러오는데 실패했습니다');
@@ -119,156 +186,52 @@ class _AppPage04State extends State<AppPage04> {
                 ),
               ),
               ),
-
-             child: DataTable(
-                    columns: <DataColumn>[
-                      DataColumn(label: Text('번호',   style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
-                      DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('첨부파일건수', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('수정/삭제', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      // textAlign: TextAlign.center,
-                    ],
-                    rows: <DataRow>[
-                      DataRow(
-                        cells: <DataCell>[
-                           DataCell(
-                               Row(
-                               children: [
-                                  Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  ),
-                                 Text('4392')
-                        ],
-                   )
-                ),
-                        DataCell(Text("분류", textAlign: TextAlign.center)),
-                        DataCell(Text("제목")),
-                          DataCell(Text("admin")),
-                          DataCell(Text("1건", textAlign: TextAlign.center,)),
-                          DataCell(Text("04/2023")),
-
-                          DataCell(
-                          Row(
-                          children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 5),
-                                padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                decoration: BoxDecoration(
-                                  color: SOFT_BLUE,
-                                  borderRadius: BorderRadius.circular(2)
-                               ),
-                                child: Row(
-                                    children: [
-                                    Text('강조등록', style: TextStyle(
-                                    color: Colors.white, fontSize: 11
-                                    )),
-                                    SizedBox(
-                                    width: 4,
-                                    ),
-                                    Icon(Icons.done, color: Colors.white, size: 11)
-                                ],
-                          ),
-                              ),
-                            SizedBox(
-                              height: 32,
-                            ),
-                //누구의 sized box임 대체 list view
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPaymentMethodPage()));
-                                  },
-                                  child: Text('Edit', style: TextStyle(
-                                      color: SOFT_BLUE
-                                  )),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      _showPopupDeletePayment(1);
-                                    },
-                                    child: Text('Delete', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                )
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                      DataRow(
-                        cells: <DataCell>[
-                          DataCell(
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 5)
-                                  ),
-                                  Text("dd")
-                                ],
-                            )
-                        ),
-                        DataCell(Text("Robert Steven")),
-                        DataCell(Text("11/2021")),
-                          DataCell(Text("04/2023")),
-                          DataCell(Text("04/2023")),
-                          DataCell(Text("04/2023")),
-
-                          DataCell(
-                            Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(right: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      showPopupMakeDefault();
-                                    },
-                                    child: Text('일반글씨', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditPaymentMethodPage()));
-                                  },
-                                  child: Text('Edit', style: TextStyle(
-                                      color: SOFT_BLUE
-                                  )),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 5),
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      _showPopupDeletePayment(2);
-                                    },
-                                    child: Text('Delete', style: TextStyle(
-                                        color: SOFT_BLUE
-                                    )),
-                                  ),
-                                )
-                              ],
-                            )
-                        ),
-                      ],
-                    ),
-                  ],
+             height: 700,
+             width: 750,
+             child: ListView.builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
+               shrinkWrap: true,
+               itemCount: BData.length,
+               // physics: NeverScrollableScrollPhysics(),
+               itemBuilder: (BuildContext context, int index) {
+                 return DataTable (
+                   columnSpacing: 10,
+                   dataRowHeight: 40,
+                   columns:
+                   <DataColumn>[
+                     DataColumn(label:
+                      Text('번호',
+                         style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL),
+                     )),
+                     DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                   ], rows:
+                 _dataGrid(BData[index]),
+                 );
+               },
+             ),
+           ),  //listview.builder endpoint
+        ),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color(0xffcccccc),
+                    width: 1.0,
+                  ),
                 ),
               ),
             ),
-
-
-            Container( //노하우등록임
-              margin: EdgeInsets.only(top: 32),
+            Container( //등록임
+              margin: EdgeInsets.only(top: 10),
               child: OutlinedButton(
                   onPressed: () {
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04Detail()));
-
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AppPage04Detail()));
                   },
                   style: ButtonStyle(
                       overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -283,11 +246,11 @@ class _AppPage04State extends State<AppPage04> {
                             width: 1.0
                         ),
                       )
-                  ), //등록 스타일
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
-                      '부품가이드 등록',
+                      '노하우 등록',
                       style: TextStyle(
                           color: SOFT_BLUE,
                           fontWeight: FontWeight.bold,
@@ -298,10 +261,12 @@ class _AppPage04State extends State<AppPage04> {
                   )
               ),
             )
-      ],
+          ],
+
         ),
-        );
+    );
   }
+
 
   void showPopupMakeDefault() {
     // set up the buttons
@@ -373,7 +338,6 @@ class _AppPage04State extends State<AppPage04> {
         continueButton,
       ],
     );
-
     // show the dialog
     showDialog(
       context: context,

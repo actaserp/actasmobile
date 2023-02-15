@@ -9,24 +9,26 @@ import '../../config/constant.dart';
 class MhmanualList_model{
   late var custcd;
   late var spjangcd;
-  late var remark;
   late var hseq;
   late var hinputdate;
   late var hgroupcd;
   late var hsubject;
-  late var hfilename;
   late var hpernm;
   late var hmemo;
   late var hflag;
-  late var yyyymm;
-  late var cnam;
-  late int attcnt; //int임
 
-  MhmanualList_model({ required this.custcd,required this.spjangcd,required this.remark, required this.hseq, required this.hinputdate,
-    required this.hgroupcd,required this.hsubject, required this.hfilename,required this.hpernm,required this.hmemo,required this.hflag,
-    required this.yyyymm,required this.cnam,required this.attcnt
-  });
+
+  MhmanualList_model({  required this.custcd, required this.spjangcd ,required this.hseq, required this.hinputdate,
+    required this.hgroupcd,required this.hsubject, required this.hpernm,required this.hmemo,required this.hflag,
+
+ });
 }
 
 
 List<MhmanualList_model> MhData =[];
+
+// late var hfilename;
+// late var yyyymm;
+// late var cnam;
+// late int attcnt; //int임
+// required this.yyyymm,required this.cnam,required this.attcnt, required this.hfilename,required this.remark,

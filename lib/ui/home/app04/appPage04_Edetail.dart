@@ -13,21 +13,18 @@ import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../model/popup/Comm751_model.dart';
-import '../../../model/shopping_cart_model.dart';
-import '../../general/product_detail/product_detail.dart';
-import '../../reusable/cache_image_network.dart';
 
-class AppPage03Detail extends StatefulWidget {
+class EAppPage04Detail extends StatefulWidget {
 
 
   // final MhmanualList_model mhData;
   // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
-  _AppPage03DetailState createState() => _AppPage03DetailState();
+  _EAppPage04DetailState createState() => _EAppPage04DetailState();
 }
 
-class _AppPage03DetailState extends State<AppPage03Detail> {
+class _EAppPage04DetailState extends State<EAppPage04Detail> {
 
   final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
@@ -48,7 +45,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
   TextEditingController _etPostalCode = TextEditingController(text: '07093');
   TextEditingController _etState = TextEditingController(text: 'USA');
-  TextEditingController _etCompdate = TextEditingController();
 
 
   @override
@@ -100,7 +96,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       return C751Data;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('고장부위 불러오는데 실패했습니다');
+      throw Exception('분류를 불러오는데 실패했습니다');
     }
   }
   //저장
@@ -135,7 +131,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('수리노하우 저장에 실패했습니다');
+      throw Exception('부품가이드 수정에 실패했습니다');
       return   false;
     }
   }
@@ -149,7 +145,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
 
   @override
   Widget build(BuildContext context) {
-    final double boxImageSize = (MediaQuery.of(context).size.width / 5);
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -157,7 +152,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '노하우 등록',
+            '부품가이드 수정',
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -199,47 +194,16 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                       ),
                     ),
                   ),
-                        SizedBox(
-                          height: 20,
-                        ),
-              _buildOptioncheckParts(),
-              SizedBox(
-                height: 20,
-              ),
-                        TextField(
-                          controller: _etCompdate,
-                          readOnly: true,
-                          onTap: () {
-                            // _selectDateWithMinMaxDate2(context);
-                          },
-                          maxLines: 1,
-                          cursorColor: Colors.grey[600],
-                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              isDense: true,
-                              hintText: '작성일자를 입력하세요',
-                              suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[600]!),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[600]!),
-                              ),
-                              labelText: '작성일자 *',
-                              labelStyle:
-                              TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+            _buildOptioncheckParts(),
+            SizedBox(
+              height: 20,
+            ),
                       TextField(
-                        controller: _etState,
+                        controller: _etAddressTitle,
                         decoration: InputDecoration(
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                            hintText: '제목을 작성하세요',
                             focusedBorder: UnderlineInputBorder(
                                 borderSide:
                                 BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -254,13 +218,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                         height: 20,
                       ),
 
-                      TextField(
+                    TextField(
                       enabled: false,
                       style: TextStyle(color: BLACK_GREY),
                       controller: _etPostalCode,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
                               BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -277,11 +240,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           TextField(
                             controller: _etAddressTitle,
                             decoration: InputDecoration(
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                                hintText: '내용을 작성하세요',
                                 focusedBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                     borderSide:
                                     BorderSide(color: PRIMARY_COLOR, width: 2.0)),
                                 enabledBorder: UnderlineInputBorder(
@@ -294,88 +253,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-                  // Column( //화면꽉차게 쓰기:expanded
-                  //   children:[
-                  //          Expanded(
-                  //                 child:
-                  //                   Text('첨부파일 리스트', style: TextStyle(
-                  //                       fontSize: 15,
-                  //                       color: SOFT_BLUE,
-                  //                       fontWeight: FontWeight.bold
-                  //                   ),
-                  //                       textAlign: TextAlign.center
-                  //                   ),
-                  //
-                  //             ),
-                  //     Text('첨부파일 목록', style: TextStyle(
-                  //         fontSize: 15,
-                  //         color: SOFT_BLUE,
-                  //         fontWeight: FontWeight.bold
-                  //     ),
-                  //         textAlign: TextAlign.center
-                  //     ),
-                  //
-                  //   ],
-                  // ),
-            Row(
-              children: [
-                            SizedBox(    //왼쪽 크기 정하기
-                              width: 0,
-                              height: 40,
-                            ),
-                            Text('첨부파일 목록', style: TextStyle(
-                                fontSize: 16,
-                                color: SOFT_BLUE,
-                                fontWeight: FontWeight.bold
-                            ),
-                                textAlign: TextAlign.center
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                      ],
-            ),
-            Row(
-              children: [
-                SizedBox(width: 500
-                ),
-                GestureDetector(
-                  onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: SOFT_BLUE,
-                      border: Border.all(
-                        color: SOFT_BLUE,
-                      ),
-
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: Text('업로드', style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold,
-                      ),
-                          textAlign: TextAlign.center
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
-              child: Column(
-                children: List.generate(shoppingCartData.length,(index){
-                  return _buildItem(index, boxImageSize);
-                }),
-              ),
-            ),
+            _buildFileList(),
             SizedBox(
               height: 40,
             ),
@@ -385,7 +263,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) => SOFT_BLUE,
                     ),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
@@ -393,12 +270,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     ),
                   ),
                   onPressed: () {
-                    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                    _reusableWidget.startLoading(context, '수정 되었습니다.', 1);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Text(
-                      '등록하기',
+                      '수정하기',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -414,89 +291,39 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   }
 
 
-  //  첨부파일리스트 ~ network로 가져와야함
-  Column _buildItem(index, boxImageSize){
-    int quantity = shoppingCartData[index].qty;
+  //첨부파일리스트
+  Widget _buildFileList(){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-                  },
-                  child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(4)),
-                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: shoppingCartData[index].image)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-                        },
-                        child: Text(
-                          shoppingCartData[index].name,
-                          style: GlobalStyle.productName.copyWith(fontSize: 14),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
+
+          padding: EdgeInsets.all(16),
+          color: Colors.white,
+          child: Column(
+                        children: [
+                        Row(
+                        children: [
+                        Text('첨부파일리스트자리입니다.', style:
+                        TextStyle(
+                            color: BLACK_GREY,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        // child: Text('\$ '+_globalFunction.removeDecimalZeroFormat(shoppingCartData[index].price),
-                        //     style: GlobalStyle.productPrice),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                // showPopupDelete(index, boxImageSize);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        width: 1, color: Colors.grey[300]!)),
-                                child: Icon(Icons.delete,
-                                    color: BLACK_GREY, size: 20),
-                              ),
-                            ),
-                          ],
                         ),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        SizedBox(width: 8),
+                        ],
             ),
+              ], //row-childeren
+              // children: List.generate(shoppingCartData.length,(index){
+              // return _buildItem(index, boxImageSize);
+              // }),
           ),
-        ),
-        (index == shoppingCartData.length - 1)
-            ? Wrap()
-            : Divider(
-          height: 32,
-          color: Colors.grey[400],
         )
       ],
     );
   }
+
 
   Widget _buildOptioncheckParts(){
     return Column(

@@ -17,17 +17,16 @@ import '../../../model/shopping_cart_model.dart';
 import '../../general/product_detail/product_detail.dart';
 import '../../reusable/cache_image_network.dart';
 
-class AppPage03Detail extends StatefulWidget {
+class EAppPage03Detail extends StatefulWidget {
+  final MhmanualList_model MhData;
+  const EAppPage03Detail({Key? key, required this.MhData}) : super(key: key);
 
-
-  // final MhmanualList_model mhData;
-  // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
 
   @override
-  _AppPage03DetailState createState() => _AppPage03DetailState();
+  _EAppPage03DetailState createState() => _EAppPage03DetailState();
 }
 
-class _AppPage03DetailState extends State<AppPage03Detail> {
+class _EAppPage03DetailState extends State<EAppPage03Detail> {
 
   final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
@@ -36,19 +35,29 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
 
   late String _setTime;
   late String _hour, _minute, _time;
-  late String _dbnm , _etrecedate, _etrecenum, _etrectime;
-  String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
+  late String _dbnm , _etrecedate, _etrectime;
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   // 값매핑1
-  TextEditingController _mhCustcd = TextEditingController();
-  TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
-  TextEditingController _etPostalCode = TextEditingController(text: '07093');
-  TextEditingController _etState = TextEditingController(text: 'USA');
-  TextEditingController _etCompdate = TextEditingController();
+  TextEditingController _mHCustcd = TextEditingController();
+  TextEditingController _mHSpjangcd = TextEditingController();
+  TextEditingController _mHRemark = TextEditingController();
+  TextEditingController _mHHseq = TextEditingController();
+  TextEditingController _mHHinputdate = TextEditingController();
+  TextEditingController _mHHgroupcd = TextEditingController();
+  TextEditingController _mHSubject = TextEditingController();
+  TextEditingController _mHFilename = TextEditingController();
+  TextEditingController _mHHPernm = TextEditingController();
+  TextEditingController _mHHmemo = TextEditingController();
+  TextEditingController _mHHflag = TextEditingController();
+  TextEditingController _mHAttcnt = TextEditingController();
+  TextEditingController _mHCnam = TextEditingController();
+
+
+  String? _mHCode;
 
 
   @override
@@ -60,7 +69,18 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   @override
   //값매핑2
   void setData(){
-    _mhCustcd = TextEditingController(text: "dd");
+    _mHCustcd = TextEditingController(text: widget.MhData.custcd);
+    _mHSpjangcd = TextEditingController(text: widget.MhData.spjangcd);
+    _mHHseq = TextEditingController(text: widget.MhData.hseq);
+    _mHHinputdate = TextEditingController(text: widget.MhData.hinputdate);
+    _mHHgroupcd = TextEditingController(text: widget.MhData.hgroupcd);
+    _mHSubject = TextEditingController(text: widget.MhData.hsubject);
+    _mHHPernm = TextEditingController(text: widget.MhData.hpernm);
+    _mHHmemo = TextEditingController(text: widget.MhData.hmemo);
+    _mHHflag = TextEditingController(text: widget.MhData.hflag);
+    // _mHAttcnt = TextEditingController(text: '${widget.MhData.attcnt}');
+    // _mHCnam = TextEditingController(text: widget.MhData.cnam); //분류코드
+
   }
   @override
   Future pop_Com751()async {
@@ -76,7 +96,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'greginm': '%',
+        'cnam': '%',
       },
     );
     if(response.statusCode == 200){
@@ -104,41 +124,47 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     }
   }
   //저장
-  @override
-  Future<bool> save_mhdata()async {
-    _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
-    var encoded = Uri.encodeFull(uritxt);
-    Uri uri = Uri.parse(encoded);
-    print("----------------------------");
-    //null처리
-    // if(widget.e401Data.compdate == null  ) {
-    //   showAlertDialog(context, "처리일자를 등록하세요");
-    //   return false;
-    // }
-    final response = await http.post(
-      uri,
-      headers: <String, String> {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept' : 'application/json'
-      },
-      body: <String, String> {
-        'dbnm': _dbnm,
-        // 'recedate': widget.e401Data.recedate.toString(),
-        // 'recenum': widget.e401Data.recenum.toString(),
-        // 'resuremark': widget.e401Data.resuremark.toString(),
-        'custcd': _mhCustcd.toString(),
-      },
-    );
-    if(response.statusCode == 200){
-      print("저장됨");
-      return   true;
-    }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('수리노하우 저장에 실패했습니다');
-      return   false;
-    }
-  }
+  // @override
+  // Future<bool> save_mhdata()async {
+  //   _dbnm = await  SessionManager().get("dbnm");
+  //   var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+  //   var encoded = Uri.encodeFull(uritxt);
+  //   Uri uri = Uri.parse(encoded);
+  //   print("----------------------------");
+  //   //null처리
+  //   if(widget.mHdata.hsubject == null  ){
+  //     showAlertDialog(context, "처리일자를 등록하세요");
+  //     return false;
+  //   }
+  //   if(widget.mHdata.hpernm == null  ){
+  //     showAlertDialog(context, "처리시간을 등록하세요");
+  //     return false;
+  //   }
+  //   if(widget.mHdata.hmemo == null ){
+  //     showAlertDialog(context, "고장부위를 등록하세요");
+  //     return false;
+  //   }
+  //   final response = await http.post(
+  //     uri,
+  //     headers: <String, String> {
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //       'Accept' : 'application/json'
+  //     },
+  //     body: <String, String> {
+  //       //저장될값들
+  //       'dbnm': _dbnm,
+  //       'custcd': _mHCustcd.toString(),
+  //     },
+  //   );
+  //   if(response.statusCode == 200){
+  //     print("저장됨");
+  //     return   true;
+  //   }else{
+  //     //만약 응답이 ok가 아니면 에러를 던집니다.
+  //     throw Exception('수리노하우 수정에 실패했습니다');
+  //     return   false;
+  //   }
+  // }
 
 
   @override
@@ -157,7 +183,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '노하우 등록',
+            '노하우 수정',
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -179,7 +205,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                             dropdownColor: Colors.blue[800],
                             iconEnabledColor: Colors.white,
                             hint: Text("분류", style: TextStyle(color: Colors.white)),
-                            value: this._etGregicdTxt ,
+                            value: this._mHCode ,
                             items: _C751Data.map((item) {
                               return DropdownMenuItem<String>(
                                 child: Text(item, style: TextStyle(color: Colors.white)),
@@ -199,47 +225,46 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                       ),
                     ),
                   ),
-                        SizedBox(
-                          height: 20,
-                        ),
-              _buildOptioncheckParts(),
-              SizedBox(
-                height: 20,
-              ),
-                        TextField(
-                          controller: _etCompdate,
-                          readOnly: true,
-                          onTap: () {
-                            // _selectDateWithMinMaxDate2(context);
-                          },
-                          maxLines: 1,
-                          cursorColor: Colors.grey[600],
-                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                          decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              isDense: true,
-                              hintText: '작성일자를 입력하세요',
-                              suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[600]!),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey[600]!),
-                              ),
-                              labelText: '작성일자 *',
-                              labelStyle:
-                              TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+            _buildOptioncheckParts(),
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
+              // controller: _etCompdate,
+              readOnly: true,
+              onTap: () {
+                // _selectDateWithMinMaxDate2(context);
+              },
+              maxLines: 1,
+              cursorColor: Colors.grey[600],
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              decoration: InputDecoration(
+                  fillColor: Colors.grey[200],
+                  filled: true,
+                  isDense: true,
+                  hintText: '작성일자를 입력하세요',
+                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  labelText: '작성일자 *',
+                  labelStyle:
+                  TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+            ),
+            SizedBox(
+              height: 20,
+            ),
                       TextField(
-                        controller: _etState,
+                        // controller: _etState,
                         decoration: InputDecoration(
                             fillColor: Colors.grey[200],
                             filled: true,
-                            hintText: '제목을 작성하세요',
                             focusedBorder: UnderlineInputBorder(
                                 borderSide:
                                 BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -254,13 +279,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                         height: 20,
                       ),
 
-                      TextField(
+                    TextField(
                       enabled: false,
                       style: TextStyle(color: BLACK_GREY),
-                      controller: _etPostalCode,
+                      // controller: _etPostalCode,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
                               BorderSide(color: PRIMARY_COLOR, width: 2.0)),
@@ -275,13 +299,11 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                             height: 20,
                           ),
                           TextField(
-                            controller: _etAddressTitle,
+                            // controller: _etAddressTitle,
                             decoration: InputDecoration(
                                 fillColor: Colors.grey[200],
                                 filled: true,
-                                hintText: '내용을 작성하세요',
                                 focusedBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                     borderSide:
                                     BorderSide(color: PRIMARY_COLOR, width: 2.0)),
                                 enabledBorder: UnderlineInputBorder(
@@ -294,98 +316,89 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-                  // Column( //화면꽉차게 쓰기:expanded
-                  //   children:[
-                  //          Expanded(
-                  //                 child:
-                  //                   Text('첨부파일 리스트', style: TextStyle(
-                  //                       fontSize: 15,
-                  //                       color: SOFT_BLUE,
-                  //                       fontWeight: FontWeight.bold
-                  //                   ),
-                  //                       textAlign: TextAlign.center
-                  //                   ),
-                  //
-                  //             ),
-                  //     Text('첨부파일 목록', style: TextStyle(
-                  //         fontSize: 15,
-                  //         color: SOFT_BLUE,
-                  //         fontWeight: FontWeight.bold
-                  //     ),
-                  //         textAlign: TextAlign.center
-                  //     ),
-                  //
-                  //   ],
-                  // ),
-            Row(
-              children: [
-                            SizedBox(    //왼쪽 크기 정하기
-                              width: 0,
-                              height: 40,
-                            ),
-                            Text('첨부파일 목록', style: TextStyle(
-                                fontSize: 16,
-                                color: SOFT_BLUE,
-                                fontWeight: FontWeight.bold
-                            ),
-                                textAlign: TextAlign.center
+                          // Expanded( //하단줄있는버전
+                          //   child: Column(
+                          //     children: [
+                          //     TextField(
+                          //     enabled: false,
+                          //     decoration: InputDecoration(
+                          //         labelText: '첨부파일 리스트',
+                          //         labelStyle:
+                          //         TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: SOFT_BLUE)),
+                          //   ),
+                          //   ],
+                          //         ),
+                          // ),
+                            Row(
+                              children: [
+                                SizedBox(    //왼쪽 크기 정하기
+                                  width: 0,
+                                  height: 40,
+                                ),
+                                Text('첨부파일 목록', style: TextStyle(
+                                    fontSize: 16,
+                                    color: SOFT_BLUE,
+                                    fontWeight: FontWeight.bold
+                                ),
+                                    textAlign: TextAlign.center
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 20,
                             ),
-                      ],
-            ),
-            Row(
-              children: [
-                SizedBox(width: 500
-                ),
-                GestureDetector(
-                  onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: SOFT_BLUE,
-                      border: Border.all(
-                        color: SOFT_BLUE,
-                      ),
+                          Row(
+                            children: [
+                              SizedBox(width: 500),
+                              GestureDetector(
+                                onTap: (){
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: SOFT_BLUE,
+                                      border: Border.all(
+                                        color: SOFT_BLUE,
+                                      ),
 
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: Text('업로드', style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold,
-                      ),
-                          textAlign: TextAlign.center
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
-              child: Column(
-                children: List.generate(shoppingCartData.length,(index){
-                  return _buildItem(index, boxImageSize);
-                }),
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(7),
+                                  child: Text('업로드', style: TextStyle(
+                                      color: Colors.white, fontWeight: FontWeight.bold,
+                                  ),
+                                      textAlign: TextAlign.center
+                                  ),
+                                ),
+                                ),
+                              ),
+                            ],
+                          ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            color: Colors.white,
+                           //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
+                            child: Column(
+                              children: List.generate(shoppingCartData.length,(index){
+                                return _buildItem(index, boxImageSize);
+                              }),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
             Container(
               child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (Set<MaterialState> states) => SOFT_BLUE,
                     ),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
@@ -393,12 +406,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     ),
                   ),
                   onPressed: () {
-                    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                    _reusableWidget.startLoading(context, '수정 되었습니다.', 1);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Text(
-                      '등록하기',
+                      '수정하기',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -414,11 +427,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   }
 
 
-  //  첨부파일리스트 ~ network로 가져와야함
+
+//  첨부파일리스트 ~ network로 가져와야함
   Column _buildItem(index, boxImageSize){
     int quantity = shoppingCartData[index].qty;
     return Column(
-      children: [
+      children: [       
         Container(
           child: Container(
             child: Row(
@@ -498,6 +512,8 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     );
   }
 
+  
+  //체크박스
   Widget _buildOptioncheckParts(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,8 +588,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
             ),
           ),
           SizedBox(width: 16),
-
-
           // Spacer(),
           // Text(secondaryText, style: TextStyle( //수량나타내주는거
           //   fontSize: 13,
@@ -583,6 +597,48 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       ),
     );
   }
+
+  //삭제시컨펌
+  void showPopupDelete(index, boxImageSize) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('No', style: TextStyle(color: SOFT_BLUE))
+    );
+    Widget continueButton = TextButton(
+        onPressed: () {
+          setState(() {
+            shoppingCartData.removeAt(index);
+          });
+          // _countTotalPrice();
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: '삭제되었습니다.', toastLength: Toast.LENGTH_LONG);
+        },
+        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
+    );
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('첨부파일 삭제', style: TextStyle(fontSize: 18),),
+      content: Text('이 파일을 삭제하시겠습니까?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+}
 
 //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
@@ -606,4 +662,42 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     );
   }
 
-}
+
+
+
+
+
+
+
+
+
+//작성일자처리 null 들어오면 안되는데 null상태라 안됨
+// Future<Null> _selectDateWithMinMaxDate2(BuildContext context) async {
+//   var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
+//   var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 7);
+//   final DateTime? picked = await showDatePicker(
+//     context: context,
+//     initialDate: _selectedDate,
+//     firstDate: firstDate,
+//     lastDate: lastDate,
+//     builder: (BuildContext context, Widget? child) {
+//       return Theme(
+//         data: ThemeData.light().copyWith(
+//           primaryColor: Colors.pinkAccent,
+//           colorScheme: ColorScheme.light(primary: Colors.pinkAccent, secondary: Colors.pinkAccent),
+//           buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+//         ),
+//         child: child!,
+//       );
+//     },
+//   );
+//   if (picked != null && picked != _selectedDate) {
+//     setState(() {
+//       _selectedDate = picked;
+//       widget.mhData.compdate  = picked.toLocal().toString().split(' ')[0];
+//       _eCompdate = _selectedDate.toLocal().toString().split(' ')[0];
+//       _etCompdate = TextEditingController(
+//           text: _selectedDate.toLocal().toString().split(' ')[0]);
+//     });
+//   }
+// }
