@@ -1,50 +1,50 @@
 import 'dart:convert';
 
-import 'package:actasm/model/app02/ja001list_model.dart';
+import 'package:actasm/config/global_style.dart';
+import 'package:actasm/model/app02/tbe401list_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+
+import 'package:flutter/widgets.dart';
+
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../../config/constant.dart';
-import '../../../config/global_style.dart';
+import 'appPager12Detail.dart';
 
-
-
-class AppPager10 extends StatefulWidget {
+class AppPager12 extends StatefulWidget {
   @override
-  _AppPager10State createState() => _AppPager10State();
+  _AppPager12State createState() => _AppPager12State();
 }
 
-
-class _AppPager10State extends State<AppPager10> {
-
+class _AppPager12State extends State<AppPager12>{
   TextEditingController _etSearch = TextEditingController();
   TextEditingController _etSearch2 = TextEditingController();
-  List<ja001list_model> ja001Datas = ja001Data;
-  bool chk = false;
+  List<tbe401list_model> tbe401Datas = tbe401Data;
+
 
 
   @override
-  void initState(){
+  void initState() {
+    // TODO: implement initState
+    e401list_getdate();
     super.initState();
-    ja001list_getdata();
-
   }
 
   @override
-  void dispose(){
-    ja001Data.clear();
+  void dispose() {
+    // TODO: implement dispose
     super.dispose();
+    tbe401Data.clear();
   }
 
 
-
-  Future ja001list_getdata() async {
+  Future e401list_getdate() async {
     String _dbnm = await  SessionManager().get("dbnm");
 
-    var uritxt = CLOUD_URL + '/appmobile/ja001list';
+    var uritxt = CLOUD_URL + '/appmobile/tbe401list';
     var encoded = Uri.encodeFull(uritxt);
 
     Uri uri = Uri.parse(encoded);
@@ -56,39 +56,48 @@ class _AppPager10State extends State<AppPager10> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'pernm': _etSearch.text,
-        'divinm': _etSearch2.text,
+        'actnm': _etSearch.text,
+        'equpnm': _etSearch2.text,
+
 
       },
     );
     if(response.statusCode == 200){
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-      ja001Data.clear();
+      tbe401Data.clear();
       for (int i = 0; i < alllist.length; i++) {
-        ja001list_model emObject= ja001list_model(
-
-            pernm:  alllist[i]['pernm'],
-            divinm: alllist[i]['divinm'],
-            rspnm:  alllist[i]['rspnm'],
-            handphone: alllist[i]['handphone']
+        tbe401list_model emObject= tbe401list_model(
+            recedate    : alllist[i]['recedate'],
+            compdate    : alllist[i]['compdate'],
+            actnm    : alllist[i]['actnm'],
+            equpnm    : alllist[i]['equpnm'],
+            hitchdate    : alllist[i]['hitchdate'],
+            indate    : alllist[i]['indate'],
+            contnm    : alllist[i]['contnm'],
+            contents    : alllist[i]['contents'],
+            greginm    : alllist[i]['greginm'],
+            reginm    : alllist[i]['reginm'],
+            remonm    : alllist[i]['remonm'],
+            remoremark    : alllist[i]['remoremark'],
+            resunm    : alllist[i]['resunm']
 
         );
         setState(() {
-          ja001Data.add(emObject);
+          tbe401Data.add(emObject);
         });
 
       }
-      return ja001Data;
+      return tbe401Data;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('불러오는데 실패했습니다');
     }
-
   }
 
+
   @override
-  Widget build(BuildContext buildContext){
+  Widget build(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -97,40 +106,37 @@ class _AppPager10State extends State<AppPager10> {
         ),
         elevation: GlobalStyle.appBarElevation,
         title: Text(
-          '직원리스트' + ja001Datas.length.toString(),
+          '고장이력 ' + tbe401Data.length.toString() + '건',
           style: GlobalStyle.appBarTitle,
         ),
+
         actions: <Widget>[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: TextButton(onPressed: (){
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: TextButton(onPressed: (){
 
-                  setState(() {
-                    chk = true;
-                    if(_etSearch.text == ""){
-                      showAlertDialog(context, "사원명을 입력하세요.");
-                    }
-                    ja001list_getdata();
-                  });
-                  /*searchBook(_etSearch.text);*/
-                  /*searchBook2(_etSearch2.text);*/
-                }, child: Text('검색하기')),
-              ),
+              setState(() {
 
-            ],
+                e401list_getdate();
+
+              });
+              /*searchBook(_etSearch.text);*/
+              /*searchBook2(_etSearch2.text);*/
+            }, child: Text('검색하기')),
           )
+          /*IconButton(onPressed: (){
+              print('검색');
+            }, icon: Icon(Icons.search))*/
         ],
         backgroundColor: GlobalStyle.appBarBackgroundColor,
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+
       ),
       body:
       WillPopScope(onWillPop: (){
         Navigator.pop(context);
         return Future.value(true);
-      },
-      child: Column(
+      }, child: Column(
         children: [
           Container(
 
@@ -154,7 +160,7 @@ class _AppPager10State extends State<AppPager10> {
               decoration: InputDecoration(
                 fillColor: Colors.grey[100],
                 filled: true,
-                hintText: '사원명',
+                hintText: '보수현장명',
                 prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
                 suffixIcon: (_etSearch.text == '')
                     ? null
@@ -176,7 +182,7 @@ class _AppPager10State extends State<AppPager10> {
             ),
 
           ),
-          /*Container(
+          Container(
 
             decoration: BoxDecoration(
               border: Border(
@@ -197,7 +203,7 @@ class _AppPager10State extends State<AppPager10> {
               decoration: InputDecoration(
                 fillColor: Colors.grey[100],
                 filled: true,
-                hintText: '부서명',
+                hintText: '동호기명',
                 prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
                 suffixIcon: (_etSearch2.text == '')
                     ? null
@@ -218,24 +224,23 @@ class _AppPager10State extends State<AppPager10> {
               ),
             ),
 
-          ),*/
-          chk ? Expanded(
+          ),
+          Expanded(
 
-            child: ListView.builder(itemCount: ja001Datas.length,
+            child: ListView.builder(itemCount: tbe401Datas.length,
               padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
               physics: AlwaysScrollableScrollPhysics(),
               itemBuilder: (BuildContext context, int index){
-                return _buildListCard(ja001Datas[index]);
+                return _buildListCard(tbe401Datas[index]);
               },
             ),
-          ) : Text("직원조회를 하십시오."),
+          )
         ],
-      ),
-      )
+      )),
     );
   }
 
-  Widget _buildListCard(ja001list_model ja001Data){
+  Widget _buildListCard(tbe401list_model tbe401Data){
     return Card(
       margin: EdgeInsets.only(top: 16),
       shape: RoundedRectangleBorder(
@@ -246,23 +251,18 @@ class _AppPager10State extends State<AppPager10> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: (){
-          /*Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager07Detail(e411Data: e411Data)));*/
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager12Detail(tbe401Data: tbe401Data)));
         },
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(ja001Data.pernm, style: GlobalStyle.couponName),
-              TextButton(onPressed: () async {
-                final url = Uri.parse('tel:' + ja001Data.handphone);
-                if (await canLaunchUrl(url)) {
-                  launchUrl(url);
-                } else {
-                  // ignore: avoid_print
-                  print("Can't launch $url");
-                }
-              }, child: Text('[' + ja001Data.divinm + '] ' + ja001Data.handphone + '   전화걸기', style: GlobalStyle.couponName,),),
+              Text(tbe401Data.actnm, style: GlobalStyle.couponName),
+              Text('[' + tbe401Data.contnm + '] ' + tbe401Data.contents, style: GlobalStyle.couponName),
+              Text(tbe401Data.equpnm, style: GlobalStyle.couponName),
+
+              // Text(e401Data.contents, style: GlobalStyle.couponName),
               SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -273,24 +273,18 @@ class _AppPager10State extends State<AppPager10> {
                       SizedBox(
                         width: 4,
                       ),
-                      Text('직급   '+ja001Data.rspnm+' ', style: GlobalStyle.couponExpired, ),
+                      Text('접수일자  '+tbe401Data.recedate+' ', style: GlobalStyle.couponExpired),
                     ],
                   ),
-                  GestureDetector(  
-                    onTap: () async {
-                      final url = Uri.parse('sms:' + ja001Data.handphone);
-                      if (await canLaunchUrl(url)) {
-                        launchUrl(url);
-                      } else {
-                        // ignore: avoid_print
-                        print("Can't launch $url");
-                      }
+                  GestureDetector(
+                    onTap: (){
+                      // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
+                      Navigator.pop(context);
                     },
-                    child: Text("문자전송", style: TextStyle(
+                    child: Text('처리일자  ' +tbe401Data.compdate, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
                     )),
                   ),
-
                 ],
               ),
             ],
@@ -299,29 +293,4 @@ class _AppPager10State extends State<AppPager10> {
       ),
     );
   }
-
-
-  void showAlertDialog(BuildContext context, String as_msg) async {
-    String result = await showDialog(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('직원정보조회'),
-          content: Text(as_msg),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context, "확인");
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-
 }
