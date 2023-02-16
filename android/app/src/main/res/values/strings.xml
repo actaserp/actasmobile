@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="flutter_downloader_notification_started">다운로드 시작</string>
+    <string name="flutter_downloader_notification_in_progress">다운로드 진행중</string>
+    <string name="flutter_downloader_notification_canceled">다운로드 취소</string>
+    <string name="flutter_downloader_notification_failed">다운로드 실패</string>
+    <string name="flutter_downloader_notification_complete">다운로드 완료</string>
+    <string name="flutter_downloader_notification_paused">다운로드 중지</string>
+</resources>
