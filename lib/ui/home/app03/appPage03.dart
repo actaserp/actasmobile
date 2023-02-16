@@ -185,7 +185,6 @@ class _AppPage03State extends State<AppPage03> {
         ),
         backgroundColor: GlobalStyle.appBarBackgroundColor,
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-        // bottom: _reusableWidget.bottomAppBar(),
       ),
       body:
         ListView(
@@ -202,6 +201,10 @@ class _AppPage03State extends State<AppPage03> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
+                    color: Color(0xffcccccc),
+                    width: 1.0,
+                  ),
+                  bottom: BorderSide(
                     color: Color(0xffcccccc),
                     width: 1.0,
                   ),
@@ -237,20 +240,6 @@ class _AppPage03State extends State<AppPage03> {
                     ),
                     ),  //listview.builder endpoint
               ),
-         //single~view endpoint
-          //여기까지 dataRow
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Color(0xffcccccc),
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                ),
           Container( //노하우등록임
             margin: EdgeInsets.only(top: 10),
             child: OutlinedButton(

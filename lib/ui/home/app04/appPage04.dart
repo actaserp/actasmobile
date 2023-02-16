@@ -165,7 +165,6 @@ class _AppPage04State extends State<AppPage04> {
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-          // bottom: _reusableWidget.bottomAppBar(),
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
@@ -177,21 +176,23 @@ class _AppPage04State extends State<AppPage04> {
           scrollDirection: Axis.horizontal,
            child: Container(
               margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
+             decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
                     color: Color(0xffcccccc),
                     width: 1.0,
                 ),
+                  bottom: BorderSide(
+                    color: Color(0xffcccccc),
+                    width: 1.0,
+                  ),
               ),
               ),
              height: 700,
              width: 750,
-             child: ListView.builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
+             child: ListView.builder(
                shrinkWrap: true,
                itemCount: BData.length,
-               // physics: NeverScrollableScrollPhysics(),
                itemBuilder: (BuildContext context, int index) {
                  return DataTable (
                    columnSpacing: 10,
@@ -211,20 +212,8 @@ class _AppPage04State extends State<AppPage04> {
                  );
                },
              ),
-           ),  //listview.builder endpoint
+           ),
         ),
-            Container(
-              margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                  ),
-                ),
-              ),
-            ),
             Container( //등록임
               margin: EdgeInsets.only(top: 10),
               child: OutlinedButton(
@@ -268,82 +257,4 @@ class _AppPage04State extends State<AppPage04> {
   }
 
 
-  void showPopupMakeDefault() {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text('No', style: TextStyle(color: SOFT_BLUE))
-    );
-    Widget continueButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-          // _reusableWidget.startLoading(context, 'Success', 0);
-        },
-        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      title: Text('Make Default', style: TextStyle(fontSize: 18),),
-      content: Text('Are you sure to make this card as a default payment ?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  void _showPopupDeletePayment(int index) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text('No', style: TextStyle(color: SOFT_BLUE))
-    );
-    Widget continueButton = TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-          if(index==0){
-            Fluttertoast.showToast(msg: 'Please change default payment method if you want to delete this payment method', toastLength: Toast.LENGTH_LONG);
-          } else {
-            // _reusableWidget.startLoading(context, 'Delete Payment Method Success', 0);
-          }
-        },
-        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      title: Text('Delete Payment Method', style: TextStyle(fontSize: 18),),
-      content: Text('Are you sure to delete this payment method ?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 }

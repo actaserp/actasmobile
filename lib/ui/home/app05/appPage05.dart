@@ -1,77 +1,136 @@
+import 'dart:convert';
+
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
-import 'package:actasm/model/chat_model.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:actasm/ui/reusable/cache_image_network.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
-import '../../../model/banner_slider_model.dart';
+
+import '../../../model/app05/SmanualList_model.dart';
+import '../../../model/app05/SCmanualList_model.dart';
 
 class AppPage05 extends StatefulWidget {
   @override
   _AppPage05State createState() => _AppPage05State();
+
 }
 
 class _AppPage05State extends State<AppPage05> {
+
+
   // initialize reusable widget
   final _reusableWidget = ReusableWidget();
+  final List<String> _SCData = [];
+late String _dbnm, _subkey;
 
-  TextEditingController _etChat = TextEditingController();
-
-  String _lastDate = '13 Sep 2019';
-
-  List<ChatModel> _chatList = [];
-  List<ChatModel> _chatListReversed = [];
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _initForLang();
-    });
-
+    SSlist_getdata();
+    comment();
     super.initState();
   }
 
-  void _initForLang() {
-    setState(() {
+  @override
+  Future comment()async {
+     _dbnm = await  SessionManager().get("dbnm");
+     _subkey = await  SessionManager().get("subkey");
+    var uritxt = CLOUD_URL + '/appmobile/comslist';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'subkey': _subkey,
+      },
+    );
+    if(response.statusCode == 200){
+      List<dynamic> alllist = [];
+      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      SCData.clear();
+      _SCData.clear();
+      for (int i = 0; i < alllist.length; i++) {
+        SCmanualList_model SCObject= SCmanualList_model(
+          custcd:alllist[i]['custcd'],
+          spjangcd:alllist[i]['spjangcd'],
+          sseq:alllist[i]['sseq'],
+          sinputdate:alllist[i]['sinputdate'],
+          spernm:alllist[i]['spernm'],
+          smemo:alllist[i]['smemo'],
+          sflag:alllist[i]['sflag'],
+          subkey:alllist[i]['subkey'],
+        );
+        setState(() {
+          SCData.add(SCObject);
+          _SCData.add(alllist[i]['sseq'] + '[' + alllist[i]['sinputdate'] + ']' + alllist[i]['spernm'] + ']'  + alllist[i]['smemo'] + ']' + alllist[i]['sflag'] + ']' + alllist[i]['subkey'] + ']');
 
-      // set chat dummy data
-      _chatList.add(new ChatModel(1, null, 'date', '9 Sep 2019', null, null));
-      _chatList.add(new ChatModel(2, 'buyer', 'text', 'Good morning', '13:59', true));
-      _chatList.add(new ChatModel(3, 'buyer', 'image', GLOBAL_URL+'/product/80.jpg', null, null));
-      _chatList.add(new ChatModel(4, 'buyer', 'text', 'I want to ask about the samsung tv product', '13:59', true));
-      _chatList.add(new ChatModel(5, 'buyer', 'text', 'Is the Samsung LED TV 32 Inch is still on sale ?', '14:01', true));
-      _chatList.add(new ChatModel(6, 'seller', 'text', 'Hello, thank you for contacting us', '14:18', true));
-      _chatList.add(new ChatModel(7, 'seller', 'text', 'We are sorry, but the promotion for Samsung LED TV 32 Inch has ended. Don\'t forget to turn on notification setting for promotion so you will get the news about our product', '14:20', null));
-      _chatList.add(new ChatModel(8, 'buyer', 'text', 'Ok, thank you for your information.', '14:22', true));
-      _chatList.add(new ChatModel(9, null, 'date', '13 Sep 2019', null, null));
-      _chatList.add(new ChatModel(10, 'buyer', 'image', GLOBAL_URL+'/product/21.jpg', null, null));
-      _chatList.add(new ChatModel(11, 'buyer', 'text', 'Hi, is Adidas Polo Shirt size L is ready ? For the black color.', '08:58', true));
-      _chatList.add(new ChatModel(12, 'buyer', 'text', 'I want to order for 2 pcs.', '09:00', true));
-      _chatList.add(new ChatModel(13, 'buyer', 'text', 'And can I change it if the size doesn\'t fit my body?', '09:00', true));
-      _chatList.add(new ChatModel(14, 'seller', 'text', 'Hello, good morning. The product is ready and you can change if the size is not fit your body', '09:14', null));
+        });
 
-      // reverse the list
-      _chatListReversed = _chatList.reversed.toList();
-    });
+      }
+      return SCData;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('불러오는데 실패했습니다');
+    }
   }
 
   @override
   void dispose() {
-    _etChat.dispose();
     super.dispose();
   }
 
-  void _addDate(String currentDate){
-    _chatListReversed.insert(0, new ChatModel(15, null, 'date', currentDate, null, null));
-  }
+  Future SSlist_getdata() async {
+    String _dbnm = await  SessionManager().get("dbnm");
 
-  void _addMessage(String message){
-    DateTime now = DateTime.now();
-    String _currentTime = DateFormat('kk:mm').format(now);
-    _chatListReversed.insert(0, new ChatModel(16, 'buyer', 'text', message, _currentTime, false));
+    var uritxt = CLOUD_URL + '/appmobile/SSlist';
+    var encoded = Uri.encodeFull(uritxt);
+
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+      },
+    );
+    if(response.statusCode == 200){
+      List<dynamic> alllist = [];
+      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      SData.clear();
+      for (int i = 0; i < alllist.length; i++) {
+        SmanualList_model SObject= SmanualList_model(
+          custcd:alllist[i]['custcd'],
+          spjangcd:alllist[i]['spjangcd'],
+          sseq:alllist[i]['sseq'],
+          sinputdate:alllist[i]['sinputdate'],
+          spernm:alllist[i]['spernm'],
+          smemo:alllist[i]['smemo'],
+          sflag:alllist[i]['sflag'],
+          subkey:alllist[i]['subkey'],
+        );
+        setState(() {
+          SData.add(SObject);
+        });
+
+      }
+      return SData;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('불러오는데 실패했습니다');
+    }
   }
 
   @override
@@ -90,40 +149,17 @@ class _AppPage05State extends State<AppPage05> {
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: _reusableWidget.bottomAppBar(),
         ),
-        body:
-
-              ListView(
+        body:ListView(
                 padding: EdgeInsets.all(16),
                   children: [
                     Container(
-                      height: 60,
-                      child: TextFormField(
-                        controller: _etChat,
-                        minLines: 1,
-                        maxLines: 4,
-                        textAlignVertical: TextAlignVertical.bottom,
-                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                        onChanged: (textValue) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          fillColor: Colors.grey[200],
-                          filled: true,
-                          hintText: 'textfield',
-                          focusedBorder: UnderlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                              borderSide: BorderSide(color: Colors.grey[200]!)),
-                          enabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                            borderSide: BorderSide(color: Colors.grey[200]!),
-                          ),
-                        ),
-                      ),
+                      child: Text('수리 Q&A 게시판', style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+                      )),
                     ),
-                SafeArea(
-                  child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Container( //높이랑 너비가 없었음
+                  SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             border: Border(
@@ -131,84 +167,116 @@ class _AppPage05State extends State<AppPage05> {
                                 color: Color(0xffcccccc),
                                 width: 1.0,
                               ),
-                              bottom:BorderSide(
+                              bottom: BorderSide(
                                 color: Color(0xffcccccc),
                                 width: 1.0,
                               ),
                             ),
                           ),
-                          height: 820,
-                          width: 570,//ListView.builder 더 느리게 가져옴
-                          child: ListView.builder(
+                          width: 750,
+                          height: 750,
+                          child:
+                           ListView.builder(
                             shrinkWrap: true,
-                            reverse: true,
-                            itemCount: _chatListReversed.length,
-                            itemBuilder: (context, index) {
-                              if(_chatListReversed[index].getTextImageDate=='date'){
-                                return _buildDate(_chatListReversed[index].getMessage);
-                              } else if(_chatListReversed[index].getTextImageDate=='image'){
-                                return _buildImage(_chatListReversed[index].getMessage);
-                              } else {
-                                if(_chatListReversed[index].getType=='buyer'){
-                                  return _buildChatBuyer(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!, _chatListReversed[index].getRead!);
-                                } else {
-                                  return _buildChatSeller(_chatListReversed[index].getMessage, _chatListReversed[index].getDate!);
-                                }
-                              }
+                            itemCount: SData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                            return _buildHEAD(SData[index]);
                             },
                           ),
-
-                          ),
-
-
-                  ),
-                   //endpoint
-
-                ),
-                  ],
+                        ),
+                      ),
+                   ],
               ),
     );
   }
 
-  Widget _buildDate(String date){
-    return Container(
-      margin: EdgeInsets.all(16),
+  Widget _buildHEAD(SmanualList_model SData){
+    return
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:[
+          Container(
+      margin: EdgeInsets.all(18),
       decoration: BoxDecoration(
         border: Border(
-        bottom: BorderSide(
-        color: Color(0xffcccccc),
-        width: 1.5
+          bottom: BorderSide(
+              color: Color(0xffcccccc),
+              width: 1.5
+          ),
         ),
-        ),
-    ),
+      ),
       child: Row(
         children: [
           Center(
-            child: Text(date, style: TextStyle(
+            child: Text('${SData.sinputdate}', style: TextStyle(
                 color: SOFT_GREY, fontSize: 11
             )),
           ),
-        SizedBox(
-          width: 130,
-        ),
-        Center(
-          child: Text('아무개가 작성한 질문입니다.', style: TextStyle(
-              color: SOFT_GREY, fontSize: 11
-          )),
-        ),
+          SizedBox(
+            width: 130,
+          ),
+          Center(
+            child: Text('${SData.spernm}', style: TextStyle(
+                color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 11
+            )),
+          ),
+          Center(
+            child: Text('님이 작성한 질문입니다.', style: TextStyle(
+                color: SOFT_GREY, fontSize: 11
+            )),
+          ),
         ],
       ),
+    ),
+          Container(
+            margin: EdgeInsets.only(top: 8),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xffcccccc),
+                width: 1.0,
+              ),
+              color:  Color(0xfff9fafd),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(5),
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding:EdgeInsets.all(16),
+                      child: Text('내용: ${SData.smemo}', style: TextStyle(
+                          fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                      )),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+                ListView.builder(
+                itemCount: _SCData.length,
+                itemBuilder: (BuildContext context, int index) {
+                return _buildchat(SCData[index]);
+                },
+                ),
+
+                ],
       );
 
   }
 
-  Widget _buildChatBuyer(String message, String time, bool read){
+
+  //gray 게시글 if~~~~ admin이 아니라면~
+  Widget _buildchat(SCmanualList_model SCData){
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
       margin:EdgeInsets.only(top: 4),
-      child: Wrap(
-        alignment: WrapAlignment.end,
-        children: [
+      child:
           Container(
             constraints: BoxConstraints(maxWidth: boxChatSize),
             padding: EdgeInsets.all(8),
@@ -226,28 +294,28 @@ class _AppPage05State extends State<AppPage05> {
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
+
                 Flexible(
-                  child: Text(message, style: TextStyle(
+
+                  child: Text('${SCData.smemo}', style: TextStyle(
                       color: CHARCOAL
                   )),
                 ),
                 Wrap(
                   children: [
                     SizedBox(width: 4),
-                    Icon(Icons.done_all, color: read==true?PRIMARY_COLOR:SOFT_GREY, size: 11),
+                    Icon(Icons.done_all, color: SOFT_BLUE, size: 11),
                     SizedBox(width: 2),
-                    Text(time, style: TextStyle(
+                    Text('${SCData.sinputdate}', style: TextStyle(
                         color: SOFT_GREY, fontSize: 9
                     )),
                   ],
-                )
+                ),
               ],
             ),
           ),
-        ],
-      ),
     );
   }
 
@@ -255,8 +323,7 @@ class _AppPage05State extends State<AppPage05> {
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
       margin:EdgeInsets.only(top: 4),
-      child: Wrap(
-        children: [
+      child:
           Container(
               constraints: BoxConstraints(maxWidth: boxChatSize),
               padding: EdgeInsets.all(8),
@@ -290,45 +357,9 @@ class _AppPage05State extends State<AppPage05> {
                   )
                 ],
               )
-          ),
-        ],
       ),
     );
   }
 
-  Widget _buildImage(String imageUrl){
-    final double boxChatSize = MediaQuery.of(context).size.width/1.3;
-    final double boxImageSize = (MediaQuery.of(context).size.width / 6);
-    return Container(
-      margin:EdgeInsets.only(top: 4),
-      child: Wrap(
-        alignment: WrapAlignment.end,
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: boxChatSize),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                border: Border.all(
-                    width: 1,
-                    color: Colors.grey[300]!
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  bottomLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(12),
-                )
-            ),
-            child: Container(
-              width: boxImageSize,
-              height: boxImageSize,
-              child: ClipRRect(
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(8)),
-                  child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: imageUrl)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 }
