@@ -24,6 +24,7 @@ class AppPage04 extends StatefulWidget {
 }
 
 class _AppPage04State extends State<AppPage04> {
+  TextEditingController _etSearch = TextEditingController();
 
   List<DataRow> _dataGrid(BmanualList_model BData) {
     debugPrint('The value of a is $_dataGrid(BData)');
@@ -31,10 +32,15 @@ class _AppPage04State extends State<AppPage04> {
       DataRow(
         cells: <DataCell>[
           DataCell(
-            ConstrainedBox(
-                constraints: BoxConstraints(minWidth: 75, maxWidth: 75), //SET max width
-                child: Text('${BData.bseq}',
-                    overflow: TextOverflow.ellipsis)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    // margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${BData.binputdate}')
+                ],
+              )
           ),
           DataCell(
             Row(
@@ -79,17 +85,7 @@ class _AppPage04State extends State<AppPage04> {
                 ],
               )
           ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text('${BData.binputdate}')
-                ],
-              )
-          ),
+
         ],
       ),
     ];
@@ -103,6 +99,7 @@ class _AppPage04State extends State<AppPage04> {
 
   @override
   void dispose() {
+    _etSearch.dispose();
     super.dispose();
   }
 
@@ -165,6 +162,52 @@ class _AppPage04State extends State<AppPage04> {
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+          bottom: PreferredSize(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[100]!,
+                      width: 1.0,
+                    )
+                ),
+              ),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+              height: kToolbarHeight,
+              child: TextFormField(
+                controller: _etSearch,
+                textAlignVertical: TextAlignVertical.bottom,
+                maxLines: 1,
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                onChanged: (textValue) {
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.grey[100],
+                  filled: true,
+                  hintText: '제목/내용 검색',
+                  prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                  suffixIcon: (_etSearch.text == '')
+                      ? null
+                      : GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _etSearch = TextEditingController(text: '');
+                        });
+                      },
+                      child: Icon(Icons.close, color: Colors.grey[500])),
+                  focusedBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(color: Colors.grey[200]!),
+                  ),
+                ),
+              ),
+            ),
+            preferredSize: Size.fromHeight(kToolbarHeight),
+          ),
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
@@ -199,14 +242,10 @@ class _AppPage04State extends State<AppPage04> {
                    dataRowHeight: 40,
                    columns:
                    <DataColumn>[
-                     DataColumn(label:
-                      Text('번호',
-                         style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL),
-                     )),
+                     DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                    ], rows:
                  _dataGrid(BData[index]),
                  );

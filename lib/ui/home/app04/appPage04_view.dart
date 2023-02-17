@@ -55,7 +55,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
      ListView(
         padding: EdgeInsets.all(26),
         children: [
-          Text('No.${widget.BData.bseq}', style: TextStyle(
+          Text('Date.${widget.BData.binputdate}', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
           )),
           Container(

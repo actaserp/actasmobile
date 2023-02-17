@@ -16,10 +16,13 @@ class SmanualList_model{
   late var sflag;
   late var subkey;
 
+  String get getsubkey{
+    return this.subkey;
+  }
 
   SmanualList_model({  required this.custcd, required this.spjangcd ,
     required this.sseq, required this.sinputdate,
-    required this.spernm,required this.smemo, required this.sflag, required this.subkey
+    required this.spernm,required this.smemo, required this.sflag
  });
 }
 
