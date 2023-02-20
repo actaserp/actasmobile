@@ -44,7 +44,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
         ),
         elevation: GlobalStyle.appBarElevation,
         title: Text(
-          '수리노하우',
+          '부품가이드',
           style: GlobalStyle.appBarTitle,
         ),
         backgroundColor: GlobalStyle.appBarBackgroundColor,

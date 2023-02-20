@@ -131,7 +131,7 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('수리노하우 저장에 실패했습니다');
+      throw Exception('부품가이드 저장에 실패했습니다');
       return   false;
     }
   }
@@ -561,7 +561,7 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('수리노하우'),
+          title: Text('부품가이드'),
           content: Text(as_msg),
           actions: <Widget>[
             TextButton(

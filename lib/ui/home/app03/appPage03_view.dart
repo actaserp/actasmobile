@@ -14,9 +14,12 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
-
+import 'package:thumbnailer/thumbnailer.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../model/app03/AttachList_model.dart';
+import '../../reusable/cache_image_network.dart';
 import '../tab_home.dart';
 import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
@@ -120,6 +123,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
     setData();
     super.initState();
 
+    ///다운로드
     IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
@@ -129,7 +133,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
-
+    ///썸네일
+    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
+      'custom/mimeType': FontAwesomeIcons.key,
+    });
   }
 
   @override
@@ -291,10 +298,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
                         ],
                       ),
                     ),
-
                             SizedBox(
                               height: 12,
                             ),
+                            ///첨부파일리스트
                             _buildFileList(),
                             SizedBox(
                               height: 20,
@@ -349,11 +356,20 @@ Widget _buildFileList() {
                                },
                                child: ConstrainedBox(
                                  constraints: BoxConstraints(minWidth: 105, ),
-                               child:  Text('${_ATCData[index]}', style: TextStyle(
-                                   fontSize: 20,
-                                   color: SOFT_BLUE,
-                                   fontWeight: FontWeight.bold
-                               ),
+                               child:  Column(
+                                 children: [
+                                 ClipRRect(
+                                 borderRadius:
+                                   BorderRadius.all(Radius.circular(4)),
+                                   child: buildCacheNetworkImage(width: 200, height: 200, url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH")
+                                   ),
+                                   Text('${_ATCData[index]}', style: TextStyle(
+                                       fontSize: 20,
+                                       color: SOFT_BLUE,
+                                       fontWeight: FontWeight.bold
+                                   ),
+                                   ),
+                                 ],
                                ),
                                ),
                            ),
