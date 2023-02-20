@@ -112,7 +112,7 @@ class _AppPage03State extends State<AppPage03> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 50), //SET max width
+                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50), //SET max width
                       child: Text('${MhData.hpernm}',
                           overflow: TextOverflow.ellipsis)),
                 ],

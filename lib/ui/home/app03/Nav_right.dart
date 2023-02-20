@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../appPage02.dart';
 import '../tab_home.dart';
 
+
+
+
 class Nav_right extends StatelessWidget{
   final Widget text;
   final Color color;
@@ -12,6 +15,8 @@ class Nav_right extends StatelessWidget{
   required this.text, required this.color,
 
       }) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {

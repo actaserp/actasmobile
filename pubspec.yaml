@@ -54,6 +54,7 @@ dependencies:
   flutter_downloader: ^1.10.1+2
   permission_handler: ^10.2.0
   thumbnailer: ^2.2.0
+  video_thumbnail: ^0.5.3
 
 dev_dependencies:
   flutter_test:

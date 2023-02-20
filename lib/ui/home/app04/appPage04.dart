@@ -147,7 +147,8 @@ class _AppPage04State extends State<AppPage04> {
     if(response.statusCode == 200){
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-      MhData.clear();
+      ///clear 안 해주면 length 조절 안됨
+      BData.clear();
       for (int i = 0; i < alllist.length; i++) {
         BmanualList_model BObject= BmanualList_model(
             custcd:alllist[i]['custcd'],
@@ -159,14 +160,13 @@ class _AppPage04State extends State<AppPage04> {
           bpernm:alllist[i]['bpernm'],
           bmemo:alllist[i]['bmemo'],
           bflag:alllist[i]['bflag'],
-          attcnt:alllist[i]['attcnt'],
+          attcnt:alllist[i]['attcnt']
         );
         setState(() {
           BData.add(BObject);
         });
 
       }
-      print( 'test:::: ${BData[10].attcnt}');
       return BData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -242,7 +242,7 @@ class _AppPage04State extends State<AppPage04> {
         body: ListView(
           padding: EdgeInsets.all(16),
           children: [
-            Text('부품 가이드 자료실', style: TextStyle(
+            Text('부품 가이드 자료실  ${BData.length} 건', style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
             )),
         SingleChildScrollView(

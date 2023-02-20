@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,7 +9,6 @@ import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
 
-import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,6 +17,8 @@ import 'package:http/http.dart' as http;
 import 'package:thumbnailer/thumbnailer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+
 
 import '../../../model/app03/AttachList_model.dart';
 import '../../reusable/cache_image_network.dart';
@@ -49,7 +51,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
 
 
   @override
-  Future comment()async {
+  Future attachMH()async {
     _dbnm = await  SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/appmobile/attachMH';
     var encoded = Uri.encodeFull(uritxt);
@@ -119,7 +121,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
   @override
   void initState() {
 
-    comment();
+    attachMH();
     setData();
     super.initState();
 
@@ -165,6 +167,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
       ),
       body:
      ListView(
+       physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.all(26),
         children: [
           Container(
@@ -208,6 +211,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
               ),
             ),
             child: Column(
+
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -318,6 +322,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
 
 //첨부파일리스트
 Widget _buildFileList() {
+  final double boxImageSize = (MediaQuery.of(context).size.width / 5);
   return Container(
     margin: EdgeInsets.all(8),
         padding: EdgeInsets.all(16),
@@ -328,6 +333,7 @@ Widget _buildFileList() {
            scrollDirection: Axis.vertical,
            child: Container(
              child: ListView.builder(
+                 physics: NeverScrollableScrollPhysics(),
                  shrinkWrap: true,
                itemCount: _ATCData.length,
                itemBuilder:(BuildContext context, int index)
@@ -342,7 +348,7 @@ Widget _buildFileList() {
                                  String dir = (await getApplicationDocumentsDirectory()).path;
                                  try{
                                    await FlutterDownloader.enqueue(
-                                     url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
+                                     url: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
                                      savedDir: '$dir',	// 저장할 dir
                                      fileName: '${_ATCData[index]}',	// 파일명
                                      showNotification: true, // show download progress in status bar (for Android)
@@ -351,19 +357,27 @@ Widget _buildFileList() {
                                    print("파일 다운로드 완료");
                                  }catch(e){
                                    print("eerror :::: $e");
-                                   print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $CLOUD_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH");
+                                   print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $LOCAL_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH");
                                  }
                                },
                                child: ConstrainedBox(
                                  constraints: BoxConstraints(minWidth: 105, ),
                                child:  Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
-                                 ClipRRect(
-                                 borderRadius:
-                                   BorderRadius.all(Radius.circular(4)),
-                                   child: buildCacheNetworkImage(width: 200, height: 200, url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH")
-                                   ),
-                                   Text('${_ATCData[index]}', style: TextStyle(
+                                   InteractiveViewer( 
+                                     ///이미지 확대기능
+                                     boundaryMargin: const EdgeInsets.all(20.0),
+                                     minScale: 0.5,
+                                     maxScale: 2.6,
+                                    child: ClipRRect(
+                                   borderRadius:
+                                     BorderRadius.all(Radius.circular(14)),
+                                     child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH")
+                                     ),
+                                 ),
+                                   Text('${_ATCData[index]}',
+                                     style: TextStyle(
                                        fontSize: 20,
                                        color: SOFT_BLUE,
                                        fontWeight: FontWeight.bold
@@ -373,7 +387,39 @@ Widget _buildFileList() {
                                ),
                                ),
                            ),
+                         FloatingActionButton.small(
+                           tooltip: "Generate a data of thumbnail",
+                           onPressed: () async{
+                             String dir = (await getApplicationDocumentsDirectory()).path;
+                             setState(() {
+                               VideoThumbnail.thumbnailFile(
+                                       video: (
+                                       "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH"),
+                                       thumbnailPath: '$dir',
+                                       imageFormat: ImageFormat.JPEG,
+                                       maxHeight: 200,
+                                       maxWidth: 200,
+                                       timeMs: 50,
+                                       quality: 50);
+                             });
+                                // try{
+                                //  await VideoThumbnail.thumbnailFile(
+                                //       video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
+                                //       headers: {
+                                //         "USERHEADER1": "user defined header1",
+                                //         "USERHEADER2": "user defined header2",
+                                //       },
+                                //       imageFormat: ImageFormat.JPEG,
+                                //       timeMs: 10,
+                                //       quality: 50);
+                                // }catch(e){
+                                //   print("eerror :::: $e");
+                                // }
+                           },
+                           child: Icon(Icons.edit),
+                         ),
                          Divider(),
+
                           ],
                         );}
   ),
@@ -384,5 +430,80 @@ Widget _buildFileList() {
   );
 }
 
+///비디오 썸네일
 
+  void getVideoThumbnail(String file) async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+
+    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+        video: '$dir',
+        imageFormat: ImageFormat.JPEG,
+        timeMs: 10,
+        quality: 50);
+  }
+
+///썸네일
+//   Future<Thumbnail> getThumbnail(String mimeType, String filePath) async {
+//     switch (mimeType) {
+//       case 'image/jpeg':
+//       case 'image/png':
+//       case 'image/bmp':
+//         return await Thumbnailer.getThumbnail(
+//           thumbnailRequest: ThumbnailRequest(
+//             filePath: filePath,
+//             imageFormat: ImageFormat.JPEG,
+//             maxHeight: 256,
+//             maxWidth: 256,
+//           ),
+//         );
+//       case 'video/mp4':
+//       case 'video/quicktime':
+//         return await Thumbnailer.getThumbnail(
+//           thumbnailRequest: ThumbnailRequest(
+//             filePath: filePath,
+//             imageFormat: ImageFormat.JPEG,
+//             maxHeight: 256,
+//             maxWidth: 256,
+//             timeMs: 1000, // get thumbnail from the 1st second of the video
+//           ),
+//         );
+//
+//     case 'application/pdf':
+//       return await Thumbnailer.getThumbnail(
+//
+//     thumbnailRequest
+//
+//
+//     thumbnailRequest: ThumbnailRequest(
+//     filePath: filePath,
+//     imageFormat: ImageFormat.PNG,
+//
+//
+//     maxHeight: 256,
+//
+//
+//     maxWidth: 256,
+//
+//     pdfPageNumber
+//
+//     pdfPage
+//
+//
+//     pdfPageNumber: 1, // get thumbnail from the 1st page of the PDF document
+//     ),
+//     );
+//
+//     ),
+//     );
+//
+//
+//     ),
+//     );
+//     default:
+//     return null;
+//   }
+//   }
+//
+// }
+//
 }
