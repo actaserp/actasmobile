@@ -38,23 +38,22 @@ class _AppPage04State extends State<AppPage04> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text('${BData.binputdate}')
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
+                      child: Text('${BData.binputdate}', overflow: TextOverflow.ellipsis))
                 ],
               )
           ),
           DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50), //SET max width
-                    child: Text('${BData.bgourpcd}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 30, minWidth: 30), //SET max width
+                      child: Text('${BData.attcnt}',
+                          overflow: TextOverflow.ellipsis)),
+                ],
+              )
           ),
           DataCell(
               Row(
@@ -100,7 +99,17 @@ class _AppPage04State extends State<AppPage04> {
                 ],
               )
           ),
-
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50), //SET max width
+                    child: Text('${BData.bgourpcd}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
         ],
       ),
     ];
@@ -150,12 +159,14 @@ class _AppPage04State extends State<AppPage04> {
           bpernm:alllist[i]['bpernm'],
           bmemo:alllist[i]['bmemo'],
           bflag:alllist[i]['bflag'],
+          attcnt:alllist[i]['attcnt'],
         );
         setState(() {
           BData.add(BObject);
         });
 
       }
+      print( 'test:::: ${BData[10].attcnt}');
       return BData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -262,10 +273,11 @@ class _AppPage04State extends State<AppPage04> {
                    columns:
                    <DataColumn>[
                      DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('첨부파일건수',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('내용',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                    ], rows:
                  _dataGrid(BData[index]),
                  );

@@ -16,10 +16,12 @@ class MhmanualList_model{
   late var hpernm;
   late var hmemo;
   late var hflag;
+  late var attcnt;
 
 
   MhmanualList_model({  required this.custcd, required this.spjangcd ,required this.hseq, required this.hinputdate,
     required this.hgroupcd,required this.hsubject, required this.hpernm,required this.hmemo,required this.hflag,
+    required this.attcnt
 
  });
 }

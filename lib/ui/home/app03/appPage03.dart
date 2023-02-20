@@ -53,24 +53,22 @@ class _AppPage03State extends State<AppPage03> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text('${MhData.hinputdate}')
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
+                      child: Text('${MhData.hinputdate}', overflow: TextOverflow.ellipsis))
                 ],
               )
           ),
           DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50),
-                    //SET max width
-                    child: Text('${MhData.hgroupcd}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 30, minWidth: 30), //SET max width
+                      child: Text('${MhData.attcnt}',
+                          overflow: TextOverflow.ellipsis)),
+                ],
+              )
           ),
           DataCell(
               Row(
@@ -79,12 +77,11 @@ class _AppPage03State extends State<AppPage03> {
                 children: [
                   GestureDetector(
                     onTap: () {
-
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) => AppPage03view(MhData: MhData)));
                     },
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 105, maxWidth: 105),
+                      constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
                       child: Text('${MhData.hsubject}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -121,7 +118,18 @@ class _AppPage03State extends State<AppPage03> {
                 ],
               )
           ),
-
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
+                    //SET max width
+                    child: Text('${MhData.hgroupcd}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          )
         ],
       ),
     ];
@@ -174,11 +182,13 @@ class _AppPage03State extends State<AppPage03> {
           hpernm: alllist[i]['hpernm'],
           hmemo: alllist[i]['hmemo'],
           hflag: alllist[i]['hflag'],
+          attcnt : alllist[i]['attcnt']
         );
         setState(() {
           MhData.add(MhObject);
         });
       }
+      print( 'test:::: ${MhData[9].attcnt}');
       return
         MhData;
     } else {
@@ -292,13 +302,15 @@ class _AppPage03State extends State<AppPage03> {
                     <DataColumn>[
                       DataColumn(label: Text('등록일자', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('분류', style: TextStyle(
+                      DataColumn(label: Text('첨부파일건수', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('제목', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('내용', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('작성자', style: TextStyle(
+                          fontWeight: FontWeight.bold, color: CHARCOAL))),
+                      DataColumn(label: Text('분류', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                     ], rows:
                   _dataGrid(MhData[index]),

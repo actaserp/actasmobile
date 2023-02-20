@@ -16,12 +16,13 @@ class BmanualList_model{
   late var bpernm;
   late var bmemo;
   late var bflag;
+  late var attcnt;
 
 
   BmanualList_model({  required this.custcd, required this.spjangcd ,
     required this.bseq, required this.binputdate,
     required this.bgourpcd,required this.bsubject,
-    required this.bpernm,required this.bmemo, required this.bflag,
+    required this.bpernm,required this.bmemo, required this.bflag, required this.attcnt
 
  });
 }

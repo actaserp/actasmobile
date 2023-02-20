@@ -171,15 +171,21 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 SizedBox(
                   width: 275,
                 ),
-                Text('${widget.MhData.hflag}', style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
-                )),
+                Visibility(
+                  visible: false,
+                  child: Text('${widget.MhData.hflag}', style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
+                  )),
+                ),
                 SizedBox(
                   width: 10,
                 ),
-                Text('${widget.MhData.hseq}', style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
-                )),
+                Visibility(
+                  visible: false,
+                  child: Text('${widget.MhData.hseq}', style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
+                  )),
+                ),
                 SizedBox(
                   width: 10,
                 )
@@ -324,7 +330,6 @@ Widget _buildFileList() {
                        ///왼쪽배열
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-
                            GestureDetector(
                                onTap: () async{
                                  String dir = (await getApplicationDocumentsDirectory()).path;
@@ -352,6 +357,7 @@ Widget _buildFileList() {
                                ),
                                ),
                            ),
+                         Divider(),
                           ],
                         );}
   ),
