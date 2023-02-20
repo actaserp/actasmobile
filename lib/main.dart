@@ -1,19 +1,39 @@
 import 'dart:ui';
-
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:actasm/config/constant.dart';
 
 import 'package:actasm/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() {
+class DownloadClass {
+  static void callback(String id, DownloadTaskStatus status, int progress){
+    print("Down Status : $status");
+    print("Down Progress: $progress");
+  }
+}
 
-  // this function makes application always run in portrait mode
+void main() async {
+
+ /// this function makes application always run in portrait mode
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_){
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+  FlutterDownloader.registerCallback(DownloadClass.callback);
+  await Permission.storage.request();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+
     runApp(MyApp());
   });
+
+///Initilaize
+//   WidgetsFlutterBinding.ensureInitialized();
+//     await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+//     runApp(MyApp());
+
 }
+
+
 
 class MyCustomeScrollBehavior extends MaterialScrollBehavior{
   @override

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
+import 'package:actasm/ui/home/app03/Nav_right.dart';
 
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class AppPage03 extends StatefulWidget {
 class _AppPage03State extends State<AppPage03> {
   TextEditingController _etSearch = TextEditingController();
 
+  late final String good;
 
   ///fileview
   final mobUrl = "";
@@ -47,6 +49,17 @@ class _AppPage03State extends State<AppPage03> {
           //     child: Text('${MhData.hseq}',
           //     overflow: TextOverflow.ellipsis)),
           // ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    // margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${MhData.hinputdate}')
+                ],
+              )
+          ),
           DataCell(
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -108,17 +121,7 @@ class _AppPage03State extends State<AppPage03> {
                 ],
               )
           ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    // margin: EdgeInsets.only(right: 5),
-                  ),
-                  Text('${MhData.hinputdate}')
-                ],
-              )
-          ),
+
         ],
       ),
     ];
@@ -138,37 +141,6 @@ class _AppPage03State extends State<AppPage03> {
   }
 
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  Future<int> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // 파일 읽기
-      String contents = await file.readAsString();
-
-      return int.parse(contents);
-    } catch (e) {
-      // 에러가 발생할 경우 0을 반환
-      return 0;
-    }
-  }
-
-  Future<File> writeCounter(int counter) async {
-    final file = await _localFile;
-
-    // 파일 쓰기
-    return file.writeAsString('$counter');
-  }
 
   Future mhlist_getdata() async {
     String _dbnm = await SessionManager().get("dbnm");
@@ -219,80 +191,9 @@ class _AppPage03State extends State<AppPage03> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(child:
-              Text('Actas',
-              style: TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold
-        ),
-            ),
-              decoration: BoxDecoration(
-                color: Colors.blue[800]
-              ),
-            ),
-            ListTile(
-                title: GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));
-                    },
-                    child:  Row(
-                        children:[
-                          Icon(
-                            Icons.home,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Home'),
-                        ]))),
-            ListTile(
-              title: GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
-                },
-                  child:  Row(
-                    children:[
-                      Icon(
-                        Icons.favorite,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text('고장 처리'),
-                    ]))),
-            ListTile(
-                title: GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
-                    child:  Row(
-                        children:[
-                          Icon(
-                            Icons.safety_check,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('현장 정보'),
-                        ]))),
-            ListTile(
-                title: GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
-                    child:  Row(
-                        children:[
-                          Icon(
-                            Icons.person_outlined,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Account'),
-                        ]))),
-          ],
-        ),
+      endDrawer: Nav_right(
+        text: Text('app03_nav'),
+        color: SOFT_BLUE,
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -389,6 +290,8 @@ class _AppPage03State extends State<AppPage03> {
                     dataRowHeight: 40,
                     columns:
                     <DataColumn>[
+                      DataColumn(label: Text('등록일자', style: TextStyle(
+                          fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('분류', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('제목', style: TextStyle(
@@ -396,8 +299,6 @@ class _AppPage03State extends State<AppPage03> {
                       DataColumn(label: Text('내용', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                       DataColumn(label: Text('작성자', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('등록일자', style: TextStyle(
                           fontWeight: FontWeight.bold, color: CHARCOAL))),
                     ], rows:
                   _dataGrid(MhData[index]),

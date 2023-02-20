@@ -5,6 +5,7 @@ import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
 import 'package:actasm/ui/account/payment_method/add_payment_method.dart';
 import 'package:actasm/ui/account/payment_method/edit_payment_method.dart';
+import 'package:actasm/ui/home/app03/Nav_right.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -14,6 +15,8 @@ import 'package:http/http.dart' as http;
 
 
 import '../../../model/app04/BmanualList_model.dart';
+import '../appPage02.dart';
+import '../tab_home.dart';
 import 'appPage04_detail.dart';
 import 'appPage04_view.dart';
 
@@ -62,7 +65,7 @@ class _AppPage04State extends State<AppPage04> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04view(BData: BData)));
                     },
                     child: ConstrainedBox(
-                      constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
+                      constraints:  BoxConstraints(minWidth: 105 , maxWidth: 105),
                       child: Text('${BData.bsubject}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -73,6 +76,18 @@ class _AppPage04State extends State<AppPage04> {
                   ),
                 ],
               )
+          ),
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 70, minWidth: 70),
+                    //SET max width
+                    child: Text('${BData.bmemo}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
           ),
           DataCell(
               Row(
@@ -151,6 +166,10 @@ class _AppPage04State extends State<AppPage04> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Nav_right(
+        text: Text('app04_nav'),
+        color: SOFT_BLUE,
+      ),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: GlobalStyle.appBarIconThemeColor,
@@ -245,6 +264,7 @@ class _AppPage04State extends State<AppPage04> {
                      DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('내용',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                      DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                    ], rows:
                  _dataGrid(BData[index]),

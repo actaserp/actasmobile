@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/home/app03/Nav_right.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:actasm/ui/reusable/cache_image_network.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -15,6 +16,8 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../model/app05/SmanualList_model.dart';
 import '../../../model/app05/SCmanualList_model.dart';
+import '../appPage02.dart';
+import '../tab_home.dart';
 
 class AppPage05 extends StatefulWidget {
 
@@ -98,6 +101,10 @@ class _AppPage05State extends State<AppPage05> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Nav_right(
+        text: Text('app05_nav'),
+          color: SOFT_BLUE,
+          ),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: GlobalStyle.appBarIconThemeColor,

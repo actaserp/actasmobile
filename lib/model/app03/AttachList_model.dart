@@ -28,3 +28,5 @@ class AttachList_model{
 
 
 List<AttachList_model> ATCData =[];
+List<AttachList_model> idxData =[];
+List<AttachList_model> seqData =[];
