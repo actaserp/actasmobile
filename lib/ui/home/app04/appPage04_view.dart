@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 // import 'dart:js';
 
@@ -9,6 +11,7 @@ import 'package:actasm/model/app03/MhmanualList_model.dart';
 
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -36,6 +39,8 @@ class _AppPage04ViewState extends State<AppPage04view> {
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
+  String? _thumfile;
+  Uint8List? _thumdata;
 
   @override
   void setData() {
@@ -132,6 +137,19 @@ class _AppPage04ViewState extends State<AppPage04view> {
     Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
       'custom/mimeType': FontAwesomeIcons.key,
     });
+
+  }
+
+  ///썸네일2
+  Future<File> copyTemp(String Tempfile) async{
+    Directory tempdir = await getTemporaryDirectory();
+    final byteData = await rootBundle.load(Tempfile);
+    File videoThumb = File("${tempdir.path}/$Tempfile")
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return videoThumb;
+
   }
 
   @override
@@ -319,33 +337,36 @@ class _AppPage04ViewState extends State<AppPage04view> {
                           ),
                         ),
                         FloatingActionButton.small(
-                          tooltip: "Generate a data of thumbnail",
+                          tooltip: "테스트 중입니다.",
                           onPressed: () async{
                             String dir = (await getApplicationDocumentsDirectory()).path;
                             setState(() {
-                              VideoThumbnail.thumbnailFile(
-                                  video: (
-                                      "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH"),
-                                  thumbnailPath: '$dir',
-                                  imageFormat: ImageFormat.JPEG,
-                                  maxHeight: 200,
-                                  maxWidth: 200,
-                                  timeMs: 50,
-                                  quality: 50);
+                                Column(
+                                  children: [
+                                    if(_thumfile != null)
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("URL로 테스트"),
+                                        SizedBox(height: 10,),
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Image.file(File(_thumfile!)),
+                                            CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor: Colors.black,
+                                              child: Icon(
+                                                Icons.play_arrow,
+                                                size: 40,
+                                              ),
+                                            )
+                                          ],
+                                        )],
+                                    ),
+                                  ],
+                                );
                             });
-                            // try{
-                            //  await VideoThumbnail.thumbnailFile(
-                            //       video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
-                            //       headers: {
-                            //         "USERHEADER1": "user defined header1",
-                            //         "USERHEADER2": "user defined header2",
-                            //       },
-                            //       imageFormat: ImageFormat.JPEG,
-                            //       timeMs: 10,
-                            //       quality: 50);
-                            // }catch(e){
-                            //   print("eerror :::: $e");
-                            // }
                           },
                           child: Icon(Icons.edit),
                         ),
@@ -359,6 +380,50 @@ class _AppPage04ViewState extends State<AppPage04view> {
 
 
     );
+  }
+  
+  ///video try 1
+  // VideoThumbnail.thumbnailFile(
+  // video: (
+  // "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH"),
+  // ///이미저장된 thumbnial가져와야하는데 에뮬레이터 아니라 확인불가
+  // thumbnailPath: '$dir',
+  // imageFormat: ImageFormat.JPEG,
+  // maxHeight: 200,
+  // maxWidth: 200,
+  // timeMs: 50,
+  // quality: 50);
+  
+  ///video try 2
+// try{
+  //  await VideoThumbnail.thumbnailFile(
+  //       video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
+  //       headers: {
+  //         "USERHEADER1": "user defined header1",
+  //         "USERHEADER2": "user defined header2",
+  //       },
+  //       imageFormat: ImageFormat.JPEG,
+  //       timeMs: 10,
+  //       quality: 50);
+  // }catch(e){
+  //   print("eerror :::: $e");
+  // }
+  ///initState >> genThumbnial(); 시작하자마자 state 해주는 거임
+
+  void genThumbnial(int index) async {
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    String temp = (await getTemporaryDirectory()).path;
+    _thumfile = await VideoThumbnail.thumbnailFile(
+        video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
+        thumbnailPath: temp,
+        imageFormat: ImageFormat.PNG);
+    // _thumdata = await VideoThumbnail.thumbnailData(
+    //     video: dir,
+    //     imageFormat: ImageFormat.PNG,
+    //    maxHeight: 300,
+    //    maxWidth: 300,
+    //     quality: 50);
+
   }
 
 }
