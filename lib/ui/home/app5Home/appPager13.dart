@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:actasm/model/app02/e411list_model.dart';
 import 'package:actasm/model/app02/mfixlist_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:http/http.dart' as http;
 
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
+import 'appPager13Detail.dart';
+import 'appPager13register.dart';
 
 
 
@@ -22,80 +25,84 @@ class _AppPager13State extends State<AppPager13> {
 
 
   String _subsubsub = '';
-  
+  TextEditingController _etSearch2 = TextEditingController();
+  List<mfixlist_model> mfixDatas = mfixData;
+
+
   List<DataRow> _dataGrid(mfixlist_model mfixData){
     return [
       DataRow(
-          cells: <DataCell>[
-        DataCell(
-          ConstrainedBox(constraints: BoxConstraints(maxWidth: 75),
-          child: Text('${mfixData.fseq}',
-          overflow: TextOverflow.ellipsis)),
-        ), 
-       DataCell(
-           Row(
-             mainAxisAlignment: MainAxisAlignment.start,
-             children: [
-               ConstrainedBox(constraints: BoxConstraints(maxWidth: 55, minWidth: 50),
-               child: Text('${mfixData.fgourpcd}',
-                      overflow: TextOverflow.ellipsis)),
-             ],
-           ),
-       ),
-            DataCell(
-                Row(
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          this._subsubsub = '${mfixData.fnsubject}';
-                        });
-                        /*Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03view(MhData: MhData)));
-                        */
-                      },
-                      child: ConstrainedBox(
-                        constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
-                        child: Text('${mfixData.fnsubject}',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
-                            )
-                        ),
+        cells: <DataCell>[
+          DataCell(
+            ConstrainedBox(constraints: BoxConstraints(maxWidth: 75),
+                child: Text('${mfixData.fseq}',
+                    overflow: TextOverflow.ellipsis)),
+          ),
+          DataCell(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ConstrainedBox(constraints: BoxConstraints(maxWidth: 55, minWidth: 50),
+                    child: Text('${mfixData.cnam}',
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+          DataCell(
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        this._subsubsub = '${mfixData.fnsubject}';
+                      });
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13Detail(mfixData: mfixData)));
+
+                    },
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
+                      child: Text('${mfixData.fnsubject}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                          )
                       ),
                     ),
-                  ],
-                )
-            ),
-            DataCell(
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ConstrainedBox(
-                        constraints: BoxConstraints(minWidth: 50), //SET max width
-                        child: Text('${mfixData.fpernm}',
-                            overflow: TextOverflow.ellipsis)),
-                  ],
-                )
-            ),
-            DataCell(
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      // margin: EdgeInsets.only(right: 5),
-                    ),
-                    Text('${mfixData.finputdate}')
-                  ],
-                )
-            ),
+                  ),
+                ],
+              )
+          ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 50), //SET max width
+                      child: Text('${mfixData.fpernm}',
+                          overflow: TextOverflow.ellipsis)),
+                ],
+              )
+          ),
+          DataCell(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    // margin: EdgeInsets.only(right: 5),
+                  ),
+                  Text('${mfixData.finputdate}')
+                ],
+              )
+          ),
 
-      ],
+        ],
       ),
     ];
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -121,7 +128,8 @@ class _AppPager13State extends State<AppPager13> {
         'Accept': 'application/json'
       },
       body: <String, String>{
-        'dbnm': _dbnm
+        'dbnm': _dbnm,
+        'fnsubject': _etSearch2.text,
       },
     );
     if (response.statusCode == 200) {
@@ -131,13 +139,14 @@ class _AppPager13State extends State<AppPager13> {
       for (int i = 0; i < alllist.length; i++) {
         mfixlist_model Object = mfixlist_model(
 
-          fseq: alllist[i]['fseq'],
-          finputdate: alllist[i]['finputdate'],
-          fgourpcd: alllist[i]['fgourpcd'],
-          fnsubject: alllist[i]['fnsubject'],
-          fpernm: alllist[i]['fpernm'],
-          fmemo: alllist[i]['fmemo'],
-          cnam: alllist[i]['cnam']
+            fseq: alllist[i]['fseq'],
+            finputdate: alllist[i]['finputdate'],
+            fgourpcd: alllist[i]['fgourpcd'],
+            fnsubject: alllist[i]['fnsubject'],
+            fpernm: alllist[i]['fpernm'],
+            fmemo: alllist[i]['fmemo'],
+            cnam: alllist[i]['cnam'],
+            fflag: alllist[i]['fflag']
         );
         setState(() {
           mfixData.add(Object);
@@ -174,6 +183,25 @@ class _AppPager13State extends State<AppPager13> {
           '점검조치사항',
           style: GlobalStyle.appBarTitle,
         ),
+        actions: <Widget>[
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: TextButton(onPressed: (){
+
+                  setState(() {
+
+                    mfixlist_getdata();
+                  });
+                  /*searchBook(_etSearch.text);*/
+                  /*searchBook2(_etSearch2.text);*/
+                }, child: Text('검색하기')),
+              ),
+
+            ],
+          )
+        ],
         backgroundColor: GlobalStyle.appBarBackgroundColor,
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
         // bottom: _reusableWidget.bottomAppBar(),
@@ -181,9 +209,38 @@ class _AppPager13State extends State<AppPager13> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Text('점검조치사항 자료실', style: TextStyle(
+          TextFormField(
+            controller: _etSearch2,
+            textAlignVertical: TextAlignVertical.bottom,
+            maxLines: 1,
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+            decoration: InputDecoration(
+              fillColor: Colors.grey[100],
+              filled: true,
+              hintText: '게시글 제목검색',
+              prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+              suffixIcon: (_etSearch2.text == '')
+                  ? null
+                  : GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _etSearch2 = TextEditingController(text: '');
+                    });
+                  },
+                  child: Icon(Icons.close, color: Colors.grey[500])),
+              focusedBorder: UnderlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  borderSide: BorderSide(color: Colors.grey[200]!)),
+              enabledBorder: UnderlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderSide: BorderSide(color: Colors.grey[200]!),
+              ),
+            ),
+          ),
+          /*Text('점검조치사항 자료실', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-          )),
+          )),*/
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container( //높이랑 너비가 없었음
@@ -197,7 +254,7 @@ class _AppPager13State extends State<AppPager13> {
                   ),
                 ),
               ),
-              height: 300 ,
+              height: 500 ,
               width: 700 ,
               child: ListView.builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
                 shrinkWrap: true,
@@ -243,10 +300,12 @@ class _AppPager13State extends State<AppPager13> {
             margin: EdgeInsets.only(top: 10),
             child: OutlinedButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
-                 /* Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AppPage03Detail()));
-*/
+
+                  /*  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => AppPager13register()));*/
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));
+
                 },
                 style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -290,5 +349,44 @@ class _AppPager13State extends State<AppPager13> {
 
   static getDeviceWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
+  }
+
+
+  void showPopupMakeDefault() {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('No', style: TextStyle(color: SOFT_BLUE))
+    );
+    Widget continueButton = TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+          // _reusableWidget.startLoading(context, 'Success', 0);
+        },
+        child: Text('Yes', style: TextStyle(color: SOFT_BLUE))
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      title: Text('Make Default', style: TextStyle(fontSize: 18),),
+      content: Text('Are you sure to make this card as a default payment ?', style: TextStyle(fontSize: 13, color: BLACK_GREY)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

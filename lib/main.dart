@@ -1,10 +1,13 @@
 import 'dart:ui';
+import 'package:actasm/ui/home/app5Home/appPager13.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:actasm/config/constant.dart';
 
 import 'package:actasm/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DownloadClass {
@@ -46,7 +49,7 @@ class MyCustomeScrollBehavior extends MaterialScrollBehavior{
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
+    return GetMaterialApp(
       builder: (context, widget) {
         Widget error = const
         Text(
@@ -64,6 +67,9 @@ class MyApp extends StatelessWidget{
       scrollBehavior: MyCustomeScrollBehavior(),
       title: APP_NAME,
       debugShowCheckedModeBanner: false,
+      getPages: [
+        GetPage(name: '/next', page: () => AppPager13())
+      ],
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         pageTransitionsTheme: PageTransitionsTheme(builders: {

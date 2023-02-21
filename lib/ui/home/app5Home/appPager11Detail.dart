@@ -48,8 +48,8 @@ class _AppPager11DetailState extends State<AppPager11Detail> {
     _etemtelnum       =  TextEditingController(text: widget.e601Data.emtelnum);
   }
 
-@override
-void dispose(){
+  @override
+  void dispose(){
     super.dispose();
   }
 

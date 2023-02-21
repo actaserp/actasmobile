@@ -90,93 +90,91 @@ class _AppPager10State extends State<AppPager10> {
   @override
   Widget build(BuildContext buildContext){
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: GlobalStyle.appBarIconThemeColor,
-        ),
-        elevation: GlobalStyle.appBarElevation,
-        title: Text(
-          '직원리스트' + ja001Datas.length.toString(),
-          style: GlobalStyle.appBarTitle,
-        ),
-        actions: <Widget>[
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: TextButton(onPressed: (){
-
-                  setState(() {
-                    chk = true;
-                    if(_etSearch.text == ""){
-                      showAlertDialog(context, "사원명을 입력하세요.");
-                    }
-                    ja001list_getdata();
-                  });
-                  /*searchBook(_etSearch.text);*/
-                  /*searchBook2(_etSearch2.text);*/
-                }, child: Text('검색하기')),
-              ),
-
-            ],
-          )
-        ],
-        backgroundColor: GlobalStyle.appBarBackgroundColor,
-        systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-      ),
-      body:
-      WillPopScope(onWillPop: (){
-        Navigator.pop(context);
-        return Future.value(true);
-      },
-      child: Column(
-        children: [
-          Container(
-
-            decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey[100]!,
-                    width: 1.0,
-                  )
-              ),
-            ),
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-            height: kToolbarHeight,
-            child: TextField(
-              controller: _etSearch,
-              textAlignVertical: TextAlignVertical.bottom,
-              maxLines: 1,
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-
-              /*onChanged: searchBook,*/
-              decoration: InputDecoration(
-                fillColor: Colors.grey[100],
-                filled: true,
-                hintText: '사원명',
-                prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                suffixIcon: (_etSearch.text == '')
-                    ? null
-                    : GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _etSearch = TextEditingController(text: '');
-                      });
-                    },
-                    child: Icon(Icons.close, color: Colors.grey[500])),
-                focusedBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    borderSide: BorderSide(color: Colors.grey[200]!)),
-                enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  borderSide: BorderSide(color: Colors.grey[200]!),
-                ),
-              ),
-            ),
-
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: GlobalStyle.appBarIconThemeColor,
           ),
-          /*Container(
+          elevation: GlobalStyle.appBarElevation,
+          title: Text(
+            '직원리스트' + ja001Datas.length.toString(),
+            style: GlobalStyle.appBarTitle,
+          ),
+          actions: <Widget>[
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: TextButton(onPressed: (){
+
+                    setState(() {
+                      chk = true;
+
+                      ja001list_getdata();
+                    });
+                    /*searchBook(_etSearch.text);*/
+                    /*searchBook2(_etSearch2.text);*/
+                  }, child: Text('검색하기')),
+                ),
+
+              ],
+            )
+          ],
+          backgroundColor: GlobalStyle.appBarBackgroundColor,
+          systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
+        ),
+        body:
+        WillPopScope(onWillPop: (){
+          Navigator.pop(context);
+          return Future.value(true);
+        },
+          child: Column(
+            children: [
+              Container(
+
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey[100]!,
+                        width: 1.0,
+                      )
+                  ),
+                ),
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                height: kToolbarHeight,
+                child: TextField(
+                  controller: _etSearch,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                  /*onChanged: searchBook,*/
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    hintText: '사원명',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                    suffixIcon: (_etSearch.text == '')
+                        ? null
+                        : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _etSearch = TextEditingController(text: '');
+                          });
+                        },
+                        child: Icon(Icons.close, color: Colors.grey[500])),
+                    focusedBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!),
+                    ),
+                  ),
+                ),
+
+              ),
+              /*Container(
 
             decoration: BoxDecoration(
               border: Border(
@@ -219,19 +217,19 @@ class _AppPager10State extends State<AppPager10> {
             ),
 
           ),*/
-          chk ? Expanded(
+              chk ? Expanded(
 
-            child: ListView.builder(itemCount: ja001Datas.length,
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-              physics: AlwaysScrollableScrollPhysics(),
-              itemBuilder: (BuildContext context, int index){
-                return _buildListCard(ja001Datas[index]);
-              },
-            ),
-          ) : Text("직원조회를 하십시오."),
-        ],
-      ),
-      )
+                child: ListView.builder(itemCount: ja001Datas.length,
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index){
+                    return _buildListCard(ja001Datas[index]);
+                  },
+                ),
+              ) : Text("직원조회를 하십시오."),
+            ],
+          ),
+        )
     );
   }
 
@@ -276,7 +274,7 @@ class _AppPager10State extends State<AppPager10> {
                       Text('직급   '+ja001Data.rspnm+' ', style: GlobalStyle.couponExpired, ),
                     ],
                   ),
-                  GestureDetector(  
+                  GestureDetector(
                     onTap: () async {
                       final url = Uri.parse('sms:' + ja001Data.handphone);
                       if (await canLaunchUrl(url)) {
@@ -286,6 +284,7 @@ class _AppPager10State extends State<AppPager10> {
                         print("Can't launch $url");
                       }
                     },
+
                     child: Text("문자전송", style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
                     )),

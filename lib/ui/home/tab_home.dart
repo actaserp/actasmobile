@@ -11,6 +11,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'app04/appPage04.dart';
 import 'app05/appPage05.dart';
+import 'app08/appPage08.dart';
+import 'app09/appPage09.dart';
+import 'app10/appPage10.dart';
+import 'app5Home/appPager10.dart';
+import 'app5Home/appPager11.dart';
+import 'app5Home/appPager12.dart';
+import 'app5Home/appPager13.dart';
+import 'app5Home/tab5_home.dart';
 import 'appPage02.dart';
 import 'app03/appPage03.dart';
 
@@ -244,14 +252,19 @@ class _Home1PageState extends State<TabHomePage> {
                 case '점 검 계 획' :
                   break;
                 case '점 검 조 치' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13()));
                   break;
                 case '도 면 자 료' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage08()));
                   break;
                 case '부 품 자 료' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage10()));
                   break;
                 case '기 타 자 료' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage09()));
                   break;
                 case '현장정보 승강기번호조회 비상통화조회' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
                   break;
                 case '수 리 노 하 우' :
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03()));
@@ -265,14 +278,18 @@ class _Home1PageState extends State<TabHomePage> {
 
                   break;
                 case '직 원 정 보' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager10()));
                   break;
                 case '고 장 이 력' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager12()));
                   break;
                 case '고 장 통 계' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Tab5HomePage()));
                   break;
                 case '작 업 일 보' :
                   break;
                 case '공 지 사 항' :
+
                   break;
                 default:
                   break;

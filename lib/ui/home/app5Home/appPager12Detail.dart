@@ -354,7 +354,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
 
   static double scaleWidth(BuildContext context){
     const designWidth = 393;
-    final diff =  designWidth /getDeviceWidth(context) ;
+    final diff =  getDeviceWidth(context) /designWidth  ;
     return diff;
   }
 

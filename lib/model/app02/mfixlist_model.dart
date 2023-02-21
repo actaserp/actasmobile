@@ -9,13 +9,14 @@ class mfixlist_model{
   late var fmemo;
   late var fgourpcd;
   late var cnam;
+  late var fflag;
 
 
 
 
   mfixlist_model({
     required this.fseq, required this.finputdate, required this.fnsubject, this.fmemo, this.fpernm,
-    this.fgourpcd, this.cnam
+    this.fgourpcd, this.cnam, this.fflag,
 });
 }
 
