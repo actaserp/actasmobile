@@ -178,9 +178,9 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 Text('Date.${widget.MhData.hinputdate}', style: TextStyle(
                     fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
                 )),
-                SizedBox(
-                  width: 275,
-                ),
+                // SizedBox( //여기수정
+                //   width: 275,
+                // ),
                 Visibility(
                   visible: false,
                   child: Text('${widget.MhData.hflag}', style: TextStyle(
@@ -211,7 +211,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
               ),
             ),
             child: Column(
-
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -266,8 +265,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
                           Text('첨부파일리스트', style: TextStyle(
                               fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
                           )),
-                          SizedBox(
-                            width: 355,
+                          SizedBox( //여기수정
+                            width: MediaQuery.of(context).size.width/2.45,
                           ),
                           Container(
                             height:35,

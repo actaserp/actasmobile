@@ -205,73 +205,80 @@ class _AppPage05State extends State<AppPage05> {
   }
 
   Widget _buildHEAD(SmanualList_model SData){
+    final double WidthSize = (MediaQuery.of(context).size.width*1);
     return
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          Container(
-      margin: EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-              color: Color(0xffcccccc),
-              width: 1.5
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          Center(
-            child: Text('${SData.sinputdate}', style: TextStyle(
-                color: SOFT_GREY, fontSize: 11
-            )),
-          ),
-          SizedBox(
-            width: 130,
-          ),
-          Center(
-            child: Text('${SData.spernm}', style: TextStyle(
-                color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 11
-            )),
-          ),
-          Center(
-            child: Text('님이 작성한 질문입니다.', style: TextStyle(
-                color: SOFT_GREY, fontSize: 11
-            )),
-          ),
-        ],
-      ),
-    ),
-          Container(
-            margin: EdgeInsets.only(top: 8),
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Color(0xffcccccc),
-                width: 1.0,
-              ),
-              color:  Color(0xfff9fafd),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                bottomLeft: Radius.circular(5),
-                bottomRight: Radius.circular(12),
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding:EdgeInsets.all(16),
-                      child: Text('내용: ${SData.smemo}', style: TextStyle(
-                          fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                      )),
-                    ),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:[
+                Container(
+                  width: WidthSize,
+                  margin: EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                   border: Border(
+                     bottom: BorderSide(
+                    color: Color(0xffcccccc),
+                    width: 1.5
                 ),
-              ],
+              ),
             ),
-          ),
+                  child: Row(
+                    children: [
+                      Center(
+                        child: Text('${SData.sinputdate}', style: TextStyle(
+                            color: SOFT_GREY, fontSize: 11
+                        )),
+                      ),
+                      SizedBox(
+                        width: WidthSize/9,
+                      ),
+                      Center(
+                        child: Text('${SData.spernm}', style: TextStyle(
+                            color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 11
+                        )),
+                      ),
+                      Center(
+                        child: Text('님이 작성한 질문입니다.', style: TextStyle(
+                            color: SOFT_GREY, fontSize: 11
+                        )),
+                      ),
+                    ],
+                  ),
+                ),
+                    Container(
+                      margin: EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffcccccc),
+                          width: 1.0,
+                        ),
+                        color:  Color(0xfff9fafd),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(12),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding:EdgeInsets.all(16),
+                                child: Text('내용: ${SData.smemo}', style: TextStyle(
+                                    fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                                )),
+
+                              ),
+                              // ListView.builder(
+                              //     itemCount: _SCData.length,
+                              //     itemBuilder: (BuildContext context, int index)),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                 // ListView.builder(
                 // itemCount: _SCData.length,
                 // itemBuilder: (BuildContext context, int index) {
