@@ -25,3 +25,7 @@ class SCmanualList_model{
 
 
 List<SCmanualList_model> SCData =[];
+List<SCmanualList_model> SCmData =[];
+List<SCmanualList_model> keyData =[];
+List<SCmanualList_model> SCpermData =[];
+List<SCmanualList_model> inData =[];
