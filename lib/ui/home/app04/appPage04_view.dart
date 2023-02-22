@@ -3,18 +3,13 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
-// import 'dart:js';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
-import 'package:actasm/model/app03/MhmanualList_model.dart';
-
-import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:thumbnailer/thumbnailer.dart';
@@ -23,7 +18,6 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../../model/app03/AttachList_model.dart';
 import '../../../model/app04/BmanualList_model.dart';
 import '../../reusable/cache_image_network.dart';
-import '../tab_home.dart';
 
 class AppPage04view extends StatefulWidget {
   final BmanualList_model BData;
@@ -133,7 +127,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
-    ///썸네일
+    ///썸네일1
     Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
       'custom/mimeType': FontAwesomeIcons.key,
     });
@@ -297,8 +291,8 @@ class _AppPage04ViewState extends State<AppPage04view> {
                             String dir = (await getApplicationDocumentsDirectory()).path;
                             try{
                               await FlutterDownloader.enqueue(
-                                url: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
-                                savedDir: '$dir',	// 저장할 dir
+                                url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB", 	// file url
+                                savedDir: "$dir",	// 저장할 dir
                                 fileName: '${_ATCData[index]}',	// 파일명
                                 showNotification: true, // show download progress in status bar (for Android)
                                 saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
@@ -306,7 +300,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
                               print("파일 다운로드 완료");
                             }catch(e){
                               print("eerror :::: $e");
-                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $LOCAL_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH");
+                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $LOCAL_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB");
                             }
                           },
                           child: ConstrainedBox(
@@ -336,44 +330,30 @@ class _AppPage04ViewState extends State<AppPage04view> {
                             ),
                           ),
                         ),
-                        FloatingActionButton.small(
-                          tooltip: "테스트 중입니다.",
-                          onPressed: () async{
-                            String dir = (await getApplicationDocumentsDirectory()).path;
-                            setState(() {
-                                Column(
-                                  children: [
-                                    if(_thumfile != null)
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("URL로 테스트"),
-                                        SizedBox(height: 10,),
-                                        Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Image.file(File(_thumfile!)),
-                                            CircleAvatar(
-                                              radius: 30,
-                                              backgroundColor: Colors.black,
-                                              child: Icon(
-                                                Icons.play_arrow,
-                                                size: 40,
-                                              ),
-                                            )
-                                          ],
-                                        )],
-                                    ),
-                                  ],
-                                );
-                            });
-                          },
-                          child: Icon(Icons.edit),
-                        ),
+                        PdfThumb(),
                         Divider(),
+                        // GestureDetector(
+                        //   onTap: ()  async{
+                        //     final _fileName = await VideoThumbnail.thumbnailFile(
+                        //       video: "http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD",
+                        //       // thumbnailPath: (await getTemporaryDirectory()).path,
+                        //       thumbnailPath: "sdcard/Android/data/com.bluestacks.home",
+                        //       imageFormat: ImageFormat.WEBP,
+                        //       maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+                        //       quality: 100,
+                        //     );
+                        //     print("thumbnail file is located: $_fileName");
+                        //     print("캐시 폴더:: ${getTemporaryDirectory} 블루 스택 경로:: sdcard/Android/data/com.bluestacks.home ");
+                        //   },
+                        //     // child: Image(image: _fileName,
+                        //
+                        //     ),
 
-                      ],
-                    );}
+
+                  ],
+                    );
+
+                }
             ),
           ),
         )
@@ -396,33 +376,53 @@ class _AppPage04ViewState extends State<AppPage04view> {
   
   ///video try 2
 // try{
-  //  await VideoThumbnail.thumbnailFile(
-  //       video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
-  //       headers: {
-  //         "USERHEADER1": "user defined header1",
-  //         "USERHEADER2": "user defined header2",
-  //       },
-  //       imageFormat: ImageFormat.JPEG,
-  //       timeMs: 10,
-  //       quality: 50);
-  // }catch(e){
-  //   print("eerror :::: $e");
-  // }
-  ///initState >> genThumbnial(); 시작하자마자 state 해주는 거임
+//    await VideoThumbnail.thumbnailData(
+//         video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
+//         headers: {
+//           "USERHEADER1": "user defined header1",
+//           "USERHEADER2": "user defined header2",
+//         },
+//         imageFormat: ImageFormat.JPEG,
+//         timeMs: 10,
+//         quality: 50);
+//   }catch(e){
+//     print("eerror :::: $e");
+//   }
 
-  void genThumbnial(int index) async {
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String temp = (await getTemporaryDirectory()).path;
-    _thumfile = await VideoThumbnail.thumbnailFile(
-        video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
-        thumbnailPath: temp,
-        imageFormat: ImageFormat.PNG);
-    // _thumdata = await VideoThumbnail.thumbnailData(
-    //     video: dir,
-    //     imageFormat: ImageFormat.PNG,
-    //    maxHeight: 300,
-    //    maxWidth: 300,
-    //     quality: 50);
+///video try 3
+// GestureDetector(
+//   onTap: () async {
+//     try{
+//       await VideoThumbnail.thumbnailData(
+//           video: "http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD",
+//           headers: {
+//             "USERHEADER1": "user defined header1",
+//           },
+//           imageFormat: ImageFormat.JPEG,
+//           timeMs: 10,
+//           quality: 50);
+//     }catch(e){
+//       print("eerror :::: $e");
+//     }
+//   },
+//   child: Text("테스트임"),
+// )
+
+///pdf try 1
+
+  Widget PdfThumb(){
+    return Thumbnail(
+        dataResolver: () async {
+          return (await DefaultAssetBundle.of(context)
+              .load("http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD"))
+              .buffer
+              .asUint8List();
+        },
+        mimeType: 'application/pdf', widgetSize: 300,
+        decoration: WidgetDecoration(
+        wrapperBgColor:SOFT_BLUE,
+    ),
+        );
 
   }
 

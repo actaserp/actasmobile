@@ -56,6 +56,7 @@ dependencies:
   thumbnailer: ^2.2.0
   get: ^4.6.5
   video_thumbnail: ^0.5.3
+  video_player: ^2.5.1
 
 dev_dependencies:
   flutter_test:
