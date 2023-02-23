@@ -47,14 +47,15 @@ class _AppPager13registerState extends State<AppPager13register> {
   void initState() {
 
     setData();
-
     super.initState();
+
 
 
 
   }
 
   Future<void> setData() async {
+
     usernm = await  SessionManager().get("username");
 
   }

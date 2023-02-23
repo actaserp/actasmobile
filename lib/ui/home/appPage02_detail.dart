@@ -39,6 +39,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   final List<String> _eResuData = [];
   final List<String> _eResultData = [];
   late String _setTime;
+  late String _custcd;
   late String _hour, _minute, _time;
   late String _dbnm , _etrecedate, _etrecenum, _etrectime;
   String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
@@ -68,7 +69,15 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     pop_eresultnm();
     setData();
     super.initState();
+    setData2();
   }
+
+  @override
+  Future<void> setData2() async {
+    _custcd = await SessionManager().get("custcd");
+  }
+
+
   @override
   void setData(){
     _etActnm = TextEditingController(text: widget.e401Data.actnm);
@@ -93,6 +102,11 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     widget.e401Data.comptime = _etComptime;
     _eComptime =  _etComptime.text;
   }
+
+
+
+
+
 
   @override
   Future pop_egreginm()async {
@@ -279,7 +293,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   @override
   Future<bool> save_e411data()async {
     _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/savee411';
+    var uritxt = CLOUD_URL + '/apppgymobile/save';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
@@ -318,7 +332,9 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         'Accept' : 'application/json'
       },
       body: <String, String> {
+        ''
         'dbnm': _dbnm,
+        'actnm':  _etActnm.text,
         'recedate': widget.e401Data.recedate.toString(),
         'recenum': widget.e401Data.recenum.toString(),
         'compdate': _eCompdate.toString(),
@@ -328,10 +344,17 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         'resucd': _etResucdTxt.toString(),
         'regicd': _etRegicdTxt.toString(),
         'gregicd': _etGregicdTxt.toString(),
+        'perid' : widget.e401Data.perid.toString(),  //
+        'contcd': widget.e401Data.contcd.toString(), //
+        'actcd' : widget.e401Data.actcd.toString(), //
+        'equpcd' : widget.e401Data.equpcd.toString(), //
+        'equpnm' : widget.e401Data.equpnm.toString(), //
+        'recetime': widget.e401Data.recetime.toString() //
       },
     );
     if(response.statusCode == 200){
       print("저장됨");
+
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.

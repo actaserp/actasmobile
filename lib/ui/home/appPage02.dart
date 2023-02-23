@@ -33,6 +33,7 @@ class _AppPage02State extends State<AppPage02> {
   }
 
 
+
   Future e401list_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
 
@@ -48,6 +49,7 @@ class _AppPage02State extends State<AppPage02> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
+        'actnm': _etSearch.text
       },
     );
     if(response.statusCode == 200){
@@ -111,6 +113,24 @@ class _AppPage02State extends State<AppPage02> {
             '고장 미처리 리스트 ' + e401Data.length.toString(),
             style: GlobalStyle.appBarTitle,
           ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: TextButton(onPressed: (){
+
+                setState(() {
+
+                  if(_etSearch.text == ""){
+                    showAlertDialog(context, "현장명을 입력하세요.");
+                  }
+
+                  e401list_getdata();
+                });
+                /*searchBook(_etSearch.text);*/
+                /*searchBook2(_etSearch2.text);*/
+              }, child: Text('검색하기')),
+            )
+          ],
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: PreferredSize(
@@ -230,6 +250,27 @@ class _AppPage02State extends State<AppPage02> {
           ),
         ),
       ),
+    );
+  }
+
+  void showAlertDialog(BuildContext context, String as_msg) async {
+    String result = await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('고장내용조회'),
+          content: Text(as_msg),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context, "확인");
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
