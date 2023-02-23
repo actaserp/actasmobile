@@ -13,6 +13,7 @@ import '../../../model/app04/DmanualList_model.dart';
 import 'appPage10_view.dart';
 
 
+
 class AppPage10 extends StatefulWidget {
   @override
   _AppPage10State createState() => _AppPage10State();
@@ -20,16 +21,20 @@ class AppPage10 extends StatefulWidget {
 
 class _AppPage10State extends State<AppPage10> {
   TextEditingController _etSearch = TextEditingController();
+  TextEditingController _emSearch = TextEditingController();
 
   List<DmanualList_model> dDatas = DData;
-  bool chk = false;
+  String dropdownValue = "%" ?? "";
+
+  bool chk = true;
+
 
 
 
   @override
   void initState(){
     super.initState();
-    mlist_getdata();
+    dlist_getdata();
 
   }
 
@@ -40,7 +45,7 @@ class _AppPage10State extends State<AppPage10> {
     super.dispose();
   }
 
-  Future mlist_getdata() async {
+  Future dlist_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
 
     var uritxt = CLOUD_URL + '/appmobile/dlist';
@@ -56,6 +61,8 @@ class _AppPage10State extends State<AppPage10> {
       body: <String, String> {
         'dbnm': _dbnm,
         'subject': _etSearch.text,
+        'memo': _emSearch.text,
+        'groupcd': dropdownValue
 
       },
     );
@@ -101,7 +108,7 @@ class _AppPage10State extends State<AppPage10> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '부품자료실' + dDatas.length.toString(),
+            '기타자료실',
             style: GlobalStyle.appBarTitle,
           ),
           actions: <Widget>[
@@ -111,7 +118,7 @@ class _AppPage10State extends State<AppPage10> {
 
                 setState(() {
                   chk = true;
-                  mlist_getdata();
+                  dlist_getdata();
                 });
                 /*searchBook(_etSearch.text);*/
                 /*searchBook2(_etSearch2.text);*/
@@ -178,6 +185,75 @@ class _AppPage10State extends State<AppPage10> {
                 ),
 
               ),
+              Container(
+
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey[100]!,
+                        width: 1.0,
+                      )
+                  ),
+                ),
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                height: kToolbarHeight,
+                child: TextField(
+                  controller: _emSearch,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                  /*onChanged: searchBook,*/
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    hintText: '내용',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                    suffixIcon: (_emSearch.text == '')
+                        ? null
+                        : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _emSearch = TextEditingController(text: '');
+                          });
+                        },
+                        child: Icon(Icons.close, color: Colors.grey[500])),
+                    focusedBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!),
+                    ),
+                  ),
+                ),
+
+              ),
+              Container(
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField <String?>(
+                        decoration: InputDecoration(
+                          labelText: '분류',
+                          labelStyle: TextStyle(fontSize: 20, color: Color(0xffcfcfcf)),
+                        ),
+                        onChanged: (String? newValue) {
+                          print(newValue);
+                          setState(() {
+                            dropdownValue = newValue ?? "";
+                          });
+                        },
+                        items:
+                        [null, '01', '02'].map<DropdownMenuItem<String?>>((String? i) {
+                          return DropdownMenuItem<String?>(
+                            value: i,
+                            child: Text({'01': '현대엘리베이터', '02': '기타제작사'}[i] ?? '전체'),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  )
+              ),
 
               chk ? Expanded(
 
@@ -211,13 +287,13 @@ class _AppPage10State extends State<AppPage10> {
   }
 
   /*void searchBook2(String query){
-    final suggestions = MData.where((data) {
+    final suggestions = DData.where((data) {
       final greginmtitle = data.greginm.toString();
       final input = query.toString();
       return greginmtitle.contains(input);
     }).toList();
 
-    setState(() => mhDatas = suggestions);
+    setState(() => DDatas = suggestions);
   }*/
 
 
@@ -259,7 +335,6 @@ class _AppPage10State extends State<AppPage10> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
                     },
                     child: Text(DData.dpernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
@@ -280,7 +355,7 @@ class _AppPage10State extends State<AppPage10> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('부품자료실'),
+          title: Text('기타자료실'),
           content: Text(as_msg),
           actions: <Widget>[
             TextButton(
