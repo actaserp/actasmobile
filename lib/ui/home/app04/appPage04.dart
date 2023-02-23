@@ -168,7 +168,7 @@ class _AppPage04State extends State<AppPage04> {
            child: Container(
               margin: EdgeInsets.only(top: 15),
              height: 700,
-             width: 800,
+             width: 900,
              child: ListView(
                scrollDirection: Axis.vertical,
                  children: [ DataTable (
@@ -179,6 +179,7 @@ class _AppPage04State extends State<AppPage04> {
                    MaterialStateColor.resolveWith((states) => SOFT_BLUE),
                    columns:
                    <DataColumn>[
+                     DataColumn(label: Text('No.')),
                      DataColumn(label: Text('분류')),
                      DataColumn(label: Text('제목')),
                      DataColumn(label: Text('내용')),
@@ -203,6 +204,11 @@ class _AppPage04State extends State<AppPage04> {
                               }
                               }),
                               cells: [
+                                DataCell(
+                                    ConstrainedBox(
+                                        constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                        child: Text('${index+1}',
+                                        ))),
                               DataCell(
                               ConstrainedBox(
                               constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
