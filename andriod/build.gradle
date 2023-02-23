@@ -16,8 +16,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // release 속성으로 변경
+            signingConfig signingConfigs.release
+
+            // start of 코드난독화 및 사이즈 축소
+            minifyEnabled true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // end of 코드난독화 및 사이즈 축소
         }
     }
     compileOptions {
