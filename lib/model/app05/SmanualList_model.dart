@@ -26,6 +26,7 @@ class SmanualList_model{
  });
 }
 
+// seqKey[index].getsubkey
 
 List<SmanualList_model> SData =[];
 List<SmanualList_model> seqKey =[];

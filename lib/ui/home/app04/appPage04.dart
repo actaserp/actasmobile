@@ -29,91 +29,6 @@ class AppPage04 extends StatefulWidget {
 class _AppPage04State extends State<AppPage04> {
   TextEditingController _etSearch = TextEditingController();
 
-  List<DataRow> _dataGrid(BmanualList_model BData) {
-    debugPrint('The value of a is $_dataGrid(BData)');
-    return [
-      DataRow(
-        cells: <DataCell>[
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
-                      child: Text('${BData.binputdate}', overflow: TextOverflow.ellipsis))
-                ],
-              )
-          ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 30, minWidth: 30), //SET max width
-                      child: Text('${BData.attcnt}',
-                          overflow: TextOverflow.ellipsis)),
-                ],
-              )
-          ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04view(BData: BData)));
-                    },
-                    child: ConstrainedBox(
-                      constraints:  BoxConstraints(minWidth: 105 , maxWidth: 105),
-                      child: Text('${BData.bsubject}',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              )
-          ),
-          DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 70, minWidth: 70),
-                    //SET max width
-                    child: Text('${BData.bmemo}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 50), //SET max width
-                      child: Text('${BData.bpernm}',
-                          overflow: TextOverflow.ellipsis)),
-                ],
-              )
-          ),
-          DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 55, minWidth: 50), //SET max width
-                    child: Text('${BData.bgourpcd}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ];
-  }
 
   @override
   void initState() {
@@ -240,7 +155,7 @@ class _AppPage04State extends State<AppPage04> {
           ),
         ),
         body: ListView(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.only(top:16, bottom: 2, left: 10),
           children: [
             Text('부품 가이드 자료실  ${BData.length} 건', style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
@@ -248,45 +163,92 @@ class _AppPage04State extends State<AppPage04> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
            child: Container(
-              margin: EdgeInsets.only(top: 5),
-             decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                ),
-                  bottom: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                  ),
-              ),
-              ),
+              margin: EdgeInsets.only(top: 15),
              height: 700,
-             width: 750,
-             child: ListView.builder(
-               shrinkWrap: true,
-               itemCount: BData.length,
-               itemBuilder: (BuildContext context, int index) {
-                 return DataTable (
-                   columnSpacing: 10,
-                   dataRowHeight: 40,
+             width: 800,
+             child: ListView(
+               scrollDirection: Axis.vertical,
+                 children: [ DataTable (
+                   showCheckboxColumn: false,
+                   columnSpacing: 25, dataRowHeight: 40,
+                   headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                   headingRowColor:
+                   MaterialStateColor.resolveWith((states) => SOFT_BLUE),
                    columns:
                    <DataColumn>[
-                     DataColumn(label: Text('등록일자', style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('첨부파일건수',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('내용',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('작성자',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
-                     DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
+                     DataColumn(label: Text('분류')),
+                     DataColumn(label: Text('제목')),
+                     DataColumn(label: Text('내용')),
+                     DataColumn(label: Text('작성자')),
+                     DataColumn(label: Text('첨부파일건수')),
+                     DataColumn(label: Text('작성일자')),
                    ], rows:
-                 _dataGrid(BData[index]),
-                 );
-               },
-             ),
-           ),
-        ),
-            Container( //등록임
+                      List<DataRow>.generate(BData.length, (index)
+                      {
+                      final BmanualList_model item = BData[index];
+                      return
+                              DataRow(
+                              onSelectChanged: (value){
+                              Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AppPage04view(BData: item)));
+                              },
+                              color: MaterialStateColor.resolveWith((states){
+                              if (index % 2 == 0){
+                              return Color(0xB8E5E5E5);
+                              }else{
+                              return Color(0x86FFFFFF);
+                              }
+                              }),
+                              cells: [
+                              DataCell(
+                              ConstrainedBox(
+                              constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                  child: Text(item.bgourpcd,
+                                  ))),
+                              DataCell(Container(
+                              width: 180,
+                                  child: Text(item.bsubject,
+                                  overflow: TextOverflow.ellipsis),
+                                  )),
+                              DataCell(Container(
+                              width:180,
+                                  child: Text(item.bmemo,
+                                  overflow: TextOverflow.ellipsis),
+                                  )),
+                              DataCell(Text(item.bpernm,
+                              overflow: TextOverflow.ellipsis)),
+                              DataCell(Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                  Text(item.attcnt.toString()),
+                              ],
+                              )),
+                              DataCell(
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                      ConstrainedBox(
+                                      constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                      child: Text('${item.binputdate}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                      color: SOFT_BLUE,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold
+                                      )
+                                      ),
+                                      ),
+                              ],
+                              )
+                              ),
+                              ]);
+                              }),
+                              ),
+                              ])),
+                              ),
+            Container( ///노하우등록
               margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.all(12),
               child: OutlinedButton(
                   onPressed: () {
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));

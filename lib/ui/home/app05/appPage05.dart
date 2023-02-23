@@ -16,6 +16,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../model/app05/SmanualList_model.dart';
 import '../../../model/app05/SCmanualList_model.dart';
+import '../../../model/chat_model.dart';
 import '../appPage02.dart';
 import '../tab_home.dart';
 
@@ -30,6 +31,8 @@ class AppPage05 extends StatefulWidget {
 class _AppPage05State extends State<AppPage05> {
 
   TextEditingController _etSearch = TextEditingController();
+  TextEditingController _etChat = TextEditingController();
+  String _lastDate = '13 Sep 2019';
   late String _dbnm;
   late Map<dynamic, dynamic> seqKey23;
   final List<String> _SCmData = [];
@@ -37,15 +40,15 @@ class _AppPage05State extends State<AppPage05> {
   final List<String> _seqKey = [];
   final List<String> _SCpermData = [];
   final List<String> _inData = [];
-
+  List<ChatModel> _chatListReversed = [];
 
   @override
   void initState() {
     SSlist_getdata();
     attachCM();
     super.initState();
-    debugPrint("keydata 조회되는지 keyData2[1] ::: ${seqKey}");
-    debugPrint("keydata 조회되는지 keyData2 1,2,3 나열 ::: ${_seqKey}");
+    debugPrint("keydata 조회되는지 keyData.length ::: ${keyData.length}");
+    // debugPrint("seqkey 조회되는지 길이, value ::: ${seqKey.length} , ${seqKey} , 첫번째::: ${seqKey.first}, seqKey.index.subkey=${seqKey.elementAt(8).subkey}");
 
 
   }
@@ -58,7 +61,15 @@ class _AppPage05State extends State<AppPage05> {
     super.dispose();
   }
 
+  void _addDate(String currentDate){
+    _chatListReversed.insert(0, new ChatModel(15, null, 'date', currentDate, null, null));
+  }
 
+  void _addMessage(String message){
+    DateTime now = DateTime.now();
+    String _currentTime = DateFormat('kk:mm').format(now);
+    _chatListReversed.insert(0, new ChatModel(16, 'buyer', 'text', message, _currentTime, false));
+  }
 
 
   Future SSlist_getdata() async {
@@ -98,7 +109,7 @@ class _AppPage05State extends State<AppPage05> {
         setState(() {
           SData.add(SObject);
           seqKey.add(SObject);
-          _seqKey.add(alllist[i]['subkey']);
+          _seqKey.add(alllist[i]['sseq']);
         });
 
       }
@@ -129,6 +140,7 @@ class _AppPage05State extends State<AppPage05> {
     if(response.statusCode == 200){
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      SCData.clear();
       SCmData.clear();
       _SCmData.clear();
       keyData.clear();
@@ -159,8 +171,6 @@ class _AppPage05State extends State<AppPage05> {
       }
       debugPrint('comment data::: $SCData length::::${SCData.length}' );
       debugPrint('subkey data::: $keyData length::::${keyData.length}' );
-      debugPrint('spernm data::: $SCpermData length::::${SCpermData.length}' );
-      debugPrint('date data::: $inData length::::${inData.length}' );
       return
         SCData;
     }else{
@@ -270,8 +280,69 @@ class _AppPage05State extends State<AppPage05> {
                           ),
                         ),
                       ),
+                    Container(
+                      margin: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: TextFormField(
+                              controller: _etChat,
+                              minLines: 1,
+                              maxLines: 4,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                              onChanged: (textValue) {
+                                setState(() {});
+                              },
+                              decoration: InputDecoration(
+                                fillColor: Colors.grey[200],
+                                filled: true,
+                                hintText: 'Write Message',
+                                focusedBorder: UnderlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                    borderSide: BorderSide(color: Colors.grey[200]!)),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                  borderSide: BorderSide(color: Colors.grey[200]!),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            child: GestureDetector(
+                              onTap: (){
+                                if(_etChat.text != ''){
+                                  print('send message : '+_etChat.text);
+                                  setState(() {
+                                    DateTime now = DateTime.now();
+                                    String currentDate = DateFormat('d MMM yyyy').format(now);
+                                    if(_lastDate!=currentDate){
+                                      _lastDate = currentDate;
+                                      _addDate(currentDate);
+                                    }
+                                    _addMessage(_etChat.text);
+                                    _etChat.text = '';
+                                  });
+                                }
+                              },
+                              child: ClipOval(
+                                child: Container(
+                                    color: SOFT_BLUE,
+                                    padding: EdgeInsets.all(10),
+                                    child: Icon(Icons.send, color: Colors.white)
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                    ],
               ),
+
     );
   }
 
@@ -346,13 +417,17 @@ class _AppPage05State extends State<AppPage05> {
                       ),
                     ),
                 Container(
-                  height: MediaQuery.of(context).size.height/7,
+                  height: MediaQuery.of(context).size.height/3.6,
                   child: ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
+                    /// seqKey => Slist, keydata => SClist
                     itemBuilder: (BuildContext context, int index) {
-                    Iterable<String> commap = seqKey.where((element) => element == SCData[index]).cast<String>();
-                    debugPrint("맵 결과 (2) ::: ${commap}");
+                      // if (index >= SCData.length || index >= keyData.length) {
+                      //   return SizedBox.shrink(); // or some other widget to represent an empty or placeholder item
+                      // }
+                    Iterable<String> commap = seqKey.where((element) => element == keyData).cast<String>();
+                    debugPrint("where 결과 ::: $commap}");
                       return
                         _buildchat(SCData[index]);
                     },

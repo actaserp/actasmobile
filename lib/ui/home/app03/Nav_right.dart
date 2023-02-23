@@ -83,19 +83,31 @@ class Nav_right extends StatelessWidget{
                             width: 10),
                             Text('Account'),
                             ]))),
+///반복문 foreach loop or for loop, for in loop 사용해야함
+                Opacity(
+                  opacity: 0,
+                  child: ListTile(
+                      title: Row(
+                              children:[
+                                Icon(Icons.person_outlined),
+                                SizedBox(
+                                    width: 10),
+                              ])),
+                ),
+                
                 ListTile(
                     title: GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
                         child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children:[
-                              SizedBox(height: MediaQuery.of(context).size.height/1.4,
-                              width: 190),
                               Icon(Icons.door_back_door_outlined),
                               SizedBox(
                                   width: 10),
                               Text('Logout'),
                             ]))),
+
               ],
               ),
               );

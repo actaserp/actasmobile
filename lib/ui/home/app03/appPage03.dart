@@ -36,106 +36,6 @@ class _AppPage03State extends State<AppPage03> {
   final List<String> _SCData = [];
   late String _dbnm, _subkey;
 
-
-
-  List<DataRow> _dataGrid(MhmanualList_model MhData) {
-    debugPrint('The value of a is $_dataGrid(MhData)');
-    return [
-      DataRow(
-        cells: <DataCell>[
-          // DataCell(
-          //      ConstrainedBox(
-          //       constraints: BoxConstraints(maxWidth: 75), //SET max width
-          //     child: Text('${MhData.hseq}',
-          //     overflow: TextOverflow.ellipsis)),
-          // ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
-                      child: Text('${MhData.hinputdate}', overflow: TextOverflow.ellipsis))
-                ],
-              )
-          ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 30, minWidth: 30), //SET max width
-                      child: Text('${MhData.attcnt}',
-                          overflow: TextOverflow.ellipsis)),
-                ],
-              )
-          ),
-          DataCell(
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => AppPage03view(MhData: MhData)));
-                    },
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
-                      child: Text('${MhData.hsubject}',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: SOFT_BLUE,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                          )
-                      ),
-                    ),
-                  ),
-                ],
-              )
-          ),
-          DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 70, minWidth: 70),
-                    //SET max width
-                    child: Text('${MhData.hmemo}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          ),
-          DataCell(
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 50, minWidth: 50), //SET max width
-                      child: Text('${MhData.hpernm}',
-                          overflow: TextOverflow.ellipsis)),
-                ],
-              )
-          ),
-          DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 50, minWidth: 50),
-                    //SET max width
-                    child: Text('${MhData.hgroupcd}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-          )
-        ],
-      ),
-    ];
-  }
-
-
   @override
   void initState() {
     super.initState();
@@ -200,6 +100,7 @@ class _AppPage03State extends State<AppPage03> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       endDrawer: Nav_right(
         text: Text('app03_nav'),
@@ -265,62 +166,113 @@ class _AppPage03State extends State<AppPage03> {
       ),
       body:
       ListView(
-        padding: EdgeInsets.all(16),
+        physics: NeverScrollableScrollPhysics(),
+       ///막으면 전체화면
+       // padding: EdgeInsets.all(16),
         children: [
-          Text('수리 노하우 자료실  ${MhData.length} 건', style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-          )),
+          Container(
+            padding:EdgeInsets.only(top:16, bottom: 2, left: 10),
+            child: Text('수리 노하우 자료실  ${MhData.length} 건',
+                style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+            )),
+          ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Container( //높이랑 너비가 없었음
-              margin: EdgeInsets.only(top: 15),
-              // padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                  ),
-                  bottom: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.0,
-                  ),
-                ),
-              ),
+            child: Container(
+                margin: EdgeInsets.only(top: 15),
+              // padding: EdgeInsets.all(16),
               height: 700,
-              width: 750,
-              child: ListView
-                  .builder( //hassize is not true ~~~~~~~~~~~~~~~~~~~~~~~~~~~굿~~~
-                shrinkWrap: true,
-                itemCount: MhData.length,
-                // physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  return DataTable(
-                    columnSpacing: 10,
-                    dataRowHeight: 40,
-                    columns:
-                    <DataColumn>[
-                      DataColumn(label: Text('등록일자', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('첨부파일건수', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('제목', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('내용', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('작성자', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                      DataColumn(label: Text('분류', style: TextStyle(
-                          fontWeight: FontWeight.bold, color: CHARCOAL))),
-                    ], rows:
-                  _dataGrid(MhData[index]),
-                  );
-                },
-              ),
-            ), //listview.builder endpoint
-          ),
-          Container( //노하우등록임
+              width: 800,
+              child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    DataTable(
+                      showCheckboxColumn: false,
+                    columnSpacing: 25, dataRowHeight: 40,
+                    headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                    headingRowColor:
+                    MaterialStateColor.resolveWith((states) => SOFT_BLUE),
+                      columns:
+                      <DataColumn>[
+                        DataColumn(label: Text('분류')),
+                        DataColumn(label: Text('제목')),
+                        DataColumn(label: Text('내용')),
+                        DataColumn(label: Text('작성자')),
+                        DataColumn(label: Text('첨부파일건수')),
+                        DataColumn(label: Text('작성일자')),
+                      ],
+                  rows: List<DataRow>.generate(MhData.length, (index)
+                     {
+                    final MhmanualList_model item = MhData[index];
+                    return
+                      DataRow(
+                        ///longpress
+                      //   onLongPress: (){
+                      //     Navigator.push(context, MaterialPageRoute(
+                      //         builder: (context) => AppPage03view(MhData: item)));
+                      // },
+                          onSelectChanged: (value){
+                          Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => AppPage03view(MhData: item)));
+                       },
+                      color: MaterialStateColor.resolveWith((states){
+                        if (index % 2 == 0){
+                          return Color(0xB8E5E5E5);
+                        }else{
+                          return Color(0x86FFFFFF);
+                        }
+                      }),
+                        cells: [
+                      DataCell(
+                          ConstrainedBox(
+                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                          child: Text(item.hgroupcd
+                          ))),
+                      DataCell(Container(
+                        width: 180,
+                        child: Text(item.hsubject,
+                          overflow: TextOverflow.ellipsis),
+                      )),
+                      DataCell(Container(
+                        width:180,
+                        child: Text(item.hmemo,
+                            overflow: TextOverflow.ellipsis),
+                      )),
+                      DataCell(Text(item.hpernm,
+                          overflow: TextOverflow.ellipsis)),
+                      DataCell(Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(item.attcnt.toString()),
+                        ],
+                      )),
+                      DataCell(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                             ConstrainedBox(
+                                  constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                  child: Text('${item.hinputdate}',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: SOFT_BLUE,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold
+                                      )
+                                  ),
+                                ),
+                            ],
+                          )
+                      ),
+                    ]);
+                  }),
+                  ),
+              ])),
+            ),
+          Container( ///노하우등록
             margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.all(12),
             child: OutlinedButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));

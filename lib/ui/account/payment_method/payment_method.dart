@@ -156,7 +156,7 @@ class _PaymentMethodPageState extends State<PaymentMethodPage> {
                                     ),
                                   ),
                                   child: Image.asset('assets/images/visa.png', height: 10),
-                                ),
+            ),
                                 Text('Visa card ending in 4392')
                               ],
                             )

@@ -16,6 +16,9 @@ class SCmanualList_model{
   late var sflag;
   late var subkey;
 
+  String get getsubkey{
+    return this.subkey;
+  }
 
   SCmanualList_model({  required this.custcd, required this.spjangcd ,
     required this.sseq, required this.sinputdate,
