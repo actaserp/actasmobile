@@ -12,6 +12,8 @@ import 'package:http/http.dart' as http;
 import '../../../model/app04/EmanualList_model.dart';
 import 'appPage09_view.dart';
 
+
+
 class AppPage09 extends StatefulWidget {
   @override
   _AppPage09State createState() => _AppPage09State();
@@ -19,16 +21,20 @@ class AppPage09 extends StatefulWidget {
 
 class _AppPage09State extends State<AppPage09> {
   TextEditingController _etSearch = TextEditingController();
+  TextEditingController _emSearch = TextEditingController();
 
   List<EmanualList_model> eDatas = EData;
-  bool chk = false;
+  String dropdownValue = "%" ?? "";
+
+  bool chk = true;
+
 
 
 
   @override
   void initState(){
     super.initState();
-    mlist_getdata();
+    elist_getdata();
 
   }
 
@@ -39,7 +45,7 @@ class _AppPage09State extends State<AppPage09> {
     super.dispose();
   }
 
-  Future mlist_getdata() async {
+  Future elist_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
 
     var uritxt = CLOUD_URL + '/appmobile/elist';
@@ -55,6 +61,8 @@ class _AppPage09State extends State<AppPage09> {
       body: <String, String> {
         'dbnm': _dbnm,
         'subject': _etSearch.text,
+        'memo': _emSearch.text,
+        'groupcd': dropdownValue
 
       },
     );
@@ -100,7 +108,7 @@ class _AppPage09State extends State<AppPage09> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '기타자료실' + eDatas.length.toString(),
+            '기타자료실',
             style: GlobalStyle.appBarTitle,
           ),
           actions: <Widget>[
@@ -110,7 +118,7 @@ class _AppPage09State extends State<AppPage09> {
 
                 setState(() {
                   chk = true;
-                  mlist_getdata();
+                  elist_getdata();
                 });
                 /*searchBook(_etSearch.text);*/
                 /*searchBook2(_etSearch2.text);*/
@@ -177,6 +185,75 @@ class _AppPage09State extends State<AppPage09> {
                 ),
 
               ),
+              Container(
+
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey[100]!,
+                        width: 1.0,
+                      )
+                  ),
+                ),
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                height: kToolbarHeight,
+                child: TextField(
+                  controller: _emSearch,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                  /*onChanged: searchBook,*/
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    hintText: '내용',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                    suffixIcon: (_emSearch.text == '')
+                        ? null
+                        : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _emSearch = TextEditingController(text: '');
+                          });
+                        },
+                        child: Icon(Icons.close, color: Colors.grey[500])),
+                    focusedBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!),
+                    ),
+                  ),
+                ),
+
+              ),
+              Container(
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField <String?>(
+                        decoration: InputDecoration(
+                          labelText: '분류',
+                          labelStyle: TextStyle(fontSize: 20, color: Color(0xffcfcfcf)),
+                        ),
+                        onChanged: (String? newValue) {
+                          print(newValue);
+                          setState(() {
+                            dropdownValue = newValue ?? "";
+                          });
+                        },
+                        items:
+                        [null, '01', '02'].map<DropdownMenuItem<String?>>((String? i) {
+                          return DropdownMenuItem<String?>(
+                            value: i,
+                            child: Text({'01': '현대엘리베이터', '02': '기타제작사'}[i] ?? '전체'),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  )
+              ),
 
               chk ? Expanded(
 
@@ -210,13 +287,13 @@ class _AppPage09State extends State<AppPage09> {
   }
 
   /*void searchBook2(String query){
-    final suggestions = MData.where((data) {
+    final suggestions = EData.where((data) {
       final greginmtitle = data.greginm.toString();
       final input = query.toString();
       return greginmtitle.contains(input);
     }).toList();
 
-    setState(() => mhDatas = suggestions);
+    setState(() => eDatas = suggestions);
   }*/
 
 
@@ -258,7 +335,6 @@ class _AppPage09State extends State<AppPage09> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
                     },
                     child: Text(EData.epernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold

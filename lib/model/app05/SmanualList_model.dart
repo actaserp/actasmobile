@@ -22,9 +22,10 @@ class SmanualList_model{
 
   SmanualList_model({  required this.custcd, required this.spjangcd ,
     required this.sseq, required this.sinputdate,
-    required this.spernm,required this.smemo, required this.sflag
+    required this.spernm,required this.smemo, required this.sflag, required this.subkey
  });
 }
 
 
 List<SmanualList_model> SData =[];
+List<SmanualList_model> seqKey =[];

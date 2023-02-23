@@ -13,6 +13,7 @@ import '../../../model/app04/MmanualList_model.dart';
 import 'appPage08_view.dart';
 
 
+
 class AppPage08 extends StatefulWidget {
   @override
   _AppPage08State createState() => _AppPage08State();
@@ -20,9 +21,13 @@ class AppPage08 extends StatefulWidget {
 
 class _AppPage08State extends State<AppPage08> {
   TextEditingController _etSearch = TextEditingController();
+  TextEditingController _emSearch = TextEditingController();
 
   List<MmanualList_model> mhDatas = MData;
-  bool chk = false;
+  String dropdownValue = "%" ?? "";
+
+  bool chk = true;
+
 
 
 
@@ -56,6 +61,8 @@ class _AppPage08State extends State<AppPage08> {
       body: <String, String> {
         'dbnm': _dbnm,
         'subject': _etSearch.text,
+        'memo': _emSearch.text,
+        'groupcd': dropdownValue
 
       },
     );
@@ -101,7 +108,7 @@ class _AppPage08State extends State<AppPage08> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '도면자료실' + mhDatas.length.toString(),
+            '도면자료실',
             style: GlobalStyle.appBarTitle,
           ),
           actions: <Widget>[
@@ -177,6 +184,75 @@ class _AppPage08State extends State<AppPage08> {
                   ),
                 ),
 
+              ),
+              Container(
+
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey[100]!,
+                        width: 1.0,
+                      )
+                  ),
+                ),
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                height: kToolbarHeight,
+                child: TextField(
+                  controller: _emSearch,
+                  textAlignVertical: TextAlignVertical.bottom,
+                  maxLines: 1,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                  /*onChanged: searchBook,*/
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    hintText: '내용',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                    suffixIcon: (_emSearch.text == '')
+                        ? null
+                        : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _emSearch = TextEditingController(text: '');
+                          });
+                        },
+                        child: Icon(Icons.close, color: Colors.grey[500])),
+                    focusedBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!),
+                    ),
+                  ),
+                ),
+
+              ),
+              Container(
+                  child: Column(
+                    children: [
+                      DropdownButtonFormField <String?>(
+                        decoration: InputDecoration(
+                          labelText: '분류',
+                          labelStyle: TextStyle(fontSize: 20, color: Color(0xffcfcfcf)),
+                        ),
+                        onChanged: (String? newValue) {
+                          print(newValue);
+                          setState(() {
+                            dropdownValue = newValue ?? "";
+                          });
+                        },
+                        items:
+                        [null, '01', '02'].map<DropdownMenuItem<String?>>((String? i) {
+                          return DropdownMenuItem<String?>(
+                            value: i,
+                            child: Text({'01': '현대엘리베이터', '02': '기타제작사'}[i] ?? '전체'),
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  )
               ),
 
               chk ? Expanded(
@@ -259,7 +335,6 @@ class _AppPage08State extends State<AppPage08> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
                     },
                     child: Text(MData.mpernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold

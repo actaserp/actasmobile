@@ -83,20 +83,13 @@ class Nav_right extends StatelessWidget{
                             width: 10),
                             Text('Account'),
                             ]))),
-                // ListTile(
-                //     title: GestureDetector(
-                //         child:  Row(
-                //             children:[
-                //               SizedBox(
-                //                 height: 570),
-                //             ]))),
                 ListTile(
                     title: GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
                         child:  Row(
                             children:[
-                              SizedBox(height: 1200,
+                              SizedBox(height: MediaQuery.of(context).size.height/1.4,
                               width: 190),
                               Icon(Icons.door_back_door_outlined),
                               SizedBox(

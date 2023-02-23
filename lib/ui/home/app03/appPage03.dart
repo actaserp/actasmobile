@@ -267,7 +267,7 @@ class _AppPage03State extends State<AppPage03> {
       ListView(
         padding: EdgeInsets.all(16),
         children: [
-          Text('수리 노하우 자료실', style: TextStyle(
+          Text('수리 노하우 자료실  ${MhData.length} 건', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
           )),
           SingleChildScrollView(
