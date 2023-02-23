@@ -128,8 +128,7 @@ class _AppPager11State extends State<AppPager11> {
 
       var addr2 = utf8.decode(response.bodyBytes);
       Map<String, dynamic> user = jsonDecode(addr2);
-      print(user);
-      print('승강기조회, ${user['response']['body']['items']['item'][0]['address1']}');
+
 
 
       addres =  user['response']['body']['items']['item'][0]['address1'];
@@ -183,7 +182,7 @@ class _AppPager11State extends State<AppPager11> {
 
                   e601list_getdata();
                   getelvinfo();
-                  /* print(elvlrt.length);*/
+
 
                 });
                 /*searchBook(_etSearch.text);*/
@@ -191,7 +190,7 @@ class _AppPager11State extends State<AppPager11> {
               }, child: Text('검색하기')),
             )
             /*IconButton(onPressed: (){
-              print('검색');
+
             }, icon: Icon(Icons.search))*/
           ],
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -302,8 +301,7 @@ class _AppPager11State extends State<AppPager11> {
                       margin: EdgeInsets.only(left: 20),
                       child: ElevatedButton(
                         onPressed: ()  {
-                          print(addres);
-                          print(sigunguNm);
+
                           getelvinfo();
 
 
@@ -412,7 +410,7 @@ class _AppPager11State extends State<AppPager11> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
+
                     },
                     child: Text(e601Data.pernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
@@ -443,6 +441,7 @@ class _AppPager11State extends State<AppPager11> {
             child: Container(
               width: 400,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(as_msg, style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold), softWrap: true,),

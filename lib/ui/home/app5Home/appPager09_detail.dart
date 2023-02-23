@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/app02/e411list_model.dart';
+import '../app03/Nav_right.dart';
 
 class AppPager09Detail extends StatefulWidget{
 
@@ -56,6 +57,8 @@ class _AppPager09DetailState extends State<AppPager09Detail> {
   @override
   Widget build(BuildContext buildContext){
     return Scaffold(
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,

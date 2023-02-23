@@ -17,6 +17,7 @@ import '../../../config/global_style.dart';
 import '../../../model/app02/AttachListMB_model.dart';
 import '../../reusable/cache_image_network.dart';
 import '../../reusable/reusable_widget.dart';
+import '../app03/Nav_right.dart';
 import 'appPager13.dart';
 import 'appPager14.dart';
 
@@ -221,10 +222,13 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,
         ),
+
         elevation: GlobalStyle.appBarElevation,
         title: Text(
           '공지사항',

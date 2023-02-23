@@ -108,12 +108,7 @@ class _AppPager08State extends State<AppPager08> {
 
                 setState(() {
                   chk = true;
-                  if(_etSearch.text == ""){
-                    showAlertDialog(context, "현장명을 입력하세요.");
-                  }
-                  if(_etSearch2.text == ""){
-                    showAlertDialog(context, "고장부위을 입력하세요.");
-                  }
+
                   e411list_getdata();
                 });
                 /*searchBook(_etSearch.text);*/
@@ -273,7 +268,7 @@ class _AppPager08State extends State<AppPager08> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
+
                     },
                     child: Text(e411Data.pernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold

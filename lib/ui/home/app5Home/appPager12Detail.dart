@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/app02/tbe401list_model.dart';
+import '../app03/Nav_right.dart';
 
 class AppPager12Detail extends StatefulWidget{
 
@@ -74,6 +75,8 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,
@@ -92,7 +95,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
           Row(
             children: [
               Container(
-                width: 150 * scaleWidth(context),
+                width: 0.432 * MediaQuery.of(context).size.width,
                 child: TextField(
                   controller: _etrecedate,
                   readOnly: true,
@@ -110,7 +113,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
               ),
               Container(
                 margin: EdgeInsets.only(left: 20),
-                width: 150 * scaleWidth(context),
+                width: 0.432 * MediaQuery.of(context).size.width,
                 child: TextField(
                   controller: _etcompdate,
                   readOnly: true,
@@ -176,7 +179,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
           Row(
             children: [
               Container(
-                width: 150 * scaleWidth(context),
+                width: 0.432 * MediaQuery.of(context).size.width,
                 child: TextField(
                   controller: _ethitchdate,
                   readOnly: true,
@@ -198,7 +201,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
               ),
               Container(
                 margin: EdgeInsets.only(left: 20),
-                width: 150 * scaleWidth(context),
+                width: 0.432 * MediaQuery.of(context).size.width,
                 child: TextField(
                   controller: _etindate,
                   readOnly: true,

@@ -18,6 +18,7 @@ import '../../../model/app02/AttachListMB_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../reusable/cache_image_network.dart';
 import '../../reusable/reusable_widget.dart';
+import '../app03/Nav_right.dart';
 import 'appPager13.dart';
 
 
@@ -232,6 +233,8 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,

@@ -11,11 +11,14 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../model/banner_slider_model.dart';
+import '../../home.dart';
 import '../../reusable/cache_image_network.dart';
 import '../../reusable/global_widget.dart';
+import '../appPage02.dart';
 import 'appPager07.dart';
 import 'appPager08.dart';
 import 'appPager09.dart';
+import 'appPager11.dart';
 
 
 
@@ -114,7 +117,7 @@ class _Home1PageState extends State<Tab5HomePage> {
         currentIndex: _currentIndex,
         onTap: (value) {
           _currentIndex = value;
-          _pageController.jumpToPage(value);
+
           // this unfocus is to prevent show keyboard in the wishlist page when focus on search text field
           FocusScope.of(context).unfocus();
         },
@@ -128,23 +131,39 @@ class _Home1PageState extends State<Tab5HomePage> {
         items: [
           BottomNavigationBarItem(
               label: 'Home',
-              icon: Icon(
-                  Icons.home,
-                  color: _currentIndex == 0 ? PRIMARY_COLOR : CHARCOAL
-              )
+              icon: GestureDetector(
+                onTap: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+                },
+                child: Icon(
+                    Icons.home,
+                    color: _currentIndex == 0 ? PRIMARY_COLOR : CHARCOAL
+                ),
+              ),
+
           ),
           BottomNavigationBarItem(
               label: '고장처리',
-              icon: Icon(
-                  Icons.favorite,
-                  color: _currentIndex == 1 ? ASSENT_COLOR : CHARCOAL
+              icon: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
+                },
+                child: Icon(
+                    Icons.favorite,
+                    color: _currentIndex == 1 ? ASSENT_COLOR : CHARCOAL
+                ),
               )
           ),
           BottomNavigationBarItem(
               label: '현장정보',
-              icon: Icon(
-                  Icons.shopping_cart,
-                  color: _currentIndex == 2 ? PRIMARY_COLOR : CHARCOAL
+              icon: GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
+                },
+                child: Icon(
+                    Icons.shopping_cart,
+                    color: _currentIndex == 2 ? PRIMARY_COLOR : CHARCOAL
+                ),
               )
           ),
           BottomNavigationBarItem(

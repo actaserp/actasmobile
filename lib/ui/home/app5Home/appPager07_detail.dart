@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/constant.dart';
 import '../../reusable/reusable_widget.dart';
+import '../app03/Nav_right.dart';
 
 class AppPager07Detail extends StatefulWidget{
 
@@ -62,6 +63,8 @@ class _AppPager07DetailState extends State<AppPager07Detail> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,

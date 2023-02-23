@@ -29,19 +29,58 @@ class _AppPager14State extends State<AppPager14>{
       DataRow(
         cells: <DataCell>[
           DataCell(
-            ConstrainedBox(constraints: BoxConstraints(maxWidth: 75),
-                child: Text('${mnoticeData.nseq}',
-                    overflow: TextOverflow.ellipsis)),
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        this._subsubsub = '${mnoticeData.nseq}';
+                      });
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14Detail(mnoticeData: mnoticeData)));
+
+                    },
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(minWidth: 70 , maxWidth: 70),
+                      child: Text('${mnoticeData.nseq}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ),
+                  ),
+                ],
+              )
           ),
           DataCell(
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ConstrainedBox(constraints: BoxConstraints(maxWidth: 55, minWidth: 50),
-                    child: Text('${mnoticeData.cnam}',
-                        overflow: TextOverflow.ellipsis)),
-              ],
-            ),
+              Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        this._subsubsub = '${mnoticeData.cnam}';
+                      });
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14Detail(mnoticeData: mnoticeData)));
+
+                    },
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(minWidth: 60 , maxWidth: 60),
+                      child: Text('${mnoticeData.cnam}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ),
+                  ),
+                ],
+              )
           ),
           DataCell(
               Row(
@@ -58,7 +97,7 @@ class _AppPager14State extends State<AppPager14>{
 
                     },
                     child: ConstrainedBox(
-                      constraints:  BoxConstraints(minWidth: 180 , maxWidth: 180),
+                      constraints:  BoxConstraints(minWidth: 150 , maxWidth: 150),
                       child: Text('${mnoticeData.nsubject}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -72,12 +111,28 @@ class _AppPager14State extends State<AppPager14>{
           ),
           DataCell(
               Row(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 50), //SET max width
+                  GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        this._subsubsub = '${mnoticeData.npernm}';
+                      });
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14Detail(mnoticeData: mnoticeData)));
+
+                    },
+                    child: ConstrainedBox(
+                      constraints:  BoxConstraints(minWidth: 60 , maxWidth: 60),
                       child: Text('${mnoticeData.npernm}',
-                          overflow: TextOverflow.ellipsis)),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: SOFT_BLUE, fontSize: 12, fontWeight: FontWeight.bold
+                          )
+                      ),
+                    ),
+                  ),
                 ],
               )
           ),
@@ -251,12 +306,7 @@ class _AppPager14State extends State<AppPager14>{
                       dataRowHeight: 40,
                       columns:
                       <DataColumn>[
-                        // DataColumn(label:
-                        // Container(
-                        //     width: 30,
-                        // child: Text('번호',
-                        //     style: TextStyle(fontWeight: FontWeight.bold,  color: CHARCOAL))),
-                        // ),
+
                         DataColumn(label: Text('번호',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                         DataColumn(label: Text('분류',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
                         DataColumn(label: Text('제목',  style: TextStyle(fontWeight: FontWeight.bold, color: CHARCOAL))),
@@ -288,7 +338,7 @@ class _AppPager14State extends State<AppPager14>{
                   /*  Navigator.push(context, MaterialPageRoute(
                       builder: (context) => AppPager13register()));*/
 
-                 /* Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));*/
+                  /* Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));*/
 
                 },
                 style: ButtonStyle(
@@ -336,3 +386,7 @@ class _AppPager14State extends State<AppPager14>{
     return MediaQuery.of(context).size.width;
   }
 }
+
+
+
+
