@@ -155,11 +155,14 @@ class _AppPage04State extends State<AppPage04> {
           ),
         ),
         body: ListView(
-          padding: EdgeInsets.only(top:16, bottom: 2, left: 10),
+          physics: NeverScrollableScrollPhysics(),
           children: [
-            Text('부품 가이드 자료실  ${BData.length} 건', style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-            )),
+            Container(
+              padding: EdgeInsets.only(top:16, bottom: 2, left: 10),
+              child: Text('부품 가이드 자료실  ${BData.length} 건', style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+              )),
+            ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
            child: Container(
@@ -272,7 +275,7 @@ class _AppPage04State extends State<AppPage04> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
-                      '노하우 등록',
+                      '부품가이드 등록',
                       style: TextStyle(
                           color: SOFT_BLUE,
                           fontWeight: FontWeight.bold,
