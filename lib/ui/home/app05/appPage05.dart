@@ -9,6 +9,7 @@ import 'package:actasm/ui/reusable/cache_image_network.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -34,12 +35,6 @@ class _AppPage05State extends State<AppPage05> {
   TextEditingController _etChat = TextEditingController();
   String _lastDate = '13 Sep 2019';
   late String _dbnm;
-  late Map<dynamic, dynamic> seqKey23;
-  final List<String> _SCmData = [];
-  final List<String> _keyData = [];
-  final List<String> _seqKey = [];
-  final List<String> _SCpermData = [];
-  final List<String> _inData = [];
   List<ChatModel> _chatListReversed = [];
 
   @override
@@ -47,9 +42,6 @@ class _AppPage05State extends State<AppPage05> {
     SSlist_getdata();
     attachCM();
     super.initState();
-    debugPrint("keydata 조회되는지 keyData.length ::: ${keyData.length}");
-    // debugPrint("seqkey 조회되는지 길이, value ::: ${seqKey.length} , ${seqKey} , 첫번째::: ${seqKey.first}, seqKey.index.subkey=${seqKey.elementAt(8).subkey}");
-
 
   }
 
@@ -93,8 +85,8 @@ class _AppPage05State extends State<AppPage05> {
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
       SData.clear();
-      seqKey.clear();
-      _seqKey.clear();
+      // seqKey.clear();
+      // _seqKey.clear();
       for (int i = 0; i < alllist.length; i++) {
         SmanualList_model SObject= SmanualList_model(
           custcd:alllist[i]['custcd'],
@@ -108,11 +100,12 @@ class _AppPage05State extends State<AppPage05> {
         );
         setState(() {
           SData.add(SObject);
-          seqKey.add(SObject);
-          _seqKey.add(alllist[i]['sseq']);
+          // seqKey.add(SObject);
+          // _seqKey.add(alllist[i]['sseq']);
         });
 
       }
+
       return SData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -141,10 +134,8 @@ class _AppPage05State extends State<AppPage05> {
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
       SCData.clear();
-      SCmData.clear();
-      _SCmData.clear();
-      keyData.clear();
-      _keyData.clear();
+      // keyData.clear();
+      // _keyData.clear();
 
       for (int i = 0; i < alllist.length; i++) {
         SCmanualList_model SCObject= SCmanualList_model(
@@ -159,18 +150,12 @@ class _AppPage05State extends State<AppPage05> {
         );
         setState(() {
           SCData.add(SCObject);
-          SCmData.add(SCObject);
-          _SCmData.add(alllist[i]['smemo']);
-          SCpermData.add(SCObject);
-          _SCpermData.add(alllist[i]['spernm']);
-          inData.add(SCObject);
-          _inData.add(alllist[i]['sinputdate']);
-          keyData.add(SCObject);
-          _keyData.add(alllist[i]['subkey']);
+          // keyData.add(SCObject);
+          // _keyData.add(alllist[i]['subkey']);
         });
       }
-      debugPrint('comment data::: $SCData length::::${SCData.length}' );
-      debugPrint('subkey data::: $keyData length::::${keyData.length}' );
+      // debugPrint('comment data::: $SCData length::::${SCData.length}' );
+      // debugPrint('subkey data::: $keyData length::::${keyData.length}' );
       return
         SCData;
     }else{
@@ -281,7 +266,7 @@ class _AppPage05State extends State<AppPage05> {
                         ),
                       ),
                     Container(
-                      margin: EdgeInsets.all(16),
+                      margin: EdgeInsets.all(11),
                       child: Row(
                         children: [
                           Flexible(
@@ -297,7 +282,7 @@ class _AppPage05State extends State<AppPage05> {
                               decoration: InputDecoration(
                                 fillColor: Colors.grey[200],
                                 filled: true,
-                                hintText: 'Write Message',
+                                hintText: '댓글을 입력해 주세요',
                                 focusedBorder: UnderlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                     borderSide: BorderSide(color: Colors.grey[200]!)),
@@ -315,7 +300,7 @@ class _AppPage05State extends State<AppPage05> {
                             child: GestureDetector(
                               onTap: (){
                                 if(_etChat.text != ''){
-                                  print('send message : '+_etChat.text);
+                                  print('메시지 전송 출력 => '+_etChat.text);
                                   setState(() {
                                     DateTime now = DateTime.now();
                                     String currentDate = DateFormat('d MMM yyyy').format(now);
@@ -423,13 +408,37 @@ class _AppPage05State extends State<AppPage05> {
                     itemCount: SCData.length,
                     /// seqKey => Slist, keydata => SClist
                     itemBuilder: (BuildContext context, int index) {
+                      ///length조절
                       // if (index >= SCData.length || index >= keyData.length) {
                       //   return SizedBox.shrink(); // or some other widget to represent an empty or placeholder item
                       // }
-                    Iterable<String> commap = seqKey.where((element) => element == keyData).cast<String>();
-                    debugPrint("where 결과 ::: $commap}");
-                      return
-                        _buildchat(SCData[index]);
+                      // element.sseq.toString() == keyData.elementAt(index).subkey.toString()).cast<String>()
+                      ///디버깅시 표현식
+                       // debugPrint("where 결과 ::: ${keyData.elementAt(0).subkey}");
+                       // debugPrint("seqKey 결과 ::: ${seqKey.elementAt(0).sseq}");
+                  ///try1
+                      //  Iterable<String> commap = seqKey.where((element) {
+                      //                       List elements = [];
+                      //                       for( int x = 0; x == SCData.length; x++){
+                      //                         if(element.sseq == keyData.elementAt(index).subkey){
+                      //                         elements.add(keyData[x].sseq);
+                      //                         debugPrint("elements ::: $elements");
+                      //                         debugPrint("seqKey length ::: ${seqKey.length}");
+                      //                         // debugPrint("commap ::: $commap");
+                      //                         }
+                      //                         else{
+                      //                       throw Exception('실패');
+                      //                       }}
+                      //                       return true;
+                      //
+                      //                       }) as Iterable<String>;
+
+                  if(seqKey.where((element) => element.sseq) == keyData.elementAt(index).subkey) {
+
+                      throw Exception('댓글리스트 실패했습니다... 값을 확인하세요 통신시 SCData 길이와 값 ::: length => ${SCData.length} value => ${SCData.elementAt(index).sseq} ////'
+                      'SData를 확인하세요 ::: ${SData.subkey} seqKey length, value => ${seqKey.length}, ${seqKey.elementAt(index).sseq}');
+                      // _buildchat(SCData[index]);
+                    }
                     },
                   ),
                 ),
