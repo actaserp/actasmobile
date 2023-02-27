@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../model/app03/nav_model.dart';
 import '../appPage02.dart';
 import '../tab_home.dart';
 
@@ -45,94 +46,16 @@ class Nav_right extends StatelessWidget{
                             return SizedBox(
                             height: 50,
                             child: ListTile(
-                      title: Text('ListTile $index'),
+                              leading: Icon(items[index].icon),
+                           title: Text(items[index].title),
                                onTap: (){
-                                 if(index == 1){
-
-                                 }
-                         //       Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));
+                               Navigator.push(context, MaterialPageRoute(builder: items[index].page));
 
                        },
                       ),
                             );
                       }),
                     ),
-                    // ListTile(
-                    //     title: GestureDetector(
-                    //       onTap: (){
-                    //       Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));
-                    //       },
-                    //         child:  Row(
-                    //         children:[
-                    //             Icon(Icons.home),
-                    //               SizedBox(
-                    //               width: 10),
-                    //               Text('Home'),
-                    //               ]))),
-                    // ListTile(
-                    //     title: GestureDetector(
-                    //     onTap: (){
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
-                    //     },
-                    //         child:  Row(
-                    //         children:[
-                    //         Icon(Icons.favorite),
-                    //         SizedBox(
-                    //         width: 10),
-                    //         Text('고장 처리'),
-                    //         ]))),
-                    // ListTile(
-                    //     title: GestureDetector(
-                    //     onTap: (){
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
-                    //         child:  Row(
-                    //         children:[
-                    //         Icon(Icons.safety_check),
-                    //         SizedBox(
-                    //         width: 10),
-                    //         Text('현장 정보'),
-                    //         ]))),
-                    // ListTile(
-                    //     title: GestureDetector(
-                    //     onTap: (){
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
-                    //         child:  Row(
-                    //         children:[
-                    //         Icon(Icons.person_outlined),
-                    //         SizedBox(
-                    //         width: 10),
-                    //         Text('Account'),
-                    //         ]))),
-///반복문 foreach loop or for loop, for in loop 사용해야함
-//
-//
-//                 Opacity(
-//                   opacity: 0,
-//                   child: ListTile(
-//                       title: Row(
-//                               children:[
-//                                 Icon(Icons.person_outlined),
-//                                 Container(
-//                                   child: SizedBox(
-//                                       width: 10),
-//                                 ),
-//                               ])),
-//                 ),
-//                 Container(
-//                   height: MediaQuery.of(context).size.height,
-//                   child: ListTile(
-//                       title: GestureDetector(
-//                           onTap: (){
-//                             Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
-//                           child:  Row(
-//                               mainAxisAlignment: MainAxisAlignment.end,
-//                               children:[
-//                                 Icon(Icons.door_back_door_outlined),
-//                                 SizedBox(
-//                                     width: 10),
-//                                 Text('Logout'),
-//                               ]))),
-
 
               ],
               ),
