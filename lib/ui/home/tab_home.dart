@@ -58,11 +58,11 @@ class _Home1PageState extends State<TabHomePage> {
     _categoryData.add(CategoryModel(id: 5, name: '도 면 자 료', image: GLOBAL_URL+'/menu/credit_application_status.png', color:0xffffff));
     _categoryData.add(CategoryModel(id: 6, name: '부 품 자 료', image: GLOBAL_URL+'/menu/credit_payment.png', color:0xffffff));
     _categoryData.add(CategoryModel(id: 7, name: '기 타 자 료', image: GLOBAL_URL+'/menu/commission.png', color:0xffffff));
-    _categoryData.add(CategoryModel(id: 8, name: '현장정보\n승강기번호조회\n비상통화조회', image: GLOBAL_URL+'/menu/contact_us.png', color:0xffffff));
+    _categoryData.add(CategoryModel(id: 8, name: '현장정보\n승강기번호\n비상통화/조회', image: GLOBAL_URL+'/menu/contact_us.png', color:0xffffff));
 
-    _categoryData.add(CategoryModel(id: 9, name: '수 리 노 하 우', image: GLOBAL_URL+'/menu/store.png', color:0xD3D3D3));
-    _categoryData.add(CategoryModel(id: 10, name: '부 품 가 이 드', image: GLOBAL_URL+'/menu/products.png', color:0xD3D3D3));
-    _categoryData.add(CategoryModel(id: 11, name: '수 리 Q  &  A', image: GLOBAL_URL+'/menu/buy_online.png', color:0xD3D3D3));
+    _categoryData.add(CategoryModel(id: 9, name: '수 리\n노 하 우', image: GLOBAL_URL+'/menu/store.png', color:0xD3D3D3));
+    _categoryData.add(CategoryModel(id: 10, name: '부 품\n가 이 드', image: GLOBAL_URL+'/menu/products.png', color:0xD3D3D3));
+    _categoryData.add(CategoryModel(id: 11, name: '수 리\nQ  &  A', image: GLOBAL_URL+'/menu/buy_online.png', color:0xD3D3D3));
     _categoryData.add(CategoryModel(id: 12, name: '직 원 정 보', image: GLOBAL_URL+'/menu/apply_credit.png', color:0xD3D3D3));
 
     _categoryData.add(CategoryModel(id: 13, name: '고 장 이 력', image: GLOBAL_URL+'/menu/credit_application_status.png', color:0xffffff));
@@ -235,7 +235,9 @@ class _Home1PageState extends State<TabHomePage> {
 
   Widget _createMenu(){
     return GridView.count(
-      childAspectRatio: 1.1,
+      physics: NeverScrollableScrollPhysics(),
+      ///cell ratio
+      childAspectRatio: 0.3 / 0.5,
       shrinkWrap: true,
       crossAxisSpacing: 0,
       mainAxisSpacing: 0,
@@ -267,7 +269,7 @@ class _Home1PageState extends State<TabHomePage> {
                 case '기 타 자 료' :
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage09()));
                   break;
-                case '현장정보 승강기번호조회 비상통화조회' :
+                case '현장정보 승강기번호 비상통화/조회' :
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
                   break;
                 case '수 리 노 하 우' :

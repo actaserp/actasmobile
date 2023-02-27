@@ -33,10 +33,12 @@ class _AppPage05State extends State<AppPage05> {
 
   TextEditingController _etSearch = TextEditingController();
   TextEditingController _etChat = TextEditingController();
+  TextEditingController _etMemo = TextEditingController();
   String _lastDate = '13 Sep 2019';
   late String _dbnm;
   List<ChatModel> _chatListReversed = [];
-
+  /// 댓글창을 보여줄지 여부를 저장하는 변수
+  bool _isCommentVisible = false;
   @override
   void initState() {
     SSlist_getdata();
@@ -230,6 +232,7 @@ class _AppPage05State extends State<AppPage05> {
           ),
         ),
         body:ListView(
+          physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.all(16),
                   children: [
                     Container(
@@ -254,7 +257,7 @@ class _AppPage05State extends State<AppPage05> {
                             ),
                           ),
                           width: 750,
-                          height: HSize,
+                          height: MediaQuery.of(context).size.height/1.3,
                           child:
                            ListView.builder(
                             shrinkWrap: true,
@@ -265,74 +268,84 @@ class _AppPage05State extends State<AppPage05> {
                           ),
                         ),
                       ),
-                    Container(
-                      margin: EdgeInsets.all(11),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: TextFormField(
-                              controller: _etChat,
-                              minLines: 1,
-                              maxLines: 4,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                              onChanged: (textValue) {
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                fillColor: Colors.grey[200],
-                                filled: true,
-                                hintText: '댓글을 입력해 주세요',
-                                focusedBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                    borderSide: BorderSide(color: Colors.grey[200]!)),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                                  borderSide: BorderSide(color: Colors.grey[200]!),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Container(
-                            child: GestureDetector(
-                              onTap: (){
-                                if(_etChat.text != ''){
-                                  print('메시지 전송 출력 => '+_etChat.text);
-                                  setState(() {
-                                    DateTime now = DateTime.now();
-                                    String currentDate = DateFormat('d MMM yyyy').format(now);
-                                    if(_lastDate!=currentDate){
-                                      _lastDate = currentDate;
-                                      _addDate(currentDate);
-                                    }
-                                    _addMessage(_etChat.text);
-                                    _etChat.text = '';
-                                  });
-                                }
-                              },
-                              child: ClipOval(
-                                child: Container(
-                                    color: SOFT_BLUE,
-                                    padding: EdgeInsets.all(10),
-                                    child: Icon(Icons.send, color: Colors.white)
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+            Cmemo()
                    ],
               ),
 
     );
   }
 
+  ///본문 입력 위젯 no data
+  Widget Cmemo(){
+    return   Container(
+      margin: EdgeInsets.all(11),
+      child: Row(
+        children: [
+              Flexible(
+              child: TextFormField(
+              controller: _etMemo,
+                minLines: 1,
+                maxLines: 4,
+                textAlignVertical: TextAlignVertical.bottom,
+                style: TextStyle(fontSize: 16, color: Colors.white),
+                onChanged: (textValue) {
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  fillColor: Colors.grey[500],
+                  filled: true,
+                  hintText: '질문을 입력해 주세요',
+                  hintStyle: TextStyle(color: Colors.white),
+                  focusedBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide: BorderSide(color: Colors.grey[200]!)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(color: Colors.grey[200]!),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+            width: 10,
+            ),
+            Container(
+            child: GestureDetector(
+            onTap: (){
+            if(_etMemo.text != ''){
+            print('메시지 전송 출력 => '+_etMemo.text);
+            setState(() {
+            DateTime now = DateTime.now();
+            String currentDate = DateFormat('d MMM yyyy').format(now);
+            if(_lastDate!=currentDate){
+            _lastDate = currentDate;
+            _addDate(currentDate);
+            }
+            _addMessage(_etMemo.text);
+            _etMemo.text = '';
+            });
+            }
+            },
+            child: ClipOval(
+            child: Container(
+            color: SOFT_BLUE,
+            padding: EdgeInsets.all(10),
+            child: Icon(Icons.keyboard_arrow_up, color: Colors.white)
+            ),
+            ),
+            ),
+            ),
+            ]
+      )
+    );
+  }
+
+     ///헤더 제작
   Widget _buildHEAD(SmanualList_model SData){
     final double WidthSize = (MediaQuery.of(context).size.width*1);
+    ///visible bool 초기화
+    List<bool> isVisibleList = List.generate(SCData.length, (index) => false);
+
     return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
@@ -347,11 +360,12 @@ class _AppPage05State extends State<AppPage05> {
                 ),
               ),
             ),
+                  /// 질문 제목
                   child: Row(
                     children: [
                       Center(
                         child: Text('${SData.sinputdate}', style: TextStyle(
-                            color: SOFT_GREY, fontSize: 11
+                            color: SOFT_GREY, fontSize: 12
                         )),
                       ),
                       SizedBox(
@@ -359,17 +373,18 @@ class _AppPage05State extends State<AppPage05> {
                       ),
                       Center(
                         child: Text('${SData.spernm}', style: TextStyle(
-                            color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 11
+                            color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 12
                         )),
                       ),
                       Center(
                         child: Text('님이 작성한 질문입니다.', style: TextStyle(
-                            color: SOFT_GREY, fontSize: 11
+                            color: SOFT_GREY, fontSize: 12
                         )),
                       ),
                     ],
                   ),
                 ),
+                    ///질문 내용
                     Container(
                       margin: EdgeInsets.only(top: 8),
                       padding: EdgeInsets.all(16),
@@ -391,8 +406,8 @@ class _AppPage05State extends State<AppPage05> {
                             children: [
                               Container(
                                 padding:EdgeInsets.all(16),
-                                child: Text('내용: ${SData.smemo}', style: TextStyle(
-                                    fontSize:11, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                                child: Text('${SData.smemo}', style: TextStyle(
+                                    fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                                 )),
 
                               )
@@ -401,56 +416,115 @@ class _AppPage05State extends State<AppPage05> {
                         ],
                       ),
                     ),
+                ///댓글창 생성
                 Container(
-                  height: MediaQuery.of(context).size.height/3.6,
+                  height: 100,
                   child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    // physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
-                    /// seqKey => Slist, keydata => SClist
                     itemBuilder: (BuildContext context, int index) {
-                      ///length조절
-                      // if (index >= SCData.length || index >= keyData.length) {
-                      //   return SizedBox.shrink(); // or some other widget to represent an empty or placeholder item
-                      // }
-                      // element.sseq.toString() == keyData.elementAt(index).subkey.toString()).cast<String>()
-                      ///디버깅시 표현식
-                       // debugPrint("where 결과 ::: ${keyData.elementAt(0).subkey}");
-                       // debugPrint("seqKey 결과 ::: ${seqKey.elementAt(0).sseq}");
-                  ///try1
-                      //  Iterable<String> commap = seqKey.where((element) {
-                      //                       List elements = [];
-                      //                       for( int x = 0; x == SCData.length; x++){
-                      //                         if(element.sseq == keyData.elementAt(index).subkey){
-                      //                         elements.add(keyData[x].sseq);
-                      //                         debugPrint("elements ::: $elements");
-                      //                         debugPrint("seqKey length ::: ${seqKey.length}");
-                      //                         // debugPrint("commap ::: $commap");
-                      //                         }
-                      //                         else{
-                      //                       throw Exception('실패');
-                      //                       }}
-                      //                       return true;
-                      //
-                      //                       }) as Iterable<String>;
-
-                  if(seqKey.where((element) => element.sseq) == keyData.elementAt(index).subkey) {
-
-                      throw Exception('댓글리스트 실패했습니다... 값을 확인하세요 통신시 SCData 길이와 값 ::: length => ${SCData.length} value => ${SCData.elementAt(index).sseq} ////'
-                      'SData를 확인하세요 ::: ${SData.subkey} seqKey length, value => ${seqKey.length}, ${seqKey.elementAt(index).sseq}');
-                      // _buildchat(SCData[index]);
+                      final SCmanualList_model SCmemo = SCData[index];
+                      final sseqlist = SData.sseq;
+                      final subkeylist = SCmemo.subkey;
+                      if (subkeylist == sseqlist) {
+                        return _buildchat(SCData[index]);
+                      } else {
+                        return SizedBox.shrink();
+                      }
                     }
-                    },
+
                   ),
                 ),
-
+                  ///댓글입력 토글
+                  GestureDetector(
+                    onTap: (){
+                    setState(() {
+                    _isCommentVisible = !_isCommentVisible;
+                    });
+                    },
+                    child: ClipOval(
+                    child: Container(
+                    color: SOFT_GREY,
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.comment, color: Colors.white)
+                    ),
+                    ),
+                    ),
+                Visibility(
+                    visible: _isCommentVisible,
+                    child: commentinput())
                 ],
       );
 
   }
 
+  ///댓글창 입력
+  Widget commentinput(){
+    return Container(
+      margin: EdgeInsets.all(11),
+      child: Row(
+        children: [
+      Flexible(
+      child: TextFormField(
+      controller: _etChat,
+        minLines: 1,
+        maxLines: 4,
+        textAlignVertical: TextAlignVertical.bottom,
+        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        onChanged: (textValue) {
+          setState(() {});
+        },
+        decoration: InputDecoration(
+          fillColor: Colors.grey[200],
+          filled: true,
+          hintText: '댓글을 입력해 주세요',
+          focusedBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              borderSide: BorderSide(color: Colors.grey[200]!)),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(color: Colors.grey[200]!),
+          ),
+        ),
+      ),
+    ),
+    SizedBox(
+    width: 10,
+    ),
+    Container(
+    child: GestureDetector(
+    onTap: (){
+    if(_etChat.text != ''){
+    print('댓글 전송 출력 => '+_etChat.text);
+    setState(() {
+    DateTime now = DateTime.now();
+    String currentDate = DateFormat('d MMM yyyy').format(now);
+    if(_lastDate!=currentDate){
+    _lastDate = currentDate;
+    _addDate(currentDate);
+    }
+    _addMessage(_etChat.text);
+    _etChat.text = '';
+    });
+    }
+    },
+    child: ClipOval(
+    child: Container(
+    color: SOFT_GREY,
+    padding: EdgeInsets.all(10),
+    child: Icon(Icons.keyboard_arrow_up, color: Colors.white)
+    ),
+    ),
+
+    ),
+    )
+    ]
+    ),
+    );
+  }
 
 
-  ///모델 가져가고
+  ///댓글 리스트 생성
   Widget _buildchat(SCmanualList_model SCData){
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     return Container(
@@ -497,48 +571,5 @@ class _AppPage05State extends State<AppPage05> {
           ),
     );
   }
-
-  Widget _buildChatSeller(String message, String date){
-    final double boxChatSize = MediaQuery.of(context).size.width/1.3;
-    return Container(
-      margin:EdgeInsets.only(top: 4),
-      child:
-          Container(
-              constraints: BoxConstraints(maxWidth: boxChatSize),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 1,
-                      color: Colors.grey[300]!
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(5),
-                  )
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(message, style: TextStyle(
-                        color: CHARCOAL
-                    )),
-                  ),
-                  Wrap(
-                    children: [
-                      SizedBox(width: 2),
-                      Text(date, style: TextStyle(
-                          color: SOFT_GREY, fontSize: 9
-                      )),
-                    ],
-                  )
-                ],
-              )
-      ),
-    );
-  }
-
 
 }

@@ -286,6 +286,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                                 onPressed: () {
                                 },
                                 child: Container(
+                                  width: MediaQuery.of(context).size.width/2,
                                   padding: const EdgeInsets.symmetric(vertical: 1),
                                   child: Text(
                                     '불러오기',

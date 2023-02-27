@@ -28,7 +28,7 @@ class AppPage04 extends StatefulWidget {
 
 class _AppPage04State extends State<AppPage04> {
   TextEditingController _etSearch = TextEditingController();
-
+  late String _dbnm;
 
   @override
   void initState() {
@@ -43,8 +43,7 @@ class _AppPage04State extends State<AppPage04> {
   }
 
   Future blist_getdata() async {
-    String _dbnm = await  SessionManager().get("dbnm");
-
+    _dbnm = await  SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/appmobile/Blist';
     var encoded = Uri.encodeFull(uritxt);
 
