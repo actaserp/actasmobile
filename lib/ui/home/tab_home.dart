@@ -234,98 +234,103 @@ class _Home1PageState extends State<TabHomePage> {
   }
 
   Widget _createMenu(){
+    final double HSize = MediaQuery.of(context).size.height/1.5;
+    final double WSize = MediaQuery.of(context).size.width/1;
     return GridView.count(
       physics: NeverScrollableScrollPhysics(),
       ///cell ratio
-      childAspectRatio: 0.3 / 0.5,
+      childAspectRatio: WSize / HSize,
       shrinkWrap: true,
       crossAxisSpacing: 0,
       mainAxisSpacing: 0,
       crossAxisCount: 4,
       children: List.generate(_categoryData.length, (index) {
-        return GestureDetector(
-            onTap: () {
-              // Fluttertoast.showToast(msg: 'Click '+_categoryData[index].name.replaceAll('\n', ' '), toastLength: Toast.LENGTH_SHORT);
-              String ls_name = _categoryData[index].name.replaceAll('\n', ' ');
-              switch (ls_name){
-                case '고 장 접 수' :
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => CouponPage()));
-                  break;
-                case '고 장 처 리' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
-                  break;
-                case '점 검 계 획' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15()));
-                  break;
-                case '점 검 조 치' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13()));
-                  break;
-                case '도 면 자 료' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage08()));
-                  break;
-                case '부 품 자 료' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage10()));
-                  break;
-                case '기 타 자 료' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage09()));
-                  break;
-                case '현장정보 승강기번호 비상통화/조회' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
-                  break;
-                case '수 리 노 하 우' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03()));
-                  break;
-                case '부 품 가 이 드' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04()));
+        return OverflowBox(
+          maxHeight: double.infinity,
+          child: GestureDetector(
+              onTap: () {
+                // Fluttertoast.showToast(msg: 'Click '+_categoryData[index].name.replaceAll('\n', ' '), toastLength: Toast.LENGTH_SHORT);
+                String ls_name = _categoryData[index].name.replaceAll('\n', ' ');
+                switch (ls_name){
+                  case '고 장 접 수' :
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => CouponPage()));
+                    break;
+                  case '고 장 처 리' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
+                    break;
+                  case '점 검 계 획' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15()));
+                    break;
+                  case '점 검 조 치' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13()));
+                    break;
+                  case '도 면 자 료' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage08()));
+                    break;
+                  case '부 품 자 료' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage10()));
+                    break;
+                  case '기 타 자 료' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage09()));
+                    break;
+                  case '현장정보 승강기번호 비상통화/조회' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
+                    break;
+                  case '수 리 노 하 우' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03()));
+                    break;
+                  case '부 품 가 이 드' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage04()));
 
-                  break;
-                case '수 리 Q  &  A' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage05()));
+                    break;
+                  case '수 리 Q  &  A' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage05()));
 
-                  break;
-                case '직 원 정 보' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager10()));
-                  break;
-                case '고 장 이 력' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager12()));
-                  break;
-                case '고 장 통 계' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Tab5HomePage()));
-                  break;
-                case '작 업 일 보' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
-                  break;
-                case '공 지 사 항' :
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14()));
-                  break;
-                default:
-                  break;
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[100]!, width: 0.5),
-                  color: Colors.white),  //Colors.white
-                  padding: EdgeInsets.all(8),
-              child: Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        buildCacheNetworkImage(width: 30, height: 30, url: _categoryData[index].image, plColor:  Colors.transparent),
-                        Container(
-                          margin: EdgeInsets.only(top: 12),
-                          child: Text(
-                            _categoryData[index].name,
-                            style: TextStyle(
-                              color: _color1,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                    break;
+                  case '직 원 정 보' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager10()));
+                    break;
+                  case '고 장 이 력' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager12()));
+                    break;
+                  case '고 장 통 계' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Tab5HomePage()));
+                    break;
+                  case '작 업 일 보' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
+                    break;
+                  case '공 지 사 항' :
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14()));
+                    break;
+                  default:
+                    break;
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[100]!, width: 0.5),
+                    color: Colors.white),  //Colors.white
+                    padding: EdgeInsets.all(8),
+                child: Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          buildCacheNetworkImage(width: 30, height: 30, url: _categoryData[index].image, plColor:  Colors.transparent),
+                          Container(
+                            margin: EdgeInsets.only(top: 12),
+                            child: Text(
+                              _categoryData[index].name,
+                              style: TextStyle(
+                                color: _color1,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
-                      ])),
-            ));
+                          )
+                        ])),
+              )),
+        );
       }),
     );
   }
