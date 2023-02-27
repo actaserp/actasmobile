@@ -32,6 +32,10 @@ class e401list_model{
   late var gregicd;
   late var compdate;
   late var comptime;
+  late var remocd;
+  late var cltcd;
+  late var divicd;
+  late var arrivetime;
 
 
 
@@ -39,7 +43,7 @@ class e401list_model{
   e401list_model({ required this.remark,required this.contents,required this.actperid,required this.perid,required this.frdate,required this.todate,required this.recedate,
     required this.recenum,required this.recetime, required this.actcd,required this.actnm,required this.equpcd,required this.equpnm,
     required this.actpernm,required this.pernm,required this.contcd, required this.contnm,required this.contremark, this.resuremark, this.resultcd, this.resucd,
-    this.regicd, this.gregicd , this.compdate, this.comptime});
+    this.regicd, this.gregicd , this.compdate, this.comptime, required this.remocd, this.cltcd, this.divicd, this.arrivetime});
 
 
 

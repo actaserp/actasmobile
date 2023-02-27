@@ -349,7 +349,7 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
                     ],
                   ),
                 ),*/
-                Column(
+                /*Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -361,9 +361,10 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
                       ),
                     )
                   ],
-                ),
+                ),*/
                 Container(
                     margin: EdgeInsets.only(top: 8),
+
                     child:
 
                     TextField(

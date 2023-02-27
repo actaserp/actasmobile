@@ -58,31 +58,35 @@ class _AppPage02State extends State<AppPage02> {
       e401Data.clear();
       for (int i = 0; i < alllist.length; i++) {
         e401list_model emObject= e401list_model(
-          remark:alllist[i]['remark'],
-          contents:alllist[i]['contents'],
-          actperid:alllist[i]['actperid'],
-          perid:alllist[i]['perid'],
-          frdate:alllist[i]['frdate'],
-          todate:alllist[i]['todate'],
-          recedate:alllist[i]['recedate'],
-          recenum:alllist[i]['recenum'],
-          actcd:alllist[i]['actcd'],
-          actnm:alllist[i]['actnm'],
-          equpcd:alllist[i]['equpcd'],
-          equpnm:alllist[i]['equpnm'],
-          actpernm:alllist[i]['actpernm'],
-          pernm:alllist[i]['pernm'],
-          contcd:alllist[i]['contcd'],
-          contnm:alllist[i]['contnm'],
-          contremark:alllist[i]['contremark'] ,
-          recetime:alllist[i]['recetime'],
+            remark:alllist[i]['remark'],
+            contents:alllist[i]['contents'],
+            actperid:alllist[i]['actperid'],
+            perid:alllist[i]['perid'],
+            frdate:alllist[i]['frdate'],
+            todate:alllist[i]['todate'],
+            recedate:alllist[i]['recedate'],
+            recenum:alllist[i]['recenum'],
+            actcd:alllist[i]['actcd'],
+            actnm:alllist[i]['actnm'],
+            equpcd:alllist[i]['equpcd'],
+            equpnm:alllist[i]['equpnm'],
+            actpernm:alllist[i]['actpernm'],
+            pernm:alllist[i]['pernm'],
+            contcd:alllist[i]['contcd'],
+            contnm:alllist[i]['contnm'],
+            contremark:alllist[i]['contremark'] ,
+            recetime:alllist[i]['recetime'],
             compdate:alllist[i]['compdate'],
             comptime:alllist[i]['comptime'],
             resuremark:alllist[i]['resuremark'],
             resultcd:alllist[i]['resultcd'],
             resucd:alllist[i]['resucd'],
             regicd:alllist[i]['regicd'],
-            gregicd:alllist[i]['gregicd']
+            gregicd:alllist[i]['gregicd'],
+            remocd: alllist[i]['remocd'],
+            cltcd: alllist[i]['cltcd'],
+            divicd : alllist[i]['divicd']
+
         );
         setState(() {
           e401Data.add(emObject);
@@ -238,9 +242,9 @@ class _AppPage02State extends State<AppPage02> {
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
+
                     },
-                    child: Text(e401Data.actpernm, style: TextStyle(
+                    child: Text(e401Data.pernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
                     )),
                   ),

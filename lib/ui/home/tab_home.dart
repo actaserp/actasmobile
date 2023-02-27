@@ -20,6 +20,7 @@ import 'app5Home/appPager11.dart';
 import 'app5Home/appPager12.dart';
 import 'app5Home/appPager13.dart';
 import 'app5Home/appPager14.dart';
+import 'app5Home/appPager15.dart';
 import 'app5Home/tab5_home.dart';
 import 'appPage02.dart';
 import 'app03/appPage03.dart';
@@ -252,6 +253,7 @@ class _Home1PageState extends State<TabHomePage> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
                   break;
                 case '점 검 계 획' :
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15()));
                   break;
                 case '점 검 조 치' :
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13()));

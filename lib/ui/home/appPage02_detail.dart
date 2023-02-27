@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/model/app02/eactpernm_model.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -12,6 +13,7 @@ import '../../model/app01/e401list_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
+import '../../model/app02/eremonm_model.dart';
 import '../../model/popup/econtnm_model.dart';
 import '../../model/popup/egreginm_model.dart';
 import '../../model/popup/ereginm_model.dart';
@@ -37,12 +39,16 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   final List<String> _eGregiData = [];
   final List<String> _eRegiData = [];
   final List<String> _eResuData = [];
+  final List<String> _eRemoData = [];
   final List<String> _eResultData = [];
+  final List<String> _eActperidData = [];
+
   late String _setTime;
   late String _custcd;
   late String _hour, _minute, _time;
+  late String _hour2, _minute2, _time2;
   late String _dbnm , _etrecedate, _etrecenum, _etrectime;
-  String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
+  String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime, _etRemocdTxt, _etPeridTxt, _eArrivtime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -60,6 +66,10 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   TextEditingController _etResultcd = TextEditingController();
   TextEditingController _etResuremark = TextEditingController();
   TextEditingController _etComptime = TextEditingController();
+  TextEditingController _etArrivtime = TextEditingController();
+  TextEditingController _etremoremark = TextEditingController();
+  TextEditingController _etremocd = TextEditingController();
+
 
 
   @override
@@ -67,6 +77,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     pop_egreginm();
     pop_eresunm();
     pop_eresultnm();
+    pop_eremonm();
+    pop_epernm();
     setData();
     super.initState();
     setData2();
@@ -91,6 +103,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     _etResucd = TextEditingController(text: '');    //처리내용
     _etResultcd = TextEditingController(text: '');    //처리결과
     _etResuremark = TextEditingController(text: '');    //처리내용상세
+    _etremocd = TextEditingController(text: '');    //고장요인
+
 
     _etCompdate = TextEditingController(text: _selectedDate.toLocal().toString().split(' ')[0]);
     widget.e401Data.compdate = _selectedDate.toLocal().toString().split(' ')[0];
@@ -99,7 +113,16 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [hh, ':', nn, " ", am]).toString();
 
-    widget.e401Data.comptime = _etComptime;
+    _etArrivtime.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+
+    /* widget.e401Data.comptime = _etComptime;*/
+    widget.e401Data.comptime = _etComptime.text;
+    widget.e401Data.arrivetime = _etArrivtime.text;
+
+
+    _eArrivtime = _etArrivtime.text;
     _eComptime =  _etComptime.text;
   }
 
@@ -199,46 +222,46 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
 
   @override
   Future pop_eresunm()async {
-      try{
-        _dbnm = await  SessionManager().get("dbnm");
-        var uritxt = CLOUD_URL + '/appmobile/wresunm';
-        var encoded = Uri.encodeFull(uritxt);
-        Uri uri = Uri.parse(encoded);
-        final response = await http.post(
-          uri,
-          headers: <String, String> {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept' : 'application/json'
-          },
-          body: <String, String> {
-            'dbnm': _dbnm,
-            'resunm': '%',
-          },
-        );
-        if(response.statusCode == 200){
-          List<dynamic> alllist = [];
-          alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-          eResuData.clear();
-          _eResuData.clear();
-          for (int i = 0; i < alllist.length; i++) {
-            if (alllist[i]['resucd'] != null || alllist[i]['resucd'].length > 0 ){
-              eresunm_model emObject= eresunm_model(
-                  resucd:alllist[i]['resucd'],
-                  resunm:alllist[i]['resunm']
-              );
-              setState(() {
-                eResuData.add(emObject);
-                _eResuData.add(alllist[i]['resunm'] + ' [' + alllist[i]['resucd'] + ']' );
-                // _etResucdTxt = alllist[0]['resunm'] + ' [' + alllist[0]['resucd'] + ']'  ;
-              });
-            }
+    try{
+      _dbnm = await  SessionManager().get("dbnm");
+      var uritxt = CLOUD_URL + '/appmobile/wresunm';
+      var encoded = Uri.encodeFull(uritxt);
+      Uri uri = Uri.parse(encoded);
+      final response = await http.post(
+        uri,
+        headers: <String, String> {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept' : 'application/json'
+        },
+        body: <String, String> {
+          'dbnm': _dbnm,
+          'resunm': '%',
+        },
+      );
+      if(response.statusCode == 200){
+        List<dynamic> alllist = [];
+        alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+        eResuData.clear();
+        _eResuData.clear();
+        for (int i = 0; i < alllist.length; i++) {
+          if (alllist[i]['resucd'] != null || alllist[i]['resucd'].length > 0 ){
+            eresunm_model emObject= eresunm_model(
+                resucd:alllist[i]['resucd'],
+                resunm:alllist[i]['resunm']
+            );
+            setState(() {
+              eResuData.add(emObject);
+              _eResuData.add(alllist[i]['resunm'] + ' [' + alllist[i]['resucd'] + ']' );
+              // _etResucdTxt = alllist[0]['resunm'] + ' [' + alllist[0]['resucd'] + ']'  ;
+            });
           }
-          // print(_eResuData.length);
-          return eResuData;
-        }else{
-          //만약 응답이 ok가 아니면 에러를 던집니다.
-          throw Exception('처리내용 불러오는데 실패했습니다');
         }
+        // print(_eResuData.length);
+        return eResuData;
+      }else{
+        //만약 응답이 ok가 아니면 에러를 던집니다.
+        throw Exception('처리내용 불러오는데 실패했습니다');
+      }
     }catch(e){
       print('e : $e');
     }
@@ -289,6 +312,103 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   }
 
 
+  @override
+  Future pop_eremonm()async {
+    try{
+      _dbnm = await  SessionManager().get("dbnm");
+      var uritxt = CLOUD_URL + '/appmobile/wremonm';
+      var encoded = Uri.encodeFull(uritxt);
+      Uri uri = Uri.parse(encoded);
+      final response = await http.post(
+        uri,
+        headers: <String, String> {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept' : 'application/json'
+        },
+        body: <String, String> {
+          'dbnm': _dbnm,
+          'remonm': '%',
+        },
+      );
+      if(response.statusCode == 200){
+        List<dynamic> alllist = [];
+        alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+        eRemoData.clear();
+        _eRemoData.clear();
+        for (int i = 0; i < alllist.length; i++) {
+          if (alllist[i]['remocd'] != null || alllist[i]['remocd'].length > 0 ){
+            eremonm_model emObject= eremonm_model(
+                remocd:alllist[i]['remocd'],
+                remonm:alllist[i]['remonm']
+            );
+            setState(() {
+              eRemoData.add(emObject);
+              _eRemoData.add(alllist[i]['remonm'] + ' [' + alllist[i]['remocd'] + ']' );
+              // _etResucdTxt = alllist[0]['resunm'] + ' [' + alllist[0]['resucd'] + ']'  ;
+            });
+          }
+        }
+        // print(_eResuData.length);
+        return eRemoData;
+      }else{
+        //만약 응답이 ok가 아니면 에러를 던집니다.
+        throw Exception('처리내용 불러오는데 실패했습니다');
+      }
+    }catch(e){
+      print('e : $e');
+    }
+
+  }
+
+
+  @override
+  Future pop_epernm()async {
+    try{
+      _dbnm = await  SessionManager().get("dbnm");
+      var uritxt = CLOUD_URL + '/appmobile/wpernm';
+      var encoded = Uri.encodeFull(uritxt);
+      Uri uri = Uri.parse(encoded);
+      final response = await http.post(
+        uri,
+        headers: <String, String> {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept' : 'application/json'
+        },
+        body: <String, String> {
+          'dbnm': _dbnm,
+          'wpernm': '%',
+        },
+      );
+      if(response.statusCode == 200){
+        List<dynamic> alllist = [];
+        alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+        ePernmData.clear();
+        _eActperidData.clear();
+        for (int i = 0; i < alllist.length; i++) {
+          if (alllist[i]['wperid'] != null || alllist[i]['wperid'].length > 0 ){
+            eactpernm_model emObject= eactpernm_model(
+                wperid:alllist[i]['wperid'],
+                wpernm:alllist[i]['wpernm']
+            );
+            setState(() {
+              ePernmData.add(emObject);
+              _eActperidData.add(alllist[i]['wpernm'] + ' [' + alllist[i]['wperid'] + ']' );
+              // _etResucdTxt = alllist[0]['resunm'] + ' [' + alllist[0]['resucd'] + ']'  ;
+            });
+          }
+        }
+        // print(_eResuData.length);
+        return ePernmData;
+      }else{
+        //만약 응답이 ok가 아니면 에러를 던집니다.
+        throw Exception('처리내용 불러오는데 실패했습니다');
+      }
+    }catch(e){
+      print('e : $e');
+    }
+
+  }
+
 
   @override
   Future<bool> save_e411data()async {
@@ -309,6 +429,10 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
       showAlertDialog(context, "고장부위를 등록하세요");
       return false;
     }
+    /*if(widget.e401Data.gregicd == null ){
+      showAlertDialog(context, "고장부위를 등록하세요");        ********************************************************************************************************
+      return false;
+    }*/
     if(widget.e401Data.regicd == null  ){
       showAlertDialog(context, "고장부위상세를 등록하세요");
       return false;
@@ -333,12 +457,13 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
       },
       body: <String, String> {
         ''
-        'dbnm': _dbnm,
+            'dbnm': _dbnm,
         'actnm':  _etActnm.text,
         'recedate': widget.e401Data.recedate.toString(),
         'recenum': widget.e401Data.recenum.toString(),
         'compdate': _eCompdate.toString(),
-        'comptime': _eComptime.toString(),
+        'comptime': /*_eComptime.toString()*/ widget.e401Data.comptime,
+        'arrivtime': widget.e401Data.arrivetime,
         'resuremark': widget.e401Data.resuremark.toString(),
         'resultcd': _etResultcdTxt.toString(),
         'resucd': _etResucdTxt.toString(),
@@ -349,7 +474,14 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         'actcd' : widget.e401Data.actcd.toString(), //
         'equpcd' : widget.e401Data.equpcd.toString(), //
         'equpnm' : widget.e401Data.equpnm.toString(), //
-        'recetime': widget.e401Data.recetime.toString() //
+        'recetime': widget.e401Data.recetime.toString(), //
+        'cltcd' : widget.e401Data.cltcd.toString(),
+        'divicd': widget.e401Data.divicd.toString(),
+        'actperid': _etPeridTxt.toString(),
+        'remocd' : _etRemocdTxt.toString(),
+        'remoremark': _etremoremark.text,
+
+
       },
     );
     if(response.statusCode == 200){
@@ -385,6 +517,9 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: _reusableWidget.bottomAppBar(),
+          actions: [
+            TextButton(onPressed: (){ print(_etComptime.text);}, child: Text('검색'))
+          ],
         ),
         body: ListView(
           padding: EdgeInsets.all(16),
@@ -416,14 +551,14 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
               cursorColor: Colors.grey[600],
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               decoration: InputDecoration(
-                isDense: true,
-                suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
+                  isDense: true,
+                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
                   labelText: '처리일자 *',
                   labelStyle:
                   TextStyle(color: BLACK_GREY)),
@@ -450,6 +585,31 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                     borderSide: BorderSide(color: Colors.grey[600]!),
                   ),
                   labelText: '처리시간 *',
+                  labelStyle:
+                  TextStyle(color: BLACK_GREY)),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: _etArrivtime,
+              readOnly: true,
+              onTap: () {
+                _selectTime2(context);
+              },
+              maxLines: 1,
+              cursorColor: Colors.grey[600],
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              decoration: InputDecoration(
+                  isDense: true,
+                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  labelText: '도착시간 *',
                   labelStyle:
                   TextStyle(color: BLACK_GREY)),
             ),
@@ -569,6 +729,80 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
+              child: Text('고장요인(*)'),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child:
+              Card(
+                color: Colors.blue[800],
+                elevation: 5,
+                child:
+                Container(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      dropdownColor: Colors.blue[800],
+                      iconEnabledColor: Colors.white,
+                      hint: Text("고장요인", style: TextStyle(color: Colors.white)),
+                      value: this._etRemocdTxt != null? this._etRemocdTxt :null ,
+                      items: _eRemoData.map((item) {
+                        return DropdownMenuItem<String>(
+                          child: Text(item, style: TextStyle(color: Colors.white)),
+                          value: item,
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          this._etRemocdTxt = value;
+                          /*widget.e401Data.remocd = value;*/   /*****************************************************************************************************************/
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Text('처리자, 담당자(*)'),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child:
+              Card(
+                color: Colors.blue[800],
+                elevation: 5,
+                child:
+                Container(
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      dropdownColor: Colors.blue[800],
+                      iconEnabledColor: Colors.white,
+                      hint: Text("담당자, 처리자", style: TextStyle(color: Colors.white)),
+                      value: this._etPeridTxt != null? this._etPeridTxt :null ,
+                      items: _eActperidData.map((item) {
+                        return DropdownMenuItem<String>(
+                          child: Text(item, style: TextStyle(color: Colors.white)),
+                          value: item,
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          this._etPeridTxt = value;
+                          /*widget.e401Data.remocd = value;*/   /*****************************************************************************************************************/
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
               child: Text('처리내용(*)'),
             ),
             Container(
@@ -660,7 +894,28 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
               },
             ),
             SizedBox(
-              height: 40,
+              height: 20,
+            ),
+            TextField(
+              controller: _etremoremark,
+              readOnly: false,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                  ),
+                  labelText: '고장원인상세',
+                  labelStyle:
+                  TextStyle(color: BLACK_GREY)),
+              onChanged: (text){
+                /* _etremoremark.text = text;   */                                   /**************************************************************************************/
+              },
+            ),
+            SizedBox(
+              height: 30,
             ),
             Container(
               child: TextButton(
@@ -755,6 +1010,29 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         _etComptime.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, " ", am]).toString();
+        widget.e401Data.comptime = _etComptime.text.toString();
+      });
+  }
+
+  Future<Null> _selectTime2(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        _hour2 = selectedTime.hour.toString();
+        _minute2 = selectedTime.minute.toString();
+        _time2 = _hour2 + ' : ' + _minute2;
+        _etArrivtime.text = _time2;
+        _etrectime = _hour  + _minute;
+        widget.e401Data.arrivetime  = _hour2  + _minute2;
+        _eArrivtime =  _hour2  + _minute2;
+        _etArrivtime.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+        widget.e401Data.arrivetime = _etArrivtime.text.toString();
       });
   }
 

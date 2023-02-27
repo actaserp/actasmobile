@@ -297,7 +297,7 @@ class _AppPager14State extends State<AppPager14>{
                 ),
               ),
 
-              height: 500,
+              height: 600,
               width: 700,
               child: ListView.builder(shrinkWrap: true, itemCount: mnoticeData.length,
                   itemBuilder: (BuildContext context, int index){
@@ -330,15 +330,15 @@ class _AppPager14State extends State<AppPager14>{
               ),
             ),
           ),
-          Container( //노하우등록임
+          /*Container( //노하우등록임
             margin: EdgeInsets.only(top: 10),
             child: OutlinedButton(
                 onPressed: () {
 
-                  /*  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AppPager13register()));*/
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => AppPager13register()));
 
-                  /* Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));*/
+                   Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));
 
                 },
                 style: ButtonStyle(
@@ -368,7 +368,7 @@ class _AppPager14State extends State<AppPager14>{
                   ),
                 )
             ),
-          )
+          )*/
 
         ],
       ),
