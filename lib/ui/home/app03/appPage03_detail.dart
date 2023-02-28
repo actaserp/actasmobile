@@ -32,7 +32,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   final _reusableWidget = ReusableWidget();
   final List<String> _C754Data = [];
   late String _dbnm ;
-  String? _codeTxt;
+  String? _codeTxt, _eCompdate;
 ///작성자
   var _usernm = "";
 ///timepicker
@@ -59,8 +59,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
 
   ///저장시 setData
   void setData(){
-
-
   }
 
   Future<void> sessionData() async {
@@ -141,7 +139,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         'hpernm': _usernm.toString(),
        'hmemo': _memo.toString(),
         'hsubject': _subject.toString(),
-        'hgroupcd': this._codeTxt.toString(), //작성된 groupcd랑 이름
+        'hgroupcd': this._codeTxt.toString().substring(0,2), //작성된 groupcd랑 이름
       },
     );
     if(response.statusCode == 200){
@@ -207,6 +205,8 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           onChanged: (String? value) {
                             setState(() {
                               this._codeTxt = value;
+                              debugPrint('코드 텍스트 받는지 확인:::${this._codeTxt}');
+                              debugPrint('문자열 자르기로 코드만 받기:::${value?.substring(0,2)}');
 
                             });
                             // C754Data.clear();
@@ -302,66 +302,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
-            ///첨부파일입력 시작
-            Row(
-              children: [
-                            SizedBox(    //왼쪽 크기 정하기
-                              width: 0,
-                              height: 40,
-                            ),
-                            Text('첨부파일 목록', style: TextStyle(
-                                fontSize: 16,
-                                color: SOFT_BLUE,
-                                fontWeight: FontWeight.bold
-                            ),
-                                textAlign: TextAlign.center
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                      ],
-            ),
-            Row(
-              children: [
-                SizedBox(width: 500
-                ),
-                GestureDetector(
-                  onTap: (){
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: SOFT_BLUE,
-                      border: Border.all(
-                        color: SOFT_BLUE,
-                      ),
-
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(7),
-                      child: Text('업로드', style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold,
-                      ),
-                          textAlign: TextAlign.center
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ///첨부파일 list 시작
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.white,
-              child: Column(
-                children: List.generate(shoppingCartData.length,(index){
-                  return _buildItem(index, boxImageSize);
-                }),
-              ),
-            ),
-
             ///등록 시작
             SizedBox(
               height: 40,
@@ -399,92 +339,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         )
     );
   }
-
-
-  //  첨부파일리스트 ~ network로 가져와야함
-  Column _buildItem(index, boxImageSize){
-    int quantity = shoppingCartData[index].qty;
-    return Column(
-      children: [
-        Container(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-                  },
-                  child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(4)),
-                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: shoppingCartData[index].image)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetailPage(name: shoppingCartData[index].name, image: shoppingCartData[index].image, price: shoppingCartData[index].price, rating: 4, review: 23, sale: 36)));
-                        },
-                        child: Text(
-                          shoppingCartData[index].name,
-                          style: GlobalStyle.productName.copyWith(fontSize: 14),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        // child: Text('\$ '+_globalFunction.removeDecimalZeroFormat(shoppingCartData[index].price),
-                        //     style: GlobalStyle.productPrice),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                // showPopupDelete(index, boxImageSize);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        width: 1, color: Colors.grey[300]!)),
-                                child: Icon(Icons.delete,
-                                    color: BLACK_GREY, size: 20),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        (index == shoppingCartData.length - 1)
-            ? Wrap()
-            : Divider(
-          height: 32,
-          color: Colors.grey[400],
-        )
-      ],
-    );
-  }
-
 
 //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
