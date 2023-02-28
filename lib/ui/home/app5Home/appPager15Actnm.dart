@@ -67,7 +67,7 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
 
            equpnm:    alllist[i]["equpnm"],
            actnm :    alllist[i]["actnm"],
-           actaddr  : alllist[i]["actaddr"],
+           /*actaddr  : alllist[i]["actaddr"],*/
            pernm:    alllist[i]["pernm"],
            actcd:    alllist[i]["actcd"],
            equpcd:    alllist[i]["equpcd"]

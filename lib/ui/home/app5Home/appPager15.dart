@@ -218,7 +218,7 @@ class _AppPager15State extends State<AppPager15> {
                                   ),
                                   DataCell(
                                       ConstrainedBox(
-                                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                          constraints: BoxConstraints(minWidth: 60, maxWidth: 65),
                                           child: Text(item.plandate
                                           ))),
                                   DataCell(Container(

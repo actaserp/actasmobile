@@ -8,11 +8,13 @@ import 'package:http/http.dart' as http;
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 
+import '../../../model/app02/cltnmlist_model.dart';
 import '../../../model/app02/eactpernm_model.dart';
 import '../../../model/app02/plan_model.dart';
 import '../../../model/app02/tbe601list_model.dart';
 import '../../reusable/reusable_widget.dart';
 import 'appPager15Actnm.dart';
+import 'appPager15cltnm.dart';
 
 class AppPager15register extends StatefulWidget {
 
@@ -33,9 +35,20 @@ class _AppPager15registerState extends State<AppPager15register> {
   List<String> elvlrt = [];
 
   String actcd = "";
+  String actcd2 = "";
+
   String actnm  ="";
   String equpcd = "";
+  String equpcd2 = "";
+
   String equpnm = "";
+
+  String cltcd = "";
+  String cltnm = "";
+
+  String cltcd2 = "";
+  String cltnm2 = "";
+
 
 
 
@@ -46,6 +59,8 @@ class _AppPager15registerState extends State<AppPager15register> {
   TextEditingController _etSearch2 = TextEditingController();
   TextEditingController _etqty = TextEditingController();
   TextEditingController _etText = TextEditingController();
+  TextEditingController _etSearch3 = TextEditingController();
+
 
   List<tbe601list_model> e601Datas = e601Data;
 
@@ -59,9 +74,16 @@ class _AppPager15registerState extends State<AppPager15register> {
     // TODO: implement initState
     super.initState();
     pop_epernm();
+    setData();
   }
 
-
+ @override
+ void setData(){
+    setState(() {
+      actcd2 = actcd;
+      equpcd2 = equpcd;
+    });
+ }
 
   @override
   void dispose() {
@@ -160,8 +182,7 @@ class _AppPager15registerState extends State<AppPager15register> {
           e601Data.add(emObject);
         });
 
-        print("check");
-        print(e601Datas.length);
+       print(e601Datas.length);
       }
       return e601Data;
     }else{
@@ -170,41 +191,53 @@ class _AppPager15registerState extends State<AppPager15register> {
   }
 
 
+
+
+
   @override
-  Future<bool> save_e411data()async {
+  Future<bool> save_plandata()async {
     _dbnm = await  SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/apppgymobile/mfixsave';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
-    /*if(widget.e401Data.compdate == null  ){
-      showAlertDialog(context, "처리일자를 등록하세요");
+    if(_etCompdate.text == null || _etCompdate.text == "" ){
+      showAlertDialog(context, "계획일자를 등록하세요");
       return false;
     }
-    if(widget.e401Data.comptime == null  ){
-      showAlertDialog(context, "처리시간을 등록하세요");
+    if(actcd == null || actcd == "" ){
+      showAlertDialog(context, "현장조회를 하십시오.");
       return false;
     }
-    if(widget.e401Data.gregicd == null ){
-      showAlertDialog(context, "고장부위를 등록하세요");
+    if(actnm == null  || actnm == ""){
+      showAlertDialog(context, "현장조회를 하십시오");
       return false;
     }
-    if(widget.e401Data.regicd == null  ){
-      showAlertDialog(context, "고장부위상세를 등록하세요");
+    if(equpcd == null  || equpcd == ""){
+      showAlertDialog(context, "현장조회를 하십시오.");
       return false;
     }
-    if(widget.e401Data.resucd == null  ){
-      showAlertDialog(context, "처리내용을 등록하세요");
+    if(equpnm == null  || equpnm == ""){
+      showAlertDialog(context, "현장조회를 하십시오.");
       return false;
     }
-    if(widget.e401Data.resultcd == null  ){
-      showAlertDialog(context, "처리결과를 등록하세요");
+    if(_etPeridTxt == null || _etPeridTxt == "" ){
+      showAlertDialog(context, "담당자 선택을 하십시오.");
       return false;
     }
-    if(widget.e401Data.resuremark == null  ){
-      showAlertDialog(context, "처리상세내용을 등록하세요");
+    if(_etText.text == null  || _etText.text == "" ){
+      showAlertDialog(context, "기타호기를 작성해주세요.");
       return false;
-    }*/
+    }
+    if(_etqty.text == "" || _etqty.text == null){
+      showAlertDialog(context, "관리대수를 입력해주세요. (숫자로만 입력)");
+      return false;
+    }
+    if(cltcd2 == null  || cltcd2 == ""){
+      showAlertDialog(context, "사업장 조회를 하십시오.");
+      return false;
+    }
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -222,12 +255,13 @@ class _AppPager15registerState extends State<AppPager15register> {
         'kcpernm' : _etPeridTxt.toString(),
         'remark'  : _etText.text.toString(),
         'qty'     : _etqty.text.toString(),
+        'cltcd'   : cltcd2.toString()
 
       },
     );
     if(response.statusCode == 200){
       print("저장됨");
-
+      showAlertDialog(context, '저장되었습니다.');
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -337,11 +371,16 @@ class _AppPager15registerState extends State<AppPager15register> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15Actnm(data: _etSearch2.text),
                       ),
                       ).then((value) {
+                          setState(() {
+                            actcd = value[0];
+                            equpcd = value[1];
+                            actnm = value[2];
+                            equpnm = value[3];
 
-                           actcd = value[0];
-                           equpcd = value[1];
-                           actnm = value[2];
-                           equpnm = value[3];
+                            actcd2 = value[0];
+                            equpcd2 = value[1];
+                          });
+
                           print(actcd);
                           print(equpcd);
                           print(actnm);
@@ -371,6 +410,91 @@ class _AppPager15registerState extends State<AppPager15register> {
                     });*//*
                       showAlertDialog(context);
 */
+                    },
+                    child: Text('조회하기'),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Container(
+            child: Row(
+              children: [
+                Text('현장코드: ' + actcd2),
+                Container( margin: EdgeInsets.only(left: 20),
+                    child: Text('호기코드: ' + equpcd2)),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey[100]!,
+                    width: 1.0,
+                  )
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(0, 0, 16, 12),
+            height: kToolbarHeight,
+            child: Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.6 ,
+                  child: TextField(
+                    controller: _etSearch3,
+                    textAlignVertical: TextAlignVertical.bottom,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                    /*onChanged: searchBook,*/
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                      hintText: '사업자조회',
+                      prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                      suffixIcon: (_etSearch3.text == '')
+                          ? null
+                          : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _etSearch3 = TextEditingController(text: '');
+                            });
+                          },
+                          child: Icon(Icons.close, color: Colors.grey[500])),
+                      focusedBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          borderSide: BorderSide(color: Colors.blue[800]!)),
+                      enabledBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 20),
+                  child: ElevatedButton(
+                    onPressed: ()  async {
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15Cltnm(data: _etSearch3.text),
+                      ),
+                      ).then((value) {
+                        setState(() {
+                          cltcd = value[0];
+                          cltnm = value[1];
+                          cltcd2 = value[0];
+                          cltnm2 = value[1];
+                        });
+
+
+                        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
+                      });
+
 
                     },
                     child: Text('조회하기'),
@@ -378,6 +502,21 @@ class _AppPager15registerState extends State<AppPager15register> {
                 )
               ],
             ),
+          ),
+          Container(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Text('사업자명: ' + cltnm2, overflow: TextOverflow.ellipsis),
+                  Container( margin: EdgeInsets.only(left: 20),
+                      child: Text('사업자코드: ' + cltcd2, overflow: TextOverflow.ellipsis)),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 30,
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
@@ -471,7 +610,9 @@ class _AppPager15registerState extends State<AppPager15register> {
                 ),
                 onPressed: () {
 
-                  save_e411data();
+                  save_plandata();
+
+
                   /*bool lb_save = save_e411data() as bool;
                   if (lb_save){
                     _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
@@ -529,7 +670,7 @@ class _AppPager15registerState extends State<AppPager15register> {
   }
 
 
-  void showAlertDialog(BuildContext context) async {
+/*  void showAlertDialog(BuildContext context) async {
 
 
 
@@ -569,8 +710,28 @@ class _AppPager15registerState extends State<AppPager15register> {
         );
       },
     );
-  }
+  }*/
 
+  void showAlertDialog(BuildContext context, String as_msg) async {
+    String result = await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('점검계획등록'),
+          content: Text(as_msg),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context, "확인");
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _buildListCard(tbe601list_model e601Data){
     return Card(
