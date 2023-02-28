@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/model/app02/books.dart';
-import 'package:actasm/ui/home/app11/appPage11Detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;

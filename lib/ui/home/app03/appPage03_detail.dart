@@ -12,7 +12,7 @@ import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../model/popup/Comm751_model.dart';
+import '../../../model/popup/Comm754_model.dart';
 import '../../../model/shopping_cart_model.dart';
 import '../../general/product_detail/product_detail.dart';
 import '../../reusable/cache_image_network.dart';
@@ -28,44 +28,48 @@ class AppPage03Detail extends StatefulWidget {
 }
 
 class _AppPage03DetailState extends State<AppPage03Detail> {
-
-  final List<String> _C751Data = [];
+  ///처리등록되었습니다 startloading
   final _reusableWidget = ReusableWidget();
-  List<String> _goodParts = [];
-  int _maxgoodParts = 2;
-
-  late String _setTime;
-  late String _hour, _minute, _time;
-  late String _dbnm , _etrecedate, _etrecenum, _etrectime;
-  String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
-
-
+  final List<String> _C754Data = [];
+  late String _dbnm ;
+  String? _codeTxt;
+///작성자
+  var _usernm = "";
+///timepicker
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
-  // 값매핑1
+  ///저장전 등록 controller
   TextEditingController _mhCustcd = TextEditingController();
-  TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
-  TextEditingController _etPostalCode = TextEditingController(text: '07093');
-  TextEditingController _etState = TextEditingController(text: 'USA');
+  ///여기서부터 blank
+  TextEditingController _memo = TextEditingController();
+  TextEditingController _subject = TextEditingController();
   TextEditingController _etCompdate = TextEditingController();
+
 
 
   @override
   void initState() {
-    pop_Com751();
+    sessionData();
+    pop_Com75to00();
     setData();
     super.initState();
   }
   @override
-  //값매핑2
+
+  ///저장시 setData
   void setData(){
-    _mhCustcd = TextEditingController(text: "dd");
+
+
+  }
+
+  Future<void> sessionData() async {
+    _usernm = await  SessionManager().get("username");
   }
   @override
-  Future pop_Com751()async {
+  Future pop_Com75to00()async {
     _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/Com751';
+    var uritxt = CLOUD_URL + '/appmobile/Com754to00';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     final response = await http.post(
@@ -76,31 +80,30 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'greginm': '%',
+        'cnam': '%',
       },
     );
     if(response.statusCode == 200){
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-      C751Data.clear();
-      _C751Data.clear();
+      C754Data.clear();
+      _C754Data.clear();
       for (int i = 0; i < alllist.length; i++) {
-        if (alllist[i]['gregicd'] != null || alllist[i]['gregicd'].length > 0 ){
-          Comm751_model emObject= Comm751_model(
+        if (alllist[i]['code'] != null || alllist[i]['code'].length > 0 ){
+          Comm754_model emObject= Comm754_model(
               code:alllist[i]['code'],
               cnam:alllist[i]['cnam']
           );
           setState(() {
-            C751Data.add(emObject);
-            _C751Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']' );
+            C754Data.add(emObject);
+            _C754Data.add(alllist[i]['code'] + '/' + alllist[i]['cnam']);
           });
         }
       }
 
-      return C751Data;
+      return C754Data;
     }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('고장부위 불러오는데 실패했습니다');
+      throw Exception('분류 코드를 불러오는데 실패했습니다');
     }
   }
   //저장
@@ -111,11 +114,19 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
-    //null처리
-    // if(widget.e401Data.compdate == null  ) {
-    //   showAlertDialog(context, "처리일자를 등록하세요");
-    //   return false;
-    // }
+    ///null처리
+    if(_etCompdate.text == null || _etCompdate.text == "") {
+      showAlertDialog(context, "작성일자를 등록하세요");
+      return false;
+    }
+    if(_subject == null || _subject == "" ) {
+      showAlertDialog(context, "작성일자를 등록하세요");
+      return false;
+    }
+    if(_memo == null || _memo == "" ) {
+      showAlertDialog(context, "작성일자를 등록하세요");
+      return false;
+    }
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -124,10 +135,13 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        // 'recedate': widget.e401Data.recedate.toString(),
-        // 'recenum': widget.e401Data.recenum.toString(),
-        // 'resuremark': widget.e401Data.resuremark.toString(),
-        'custcd': _mhCustcd.toString(),
+        ///저장시 필수 값
+        ///custcd, spjangcd, hseq 컨트롤러
+        'hinputdate': _etCompdate.toString(),
+        'hpernm': _usernm.toString(),
+       'hmemo': _memo.toString(),
+        'hsubject': _subject.toString(),
+        'hgroupcd': this._codeTxt.toString(), //작성된 groupcd랑 이름
       },
     );
     if(response.statusCode == 200){
@@ -178,22 +192,26 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                             icon: Icon(Icons.keyboard_arrow_down),
                             dropdownColor: Colors.blue[800],
                             iconEnabledColor: Colors.white,
-                            hint: Text("분류", style: TextStyle(color: Colors.white)),
-                            value: this._etGregicdTxt ,
-                            items: _C751Data.map((item) {
+                            hint: Text("분류 *", style: TextStyle(color: Colors.white)),
+                            value: this._codeTxt != null? this._codeTxt :null ,
+                            items: _C754Data.map((item) {
                               return DropdownMenuItem<String>(
-                                child: Text(item, style: TextStyle(color: Colors.white)),
+                                child: Row(
+                                  children: [
+                                    Text(item, style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
                                 value: item,
                               );
                           }).toList(),
                           onChanged: (String? value) {
                             setState(() {
-                              // this._etGregicdTxt = value;
-                              // widget.C751Data.code = value;
+                              this._codeTxt = value;
+
                             });
-                            C751Data.clear();
-                            _C751Data.clear();
-                            pop_Com751();
+                            // C754Data.clear();
+                            // _C754Data.clear();
+                            // pop_Com75to00();
                           },
                         ),
                       ),
@@ -202,23 +220,20 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                         SizedBox(
                           height: 20,
                         ),
-              _buildOptioncheckParts(),
-              SizedBox(
-                height: 20,
-              ),
                         TextField(
                           controller: _etCompdate,
                           readOnly: true,
                           onTap: () {
-                            // _selectDateWithMinMaxDate2(context);
+                            _selectDateWithMinMaxDate(context);
                           },
                           maxLines: 1,
                           cursorColor: Colors.grey[600],
-                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                           decoration: InputDecoration(
-                              fillColor: Colors.grey[200],
-                              filled: true,
+                              // fillColor: Colors.grey[200],
+                              // filled: true,
                               isDense: true,
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
                               hintText: '작성일자를 입력하세요',
                               suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                               enabledBorder: UnderlineInputBorder(
@@ -229,16 +244,16 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                               ),
                               labelText: '작성일자 *',
                               labelStyle:
-                              TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+                              TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
                         ),
                         SizedBox(
                           height: 20,
                         ),
                       TextField(
-                        controller: _etState,
+                        controller: _subject,
+                        autofocus: true,
                         decoration: InputDecoration(
-                            fillColor: Colors.grey[200],
-                            filled: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
                             hintText: '제목을 작성하세요',
                             focusedBorder: UnderlineInputBorder(
                                 borderSide:
@@ -253,32 +268,25 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                       SizedBox(
                         height: 20,
                       ),
+                      Row(
+                        children: [
+                          Text( _usernm,
+                          style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
+                             ),
+                          Text( '님이 작성 중입니다.',
+                            style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                          ),
+                        ],
+                      ),
 
-                      TextField(
-                      enabled: false,
-                      style: TextStyle(color: BLACK_GREY),
-                      controller: _etPostalCode,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                              BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                          ),
-                          labelText: '작성자 *',
-                          labelStyle:
-                          TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-                          ),
                           SizedBox(
                             height: 20,
                           ),
                           TextField(
-                            controller: _etAddressTitle,
+                            autofocus: true,
+                            controller: _memo,
                             decoration: InputDecoration(
-                                fillColor: Colors.grey[200],
-                                filled: true,
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
                                 hintText: '내용을 작성하세요',
                                 focusedBorder: UnderlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -294,6 +302,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           SizedBox(
                             height: 20,
                           ),
+            ///첨부파일입력 시작
             Row(
               children: [
                             SizedBox(    //왼쪽 크기 정하기
@@ -318,7 +327,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -343,16 +351,18 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
             SizedBox(
               height: 20,
             ),
+            ///첨부파일 list 시작
             Container(
               padding: EdgeInsets.all(16),
               color: Colors.white,
-              //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
               child: Column(
                 children: List.generate(shoppingCartData.length,(index){
                   return _buildItem(index, boxImageSize);
                 }),
               ),
             ),
+
+            ///등록 시작
             SizedBox(
               height: 40,
             ),
@@ -475,91 +485,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     );
   }
 
-  Widget _buildOptioncheckParts(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                ],
-              ),
-              _checboxgood(value: 'breast' , primaryText: '회원사 공유 여부'),
-              // Divider(
-              //   height: 32,
-              //   color: Colors.grey[400],
-              // ),
-              // _checboxgood(value: 'wings', primaryText: 'Chicken Wings', secondaryText: '0'),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-
-  //체크박스
-  Widget _checboxgood({value = 'breast' , primaryText: '회원사 공유 여부'}){
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: (){
-        setState(() { //tap 시에 value 다시 잡아주고
-          if(_goodParts.contains(value)){
-            _goodParts.remove(value);
-          } else {
-            if(_goodParts.length<_maxgoodParts){
-              _goodParts.add(value);
-            }
-          }
-        });
-      },
-      child: Row(
-        children: [
-          Text(primaryText, style: TextStyle(
-              fontSize: 15,
-              color: SOFT_BLUE,
-              fontWeight: (_goodParts.contains(value))?FontWeight.bold:FontWeight.normal
-          )),
-          Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  width: 1,
-                  color: (_goodParts.contains(value)) ? PRIMARY_COLOR : BLACK77
-              ),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(4.0)
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(2),
-              child: (_goodParts.contains(value))
-                  ? Icon(
-                Icons.check,
-                size: 12.0,
-                color: PRIMARY_COLOR,
-              ):Icon(
-                Icons.check_box_outline_blank,
-                size: 12.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-
-
-          // Spacer(),
-          // Text(secondaryText, style: TextStyle( //수량나타내주는거
-          //   fontSize: 13,
-          //   color: BLACK77,
-          // ))
-        ],
-      ),
-    );
-  }
 
 //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
@@ -583,4 +508,33 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     );
   }
 
+  ///datepicker
+  Future<Null> _selectDateWithMinMaxDate(BuildContext context) async {
+    var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
+    var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 7);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.pinkAccent,
+            colorScheme: ColorScheme.light(primary: Colors.pinkAccent, secondary: Colors.pinkAccent),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+        _eCompdate = _selectedDate.toLocal().toString().split(' ')[0];
+        _etCompdate = TextEditingController(
+            text: _selectedDate.toLocal().toString().split(' ')[0]);
+      });
+    }
+  }
 }

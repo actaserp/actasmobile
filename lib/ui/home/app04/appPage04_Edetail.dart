@@ -12,7 +12,7 @@ import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../model/popup/Comm751_model.dart';
+import '../../../model/popup/Comm754_model.dart';
 
 class EAppPage04Detail extends StatefulWidget {
 
@@ -26,7 +26,7 @@ class EAppPage04Detail extends StatefulWidget {
 
 class _EAppPage04DetailState extends State<EAppPage04Detail> {
 
-  final List<String> _C751Data = [];
+  final List<String> _C754Data = [];
   final _reusableWidget = ReusableWidget();
   List<String> _goodParts = [];
   int _maxgoodParts = 2;
@@ -78,22 +78,22 @@ class _EAppPage04DetailState extends State<EAppPage04Detail> {
     if(response.statusCode == 200){
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-      C751Data.clear();
-      _C751Data.clear();
+      C754Data.clear();
+      _C754Data.clear();
       for (int i = 0; i < alllist.length; i++) {
         if (alllist[i]['gregicd'] != null || alllist[i]['gregicd'].length > 0 ){
-          Comm751_model emObject= Comm751_model(
+          Comm754_model emObject= Comm754_model(
               code:alllist[i]['code'],
               cnam:alllist[i]['cnam']
           );
           setState(() {
-            C751Data.add(emObject);
-            _C751Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']' );
+            C754Data.add(emObject);
+            _C754Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']' );
           });
         }
       }
 
-      return C751Data;
+      return C754Data;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('분류를 불러오는데 실패했습니다');
@@ -175,7 +175,7 @@ class _EAppPage04DetailState extends State<EAppPage04Detail> {
                             iconEnabledColor: Colors.white,
                             hint: Text("분류", style: TextStyle(color: Colors.white)),
                             value: this._etGregicdTxt ,
-                            items: _C751Data.map((item) {
+                            items: _C754Data.map((item) {
                               return DropdownMenuItem<String>(
                                 child: Text(item, style: TextStyle(color: Colors.white)),
                                 value: item,
@@ -186,8 +186,8 @@ class _EAppPage04DetailState extends State<EAppPage04Detail> {
                               // this._etGregicdTxt = value;
                               // widget.C751Data.code = value;
                             });
-                            C751Data.clear();
-                            _C751Data.clear();
+                            C754Data.clear();
+                            _C754Data.clear();
                             pop_Com751();
                           },
                         ),

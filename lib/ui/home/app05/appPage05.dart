@@ -268,7 +268,12 @@ class _AppPage05State extends State<AppPage05> {
                           ),
                         ),
                       ),
-            Cmemo()
+                       Column(
+                         ///칼럼으로 재배치하였다.
+                         children: [
+                           Cmemo(),
+                         ],
+                       )
                    ],
               ),
 
@@ -343,8 +348,6 @@ class _AppPage05State extends State<AppPage05> {
      ///헤더 제작
   Widget _buildHEAD(SmanualList_model SData){
     final double WidthSize = (MediaQuery.of(context).size.width*1);
-    ///visible bool 초기화
-    List<bool> isVisibleList = List.generate(SCData.length, (index) => false);
 
     return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

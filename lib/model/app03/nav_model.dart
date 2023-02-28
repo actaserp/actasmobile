@@ -7,40 +7,55 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 
 import '../../config/constant.dart';
+import '../../ui/authentication/signin.dart';
 
 
 class NavListItem {
   final String title;
   final IconData icon;
   final WidgetBuilder page;
+  final Future<void> Function(BuildContext)? logout;
 
-  NavListItem({required this.title, required this.icon, required this.page});
+  NavListItem({required this.title, required this.icon, required this.page, this.logout});
+
 }
 
 final List<NavListItem> items = [
   NavListItem(
-    title: '왜 안바뀜?',
+    title: 'Home',
     icon: Icons.ac_unit,
     page: (context) => TabHomePage(),
   ),
   NavListItem(
-    title: '두 번째 아이템',
+    title: '고장처리',
     icon: Icons.access_alarm,
     page: (context) => TabHomePage(),
   ),
   NavListItem(
-    title: '세 번째 아이템',
+    title: '현장정보',
     icon: Icons.accessibility_new,
     page: (context) => TabHomePage(),
   ),
   NavListItem(
-    title: '네 번째 아이템',
+    title: 'My page',
     icon: Icons.accessibility_new,
     page: (context) => TabHomePage(),
   ),
   NavListItem(
-    title: '다섯 번째 아이템',
+    title: 'test',
     icon: Icons.logout,
     page: (context) => TabHomePage(),
+    logout: (context) async {
+      await SessionManager().destroy();
+      Navigator.pushNamedAndRemoveUntil(context, '/SigninPage', (route) => false);
+    },
+    /// try1
+    // logout: (context) async {
+    //   // 로그아웃 처리 로직 작성
+    //   // 예를 들어, 세션 삭제
+    //   await SessionManager().destroy();
+    //   Navigator.pushNamedAndRemoveUntil(
+    //       context, '/login', (route) => false);
+    // },
   ),
 ];
