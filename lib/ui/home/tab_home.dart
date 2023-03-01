@@ -17,6 +17,7 @@ import 'app08/appPage08.dart';
 import 'app09/appPage09.dart';
 import 'app10/appPage10.dart';
 
+import 'app11/appPage11.dart';
 import 'app5Home/appPager10.dart';
 import 'app5Home/appPager11.dart';
 import 'app5Home/appPager12.dart';
@@ -302,7 +303,7 @@ class _Home1PageState extends State<TabHomePage> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Tab5HomePage()));
                     break;
                   case '작 업 일 보' :
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11()));
                     break;
                   case '공 지 사 항' :
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager14()));
