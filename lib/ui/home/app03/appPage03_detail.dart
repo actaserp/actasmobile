@@ -62,7 +62,9 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   }
 
   Future<void> sessionData() async {
-    _usernm = await  SessionManager().get("username");
+    String username = await  SessionManager().get("username");
+    // 문자열 디코딩
+    _usernm = utf8.decode(username.runes.toList());
   }
   @override
   Future pop_Com75to00()async {
@@ -94,7 +96,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
           );
           setState(() {
             C754Data.add(emObject);
-            _C754Data.add(alllist[i]['code'] + '/' + alllist[i]['cnam']);
+            _C754Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']');
           });
         }
       }
@@ -133,13 +135,13 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        ///저장시 필수 값
+        ///저장시 필수 값 //작성된 groupcd랑 이름
         ///custcd, spjangcd, hseq 컨트롤러
         'hinputdate': _etCompdate.toString(),
         'hpernm': _usernm.toString(),
        'hmemo': _memo.toString(),
         'hsubject': _subject.toString(),
-        'hgroupcd': this._codeTxt.toString().substring(0,2), //작성된 groupcd랑 이름
+        'hgroupcd': this._codeTxt.toString().substring(0,2), 
       },
     );
     if(response.statusCode == 200){
@@ -205,9 +207,9 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           onChanged: (String? value) {
                             setState(() {
                               this._codeTxt = value;
-                              debugPrint('코드 텍스트 받는지 확인:::${this._codeTxt}');
+                              debugPrint('코드 텍스트 받는지 확인:::${this._codeTxt} ');
                               debugPrint('문자열 자르기로 코드만 받기:::${value?.substring(0,2)}');
-
+                              debugPrint('_usernm 확인:::${_usernm.toString()}');
                             });
                             // C754Data.clear();
                             // _C754Data.clear();
@@ -278,7 +280,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                           ),
                         ],
                       ),
-
                           SizedBox(
                             height: 20,
                           ),

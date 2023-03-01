@@ -168,7 +168,7 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
                 backgroundColor: Colors.white,
                 radius: (profilePictureSize),
                 child: Hero(
-                  tag: 'profilePicture',
+                  tag: 'profilePicture3',
                   child: ClipOval(
                       child: buildCacheNetworkImage(width: profilePictureSize, height: profilePictureSize, url: GLOBAL_URL+'/user/avatar.png')
                   ),

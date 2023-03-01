@@ -133,7 +133,7 @@ class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAlive
                   backgroundColor: Colors.white,
                   radius: profilePictureSize-4,
                   child: Hero(
-                    tag: 'profilePicture',
+                    tag: 'profilePicture2',
                     child: ClipOval(
                         child: buildCacheNetworkImage(width: profilePictureSize-4, height: profilePictureSize-4, url: GLOBAL_URL+'/user/avatar.png')
                     ),

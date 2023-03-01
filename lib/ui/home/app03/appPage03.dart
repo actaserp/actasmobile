@@ -208,11 +208,6 @@ class _AppPage03State extends State<AppPage03> {
                     final MhmanualList_model item = MhData[index];
                     return
                       DataRow(
-                        ///longpress
-                      //   onLongPress: (){
-                      //     Navigator.push(context, MaterialPageRoute(
-                      //         builder: (context) => AppPage03view(MhData: item)));
-                      // },
                           onSelectChanged: (value){
                           Navigator.push(context, MaterialPageRoute(
                           builder: (context) => AppPage03view(MhData: item)));
@@ -233,7 +228,8 @@ class _AppPage03State extends State<AppPage03> {
                       DataCell(
                           ConstrainedBox(
                           constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
-                          child: Text(item.hgroupcd
+                          child: Text(item.hgroupcd,
+                              overflow: TextOverflow.ellipsis
                           ))),
                       DataCell(Container(
                         width: 180,

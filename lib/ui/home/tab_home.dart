@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/model/feature/banner_slider_model.dart';
@@ -43,6 +45,7 @@ class _Home1PageState extends State<TabHomePage> {
 
   @override
   void initState()  {
+    setData();
     //GLOBAL_URL+'/home_banner/1.jpg'));  LOCAL_IMAGES_URL+'/elvimg/1.jpg'
     _bannerData.add(BannerSliderModel(id: 1, image: HYUNDAI_URL + '/product_gallery/THE EL_main_Web(0).jpg'));
     _bannerData.add(BannerSliderModel(id: 2, image: HYUNDAI_URL + '/product_gallery/THE EL_4(1).jpg'));
@@ -73,12 +76,14 @@ class _Home1PageState extends State<TabHomePage> {
 
 
     super.initState();
-    setData();
+
   }
 
 
   Future<void> setData() async {
-      _usernm = await  SessionManager().get("username");
+    String username = await  SessionManager().get("username");
+    // 문자열 디코딩
+    _usernm = utf8.decode(username.runes.toList());
   }
 
   @override
@@ -95,19 +100,19 @@ class _Home1PageState extends State<TabHomePage> {
             systemOverlayStyle: SystemUiOverlayStyle.light,
             title: Image.asset(LOCAL_IMAGES_URL+'/logo.png', height: 24, color: Colors.white),
             backgroundColor: _color1,
-            leading: IconButton(
-                icon: Icon(Icons.help_outline),
-                onPressed: () {
-                  Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
-                }),
+            // leading: IconButton(
+            //     icon: Icon(Icons.help_outline),
+            //     onPressed: () {
+            //       Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
+            //     }),
             actions: <Widget>[
+              // IconButton(
+              //     icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
+              //     onPressed: () {
+              //       Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
+              //     }),
               IconButton(
-                  icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
-                  onPressed: () {
-                    Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
-                  }),
-              IconButton(
-                  icon: Icon(Icons.settings),
+                  icon: Icon(Icons.help_outline),
                   onPressed: () {
                     Fluttertoast.showToast(msg: 'Click setting', toastLength: Toast.LENGTH_SHORT);
                   })

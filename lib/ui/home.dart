@@ -1,6 +1,8 @@
 // import 'package:actasm/ui/account/tab_account.dart';
 // import 'package:actasm/ui/shopping_cart/tab_shopping_cart.dart';
 // import 'package:actasm/ui/wishlist/tab_wishlist.dart';
+import 'package:actasm/ui/home/app5Home/appPager11.dart';
+import 'package:actasm/ui/home/appPage02.dart';
 import 'package:flutter/material.dart';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/ui/home/tab_home.dart';
@@ -13,12 +15,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late PageController _pageController;
   int _currentIndex = 0;
-
+  int _selectedIndex = 0;
   // Pages if you click bottom navigation
   final List<Widget> _contentPages = <Widget>[
     TabHomePage(),
-    // TabWishlistPage(),
-    // TabShoppingCartPage(),
+    AppPage02(),
+    AppPager11(),
     TabAccountPage(),
   ];
 
@@ -26,7 +28,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     // set initial pages for navigation to home page
     _pageController = PageController(initialPage: 0);
-    _pageController.addListener(_handleTabSelection);
+    _pageController.addListener(_handleTabSelection );
     super.initState();
   }
 
@@ -57,6 +59,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         onTap: (value) {
           _currentIndex = value;
           _pageController.jumpToPage(value);
+          debugPrint('${_contentPages}');
+          debugPrint('${_contentPages[_selectedIndex]}');
           // this unfocus is to prevent show keyboard in the wishlist page when focus on search text field
           FocusScope.of(context).unfocus();
         },
@@ -85,7 +89,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           BottomNavigationBarItem(
               label: '현장정보',
               icon: Icon(
-                  Icons.shopping_cart,
+                  Icons.perm_contact_cal,
                   color: _currentIndex == 2 ? PRIMARY_COLOR : CHARCOAL
               )
           ),
