@@ -116,15 +116,19 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     print("----------------------------");
     ///null처리
     if(_etCompdate.text == null || _etCompdate.text == "") {
-      showAlertDialog(context, "작성일자를 등록하세요");
+      showAlertDialog(context, "작성일자를 입력하세요");
       return false;
     }
     if(_subject == null || _subject == "" ) {
-      showAlertDialog(context, "작성일자를 등록하세요");
+      showAlertDialog(context, "제목을 입력하세요");
       return false;
     }
     if(_memo == null || _memo == "" ) {
-      showAlertDialog(context, "작성일자를 등록하세요");
+      showAlertDialog(context, "내용을 입력하세요");
+      return false;
+    }
+    if(_codeTxt == null || _codeTxt == "" ) {
+      showAlertDialog(context, "분류를 선택하세요");
       return false;
     }
     final response = await http.post(
@@ -211,14 +215,23 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                               debugPrint('문자열 자르기로 코드만 받기:::${value?.substring(0,2)}');
                               debugPrint('_usernm 확인:::${_usernm.toString()}');
                             });
-                            // C754Data.clear();
-                            // _C754Data.clear();
-                            // pop_Com75to00();
                           },
                         ),
                       ),
                     ),
-                  ),
+                  ), SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Text( _usernm,
+                                style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
+                              ),
+                              Text( '님이 작성 중입니다.',
+                                style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                              ),
+                            ],
+                          ),
                         SizedBox(
                           height: 20,
                         ),
@@ -266,19 +279,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                             labelText: '제목 *',
                             labelStyle:
                             TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Text( _usernm,
-                          style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
-                             ),
-                          Text( '님이 작성 중입니다.',
-                            style: TextStyle(color: BLACK_GREY ,fontSize: 18),
-                          ),
-                        ],
                       ),
                           SizedBox(
                             height: 20,

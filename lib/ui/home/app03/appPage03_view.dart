@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +36,8 @@ class AppPage03view extends StatefulWidget {
 }
 
 class _AppPage03ViewState extends State<AppPage03view> {
-
+  ///처리등록되었습니다 startloading
+  final _reusableWidget = ReusableWidget();
   late String _dbnm, _attatchidx;
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
@@ -268,37 +270,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
                           SizedBox( //여기수정
                             width: MediaQuery.of(context).size.width/2.45,
                           ),
-                          Container(
-                            height:35,
-                            width: 70,
-                            child: TextButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                        (Set<MaterialState> states) => PRIMARY_COLOR,
-                                  ),
-                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3.0),
-                                      )
-                                  ),
-                                ),
-                                onPressed: () {
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width/2,
-                                  padding: const EdgeInsets.symmetric(vertical: 1),
-                                  child: Text(
-                                    '불러오기',
-                                    style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -313,8 +284,42 @@ class _AppPage03ViewState extends State<AppPage03view> {
               ],
             ),
           ),
+          ///등록 시작
+          SizedBox(
+            height: 40,
+          ),
+          Container(
+            child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) => SOFT_BLUE,
+                  ),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3.0),
+                      )
+                  ),
+                ),
+                onPressed: () {
+                  _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    '수정하기',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+            ),
+          ),
               ],
             ),
+
           );
 
   }

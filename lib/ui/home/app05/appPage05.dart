@@ -30,6 +30,8 @@ class AppPage05 extends StatefulWidget {
 }
 
 class _AppPage05State extends State<AppPage05> {
+  ///댓글 dialog
+  TextEditingController myController = TextEditingController();
 
   TextEditingController _etSearch = TextEditingController();
   TextEditingController _etChat = TextEditingController();
@@ -441,9 +443,8 @@ class _AppPage05State extends State<AppPage05> {
                   ///댓글입력 토글
                   GestureDetector(
                     onTap: (){
-                    setState(() {
-                    _isCommentVisible = !_isCommentVisible;
-                    });
+                      _Comment();
+
                     },
                     child: ClipOval(
                     child: Container(
@@ -453,9 +454,6 @@ class _AppPage05State extends State<AppPage05> {
                     ),
                     ),
                     ),
-                Visibility(
-                    visible: _isCommentVisible,
-                    child: commentinput())
                 ],
       );
 
@@ -575,4 +573,35 @@ class _AppPage05State extends State<AppPage05> {
     );
   }
 
+  ///댓글 팝업
+  Future _Comment() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('수리 Q&A 댓글 입력창'),
+          content: TextField(
+            controller: myController,
+            decoration: InputDecoration(hintText: '댓글을 입력해주세요.'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                String inputText = myController.text;
+                // Do something with the text entered by the user
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
