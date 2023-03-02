@@ -475,8 +475,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         'equpcd' : widget.e401Data.equpcd.toString(), //
         'equpnm' : widget.e401Data.equpnm.toString(), //
         'recetime': widget.e401Data.recetime.toString(), //
-        'cltcd' : widget.e401Data.cltcd.toString(),
-        'divicd': widget.e401Data.divicd.toString(),
+        /*'cltcd' : widget.e401Data.cltcd.toString(),
+        'divicd': widget.e401Data.divicd.toString(),*/
         'actperid': _etPeridTxt.toString(),
         'remocd' : _etRemocdTxt.toString(),
         'remoremark': _etremoremark.text,
@@ -517,9 +517,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: _reusableWidget.bottomAppBar(),
-          actions: [
-            TextButton(onPressed: (){ print(_etComptime.text);}, child: Text('검색'))
-          ],
+
         ),
         body: ListView(
           padding: EdgeInsets.all(16),

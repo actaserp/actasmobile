@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app5Home/appPager11.dart';
 import '../appPage02.dart';
 import '../tab_home.dart';
 
@@ -64,7 +65,7 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));},
                   child:  Row(
                       children:[
                         Icon(Icons.safety_check),
