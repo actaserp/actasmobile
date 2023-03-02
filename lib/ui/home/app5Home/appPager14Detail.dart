@@ -38,7 +38,7 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
 
   TextEditingController _etfnsubject     = TextEditingController();
   TextEditingController _etfmemo         = TextEditingController();
-  List<String> dropdownList = ['사내공지', '고객공지'];
+  List<String> dropdownList = ['사내공지', /*'고객공지'*/];
   String _selectedValue = "";
   String ? _selectedValue2;
   String _shared = "N";
@@ -322,9 +322,9 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
                                 _selectedValue = "01";
                               }
 
-                              if(value.toString() == "고객공지"){
+                             /* if(value.toString() == "고객공지"){
                                 _selectedValue = "02";
-                              }
+                              }*/
 
                               this._selectedValue2 = value;
 
@@ -413,8 +413,8 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
           SizedBox(
             height: 12,
           ),
-          ElevatedButton(onPressed: (){
-            /*Navigator.pop(context);*/
+          /*ElevatedButton(onPressed: (){
+            *//*Navigator.pop(context);*//*
             showDialog(context: context, builder: (context){
               return AlertDialog(
                 content: Text('정말 수정하시겠습니까?'),
@@ -423,10 +423,10 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
                     child: Text('OK'),
                     onPressed: () {
                       update_data();
-                      /* Navigator.pushReplacement(
+                      *//* Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => AppPager13()),
-                      );*/
+                      );*//*
                       Get.off(AppPager14());
                     },
                   ),
@@ -436,7 +436,7 @@ class _AppPager14DetailState extends State<AppPager14Detail> {
                 ],
               );
             });
-          }, child: Text('수정하기'))
+          }, child: Text('수정하기'))*/
         ],
       ),
 

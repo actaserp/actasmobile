@@ -20,6 +20,9 @@ class AppPager12 extends StatefulWidget {
 }
 
 class _AppPager12State extends State<AppPager12>{
+
+
+
   TextEditingController _etSearch = TextEditingController();
   TextEditingController _etSearch2 = TextEditingController();
   List<tbe401list_model> tbe401Datas = tbe401Data;
@@ -280,7 +283,7 @@ class _AppPager12State extends State<AppPager12>{
                   GestureDetector(
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
-                      Navigator.pop(context);
+
                     },
                     child: Text('처리일자  ' +tbe401Data.compdate, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold

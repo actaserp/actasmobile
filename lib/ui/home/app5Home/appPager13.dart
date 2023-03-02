@@ -146,7 +146,8 @@ class _AppPager13State extends State<AppPager13> {
             fpernm: alllist[i]['fpernm'],
             fmemo: alllist[i]['fmemo'],
             cnam: alllist[i]['cnam'],
-            fflag: alllist[i]['fflag']
+            fflag: alllist[i]['fflag'],
+            attcnt: alllist[i]['attcnt'],
         );
         setState(() {
           mfixData.add(Object);
@@ -193,6 +194,7 @@ class _AppPager13State extends State<AppPager13> {
                   setState(() {
 
                     mfixlist_getdata();
+
                   });
                   /*searchBook(_etSearch.text);*/
                   /*searchBook2(_etSearch2.text);*/
@@ -241,7 +243,111 @@ class _AppPager13State extends State<AppPager13> {
           /*Text('점검조치사항 자료실', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
           )),*/
+          Container(
+            padding:EdgeInsets.only(top:16, bottom: 2, left: 10),
+            child: Text('점검조치사항 ${mfixData.length} 건',
+                style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+                )),
+          ),
           SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              margin: EdgeInsets.only(top: 15),
+              height: 500,
+              width: 900,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  DataTable(
+                      showCheckboxColumn: false,
+                      columnSpacing: 25, dataRowHeight: 40,
+                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      headingRowColor:
+                      MaterialStateColor.resolveWith((states) => SOFT_BLUE),
+
+                      columns: <DataColumn>[
+                        DataColumn(label: Text('No.')),
+                        DataColumn(label: Text('분류')),
+                        DataColumn(label: Text('제목')),
+                        DataColumn(label: Text('내용')),
+                        DataColumn(label: Text('작성자')),
+                        DataColumn(label: Text('첨부파일건수')),
+                        DataColumn(label: Text('작성일자')),
+                      ],
+                      rows: List<DataRow>.generate(mfixData.length, (index)
+                      {
+                        final mfixlist_model item = mfixData[index];
+                        return
+                            DataRow(
+                              onSelectChanged: (value){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => AppPager13Detail(mfixData: item)));
+                              },
+                              color: MaterialStateColor.resolveWith((states){
+                                if (index % 2 == 0){
+                                  return Color(0xB8E5E5E5);
+                                }else{
+                                  return Color(0x86FFFFFF);
+                                }
+                              }),
+                              cells: [
+                                DataCell(
+                                    ConstrainedBox(
+                                        constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                        child: Text('${index+1}',
+                                        ))),
+                                DataCell(
+                                    ConstrainedBox(
+                                        constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                        child: Text(item.cnam
+                                        ))),
+                                DataCell(Container(
+                                  width: 180,
+                                  child: Text(item.fnsubject,
+                                      overflow: TextOverflow.ellipsis),
+                                )),
+                                DataCell(Container(
+                                  width:180,
+                                  child: Text(item.fmemo,
+                                      overflow: TextOverflow.ellipsis),
+                                )),
+                                DataCell(Text(item.fpernm,
+                                    overflow: TextOverflow.ellipsis)),
+                                DataCell(Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(item.attcnt.toString()),
+                                  ],
+                                )),
+                                DataCell(
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                          child: Text('${item.finputdate}',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: SOFT_BLUE,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold
+                                              )
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                ),
+                              ]
+
+                            );
+                      }
+                  )
+                  ),],
+              ),
+            ),
+          ),
+          /*SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container( //높이랑 너비가 없었음
               margin: EdgeInsets.only(top: 15),
@@ -283,29 +389,15 @@ class _AppPager13State extends State<AppPager13> {
                 },
               ),
             ),  //listview.builder endpoint
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: Color(0xffcccccc),
-                  width: 1.0,
-                ),
-              ),
-            ),
-          ),
-          Container( //노하우등록임
+          ),*/
+          Container( ///노하우등록
             margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.all(12),
             child: OutlinedButton(
                 onPressed: () {
-
-                  /*  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AppPager13register()));*/
-
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager13register()));
-
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => AppPager13register()));
                 },
                 style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(Colors.transparent),

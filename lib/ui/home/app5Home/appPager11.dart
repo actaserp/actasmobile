@@ -181,7 +181,7 @@ class _AppPager11State extends State<AppPager11> {
                 setState(() {
 
                   e601list_getdata();
-                  getelvinfo();
+
 
 
                 });
@@ -300,12 +300,12 @@ class _AppPager11State extends State<AppPager11> {
                     Container(
                       margin: EdgeInsets.only(left: 20),
                       child: ElevatedButton(
-                        onPressed: ()  {
+                        onPressed: () async {
 
-                          getelvinfo();
+                         /* getelvinfo();
 
 
-                          Future.delayed(Duration(milliseconds: 700), (){
+                          Future.delayed(Duration(milliseconds: 1200), (){
                             if(elvlrt.length == 0){
                               showDialog(context: context, builder: (context){
                                 return AlertDialog(
@@ -314,7 +314,16 @@ class _AppPager11State extends State<AppPager11> {
                               });
                             }
                             showAlertDialog(context, elvlrt[0], elvlrt[1], elvlrt[2], elvlrt[3], elvlrt[4], elvlrt[5], elvlrt[6]);
-                          });
+                          });*/
+                          await getelvinfo();
+                          if(elvlrt.length == 0){
+                            showDialog(context: context, builder: (context){
+                              return AlertDialog(
+                                content: Text('유효하지 않습니다.'),
+                              );
+                            });
+                          }
+                          showAlertDialog(context, elvlrt[0], elvlrt[1], elvlrt[2], elvlrt[3], elvlrt[4], elvlrt[5], elvlrt[6]);
 
 
                         },

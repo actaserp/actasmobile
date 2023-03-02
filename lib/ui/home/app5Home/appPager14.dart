@@ -198,7 +198,8 @@ class _AppPager14State extends State<AppPager14>{
             npernm: alllist[i]['npernm'],
             nmemo: alllist[i]['nmemo'],
             cnam: alllist[i]['cnam'],
-            nflag: alllist[i]['nflag']
+            nflag: alllist[i]['nflag'],
+            attcnt: alllist[i]['attcnt'],
         );
         setState(() {
           mnoticeData.add(Object);
@@ -282,8 +283,108 @@ class _AppPager14State extends State<AppPager14>{
               ),
             ),
           ),
-
+          Container(
+            padding:EdgeInsets.only(top:16, bottom: 2, left: 10),
+            child: Text('공지사항 ${mnoticeData.length} 건',
+                style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+                )),
+          ),
           SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              margin: EdgeInsets.only(top: 15),
+              // padding: EdgeInsets.all(16),
+              height: MediaQuery.of(context).size.height * 0.702,
+              width: 900,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: [
+                  DataTable(
+                      showCheckboxColumn: false,
+                      columnSpacing: 25, dataRowHeight: 40,
+                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      headingRowColor:
+                      MaterialStateColor.resolveWith((states) => SOFT_BLUE),
+                      columns: <DataColumn>[
+                        DataColumn(label: Text('No.')),
+                        DataColumn(label: Text('분류')),
+                        DataColumn(label: Text('제목')),
+                        DataColumn(label: Text('내용')),
+                        DataColumn(label: Text('작성자')),
+                        DataColumn(label: Text('첨부파일건수')),
+                        DataColumn(label: Text('작성일자')),
+                      ],
+                      rows: List<DataRow>.generate(mnoticeData.length, (index){
+                        final mnoticeList_model item = mnoticeData[index];
+                        return
+                            DataRow(
+                                onSelectChanged: (value){
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => AppPager14Detail(mnoticeData: item)));
+                                },
+                                color: MaterialStateColor.resolveWith((states){
+                                  if (index % 2 == 0){
+                                    return Color(0xB8E5E5E5);
+                                  }else{
+                                    return Color(0x86FFFFFF);
+                                  }
+                                }),
+
+                                cells: [
+                                  DataCell(
+                                      ConstrainedBox(
+                                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                          child: Text('${index+1}',
+                                          ))),
+                                  DataCell(
+                                      ConstrainedBox(
+                                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                          child: Text(item.cnam
+                                          ))),
+                                  DataCell(Container(
+                                    width: 180,
+                                    child: Text(item.nsubject,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
+                                  DataCell(Container(
+                                    width:180,
+                                    child: Text(item.nmemo,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
+                                  DataCell(Text(item.npernm,
+                                      overflow: TextOverflow.ellipsis)),
+                                  DataCell(Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(item.attcnt.toString()),
+                                    ],
+                                  )),
+                                  DataCell(
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          ConstrainedBox(
+                                            constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                            child: Text('${item.ninputdate}',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: SOFT_BLUE,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold
+                                                )
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ]);
+                      }))
+                ],
+              ),
+            ),
+          )
+          /*SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Container(
               margin: EdgeInsets.only(top: 15),
@@ -317,19 +418,7 @@ class _AppPager14State extends State<AppPager14>{
                     );
                   }),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 5),
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: Color(0xffcccccc),
-                  width: 1.0,
-                ),
-              ),
-            ),
-          ),
+          ),*/
           /*Container( //노하우등록임
             margin: EdgeInsets.only(top: 10),
             child: OutlinedButton(

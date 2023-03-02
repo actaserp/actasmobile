@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:actasm/model/app02/plan_model.dart';
+import 'package:actasm/ui/home/app5Home/appPager15.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
@@ -13,6 +16,7 @@ import '../../../model/app02/eactpernm_model.dart';
 import '../../../model/app02/plan_model.dart';
 import '../../../model/app02/tbe601list_model.dart';
 import '../../reusable/reusable_widget.dart';
+import 'appPager13.dart';
 import 'appPager15Actnm.dart';
 import 'appPager15cltnm.dart';
 
@@ -60,6 +64,7 @@ class _AppPager15registerState extends State<AppPager15register> {
   TextEditingController _etqty = TextEditingController();
   TextEditingController _etText = TextEditingController();
   TextEditingController _etSearch3 = TextEditingController();
+  TextEditingController _etkcspnm = TextEditingController();
 
 
   List<tbe601list_model> e601Datas = e601Data;
@@ -233,10 +238,6 @@ class _AppPager15registerState extends State<AppPager15register> {
       showAlertDialog(context, "관리대수를 입력해주세요. (숫자로만 입력)");
       return false;
     }
-    if(cltcd2 == null  || cltcd2 == ""){
-      showAlertDialog(context, "사업장 조회를 하십시오.");
-      return false;
-    }
 
     final response = await http.post(
       uri,
@@ -255,13 +256,13 @@ class _AppPager15registerState extends State<AppPager15register> {
         'kcpernm' : _etPeridTxt.toString(),
         'remark'  : _etText.text.toString(),
         'qty'     : _etqty.text.toString(),
-        'cltcd'   : cltcd2.toString()
+        'cltcd'   : cltcd,
+        'kcspnm'  : _etkcspnm.text.toString(),
 
       },
     );
     if(response.statusCode == 200){
       print("저장됨");
-      showAlertDialog(context, '저장되었습니다.');
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -376,6 +377,9 @@ class _AppPager15registerState extends State<AppPager15register> {
                             equpcd = value[1];
                             actnm = value[2];
                             equpnm = value[3];
+                            cltcd = value[4];
+
+                            _etSearch2.text = value[2];
 
                             actcd2 = value[0];
                             equpcd2 = value[1];
@@ -422,11 +426,12 @@ class _AppPager15registerState extends State<AppPager15register> {
               children: [
                 Text('현장코드: ' + actcd2),
                 Container( margin: EdgeInsets.only(left: 20),
-                    child: Text('호기코드: ' + equpcd2)),
+                    child: Text('호기명: ' + equpnm)),
+
               ],
             ),
           ),
-          SizedBox(
+          /*SizedBox(
             height: 30,
           ),
           Container(
@@ -450,7 +455,7 @@ class _AppPager15registerState extends State<AppPager15register> {
                     maxLines: 1,
                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
 
-                    /*onChanged: searchBook,*/
+                    *//*onChanged: searchBook,*//*
                     decoration: InputDecoration(
                       fillColor: Colors.grey[300],
                       filled: true,
@@ -502,8 +507,8 @@ class _AppPager15registerState extends State<AppPager15register> {
                 )
               ],
             ),
-          ),
-          Container(
+          ),*/
+          /*Container(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -514,7 +519,7 @@ class _AppPager15registerState extends State<AppPager15register> {
                 ],
               ),
             ),
-          ),
+          ),*/
           SizedBox(
             height: 30,
           ),
@@ -592,6 +597,25 @@ class _AppPager15registerState extends State<AppPager15register> {
               /* _etremoremark.text = text;   */                                   /**************************************************************************************/
             },
           ),
+
+          TextField(
+            controller: _etkcspnm,
+            readOnly: false,
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide:
+                    BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                ),
+                labelText: '검사기관',
+                labelStyle:
+                TextStyle(color: BLACK_GREY)),
+            onChanged: (text){
+              /* _etremoremark.text = text;   */                                   /**************************************************************************************/
+            },
+          ),
           SizedBox(
             height: 30,
           ),
@@ -611,12 +635,30 @@ class _AppPager15registerState extends State<AppPager15register> {
                 onPressed: () {
 
                   save_plandata();
+                  Get.off(AppPager15());
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: Text('저장되었습니다.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
 
+                            Navigator.pop(context);
+                           /* Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => AppPager13()),
+                            );
+                            Get.off(AppPager14());*/
+                          },
+                        ),
 
-                  /*bool lb_save = save_e411data() as bool;
-                  if (lb_save){
-                    _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-                  }*/
+                      ],
+                    );
+                  });
+                  
+                  /*Get.off(AppPager15());*/
+
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -640,7 +682,7 @@ class _AppPager15registerState extends State<AppPager15register> {
 
   Future<Null> _selectDateWithMinMaxDate(BuildContext context) async {
     var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
-    var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 7);
+    var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 60);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate,

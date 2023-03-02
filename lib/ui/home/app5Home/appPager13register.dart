@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -21,15 +23,16 @@ class _AppPager13registerState extends State<AppPager13register> {
 
   final List<String> _C750Data = [];
   final _reusableWidget = ReusableWidget();
-  List<String> _goodParts = [];
+
   int _maxgoodParts = 2;
   final List<String> _eGregiData = [];
   List<String> dropdownList = ['합격', '불합격', '조건부'];
   String? _selectedValue = "";
   String _shared = "N";
-
+  var _usernm = "";
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   String _dbnm = '';
   String? _etGregicdTxt;
@@ -41,6 +44,8 @@ class _AppPager13registerState extends State<AppPager13register> {
   TextEditingController _etCompdate = TextEditingController();
 
 
+  TextEditingController _etfintputdate = TextEditingController();
+
 
 
   @override
@@ -49,15 +54,12 @@ class _AppPager13registerState extends State<AppPager13register> {
     setData();
     super.initState();
 
-
-
-
   }
 
   Future<void> setData() async {
-
-    usernm = await  SessionManager().get("username");
-
+    String username = await  SessionManager().get("username");
+    // 문자열 디코딩
+    _usernm = utf8.decode(username.runes.toList());
   }
 
 
@@ -216,24 +218,17 @@ class _AppPager13registerState extends State<AppPager13register> {
           SizedBox(
             height: 20,
           ),
-          _buildOptioncheckParts(),
-          SizedBox(
-            height: 20,
-          ),
           TextField(
-            controller: _etCompdate,
-            readOnly: false,
+            controller: _etfintputdate,
+            readOnly: true,
             onTap: () {
-              // _selectDateWithMinMaxDate2(context);
+              _selectDateWithMinMaxDate(context);
             },
             maxLines: 1,
             cursorColor: Colors.grey[600],
             style: TextStyle(fontSize: 16, color: Colors.grey[700]),
             decoration: InputDecoration(
-                fillColor: Colors.grey[200],
-                filled: true,
                 isDense: true,
-                hintText: '작성일자를 입력하세요',
                 suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
@@ -241,9 +236,9 @@ class _AppPager13registerState extends State<AppPager13register> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '작성일자 *',
+                labelText: '작성일자 ',
                 labelStyle:
-                TextStyle(fontSize: 16,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+                TextStyle(color: BLACK_GREY)),
           ),
           SizedBox(
             height: 20,
@@ -291,11 +286,12 @@ class _AppPager13registerState extends State<AppPager13register> {
   }
           ),*/
            Text(
-            '작성자 :  ' + usernm,
+            '작성자 :  ' + _usernm,
             style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 16),
+                fontSize: 16,
+                fontFamily: "Noto Sans KR"),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -424,6 +420,36 @@ class _AppPager13registerState extends State<AppPager13register> {
   }
 
 
+  Future<Null> _selectDateWithMinMaxDate(BuildContext context) async {
+    var firstDate = DateTime(initialDate.year, initialDate.month - 3, initialDate.day);
+    var lastDate = DateTime(initialDate.year, initialDate.month, initialDate.day + 60);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.pinkAccent,
+            colorScheme: ColorScheme.light(primary: Colors.pinkAccent, secondary: Colors.pinkAccent),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+
+        _etfintputdate = TextEditingController(
+            text: _selectedDate.toLocal().toString().split(' ')[0]);
+      });
+    }
+  }
+
+
   //  첨부파일리스트 ~ network로 가져와야함
   Column _buildItem(index, boxImageSize){
     int quantity = shoppingCartData[index].qty;
@@ -505,94 +531,6 @@ class _AppPager13registerState extends State<AppPager13register> {
           color: Colors.grey[400],
         )
       ],
-    );
-  }
-
-  Widget _buildOptioncheckParts(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                ],
-              ),
-              _checboxgood(value: 'breast' , primaryText: '회원사 공유 여부'),
-              // Divider(
-              //   height: 32,
-              //   color: Colors.grey[400],
-              // ),
-              // _checboxgood(value: 'wings', primaryText: 'Chicken Wings', secondaryText: '0'),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  //체크박스
-  Widget _checboxgood({value = 'breast' , primaryText: '회원사 공유 여부'}){
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: (){
-        setState(() { //tap 시에 value 다시 잡아주고
-          if(_goodParts.contains(value)){
-            _goodParts.remove(value);
-            _shared = "N";
-          } else {
-            if(_goodParts.length<_maxgoodParts){
-              _goodParts.add(value);
-              _shared = "Y";
-            }
-          }
-        });
-      print(_shared);
-        },
-      child: Row(
-        children: [
-          Text(primaryText, style: TextStyle(
-              fontSize: 15,
-              color: SOFT_BLUE,
-              fontWeight: (_goodParts.contains(value))?FontWeight.bold:FontWeight.normal
-          )),
-          Spacer(),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                  width: 1,
-                  color: (_goodParts.contains(value)) ? PRIMARY_COLOR : BLACK77
-              ),
-              borderRadius: BorderRadius.all(
-                  Radius.circular(4.0)
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(2),
-              child: (_goodParts.contains(value))
-                  ? Icon(
-                Icons.check,
-                size: 12.0,
-                color: PRIMARY_COLOR,
-              ):Icon(
-                Icons.check_box_outline_blank,
-                size: 12.0,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-
-
-          // Spacer(),
-          // Text(secondaryText, style: TextStyle( //수량나타내주는거
-          //   fontSize: 13,
-          //   color: BLACK77,
-          // ))
-        ],
-      ),
     );
   }
 

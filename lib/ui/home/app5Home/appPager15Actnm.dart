@@ -32,7 +32,7 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
    super.initState();
    _searchTerm = widget.data;
    getactnminfo();
-   print(_searchTerm);
+
   }
 
  Future getactnminfo() async {
@@ -70,15 +70,15 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
            /*actaddr  : alllist[i]["actaddr"],*/
            pernm:    alllist[i]["pernm"],
            actcd:    alllist[i]["actcd"],
-           equpcd:    alllist[i]["equpcd"]
+           equpcd:    alllist[i]["equpcd"],
+            cltcd:    alllist[i]["cltcd"],
 
        );
        setState(() {
          e601Data.add(emObject);
        });
 
-       print("check");
-       print(e601Datas.length);
+
      }
      return e601Data;
    }else{
@@ -138,9 +138,8 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
            children: [
              TextButton(child: Text(e601Data.actnm, style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
                  onPressed: () {
-                    print(e601Data.actcd);
-                    print("object");
-                   Navigator.pop(context, [e601Data.actcd, e601Data.equpcd, e601Data.actnm, e601Data.equpnm]);
+
+                   Navigator.pop(context, [e601Data.actcd, e601Data.equpcd, e601Data.actnm, e601Data.equpnm, e601Data.cltcd]);
                  },
                ),
              Text('현장코드: ' + e601Data.actcd, style: GlobalStyle.couponName),

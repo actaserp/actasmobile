@@ -12,11 +12,12 @@ class tbe601list_model{
   late var emtelnum;
   late var actcd;
   late var equpcd;
+  late var cltcd;
 
 
 
   tbe601list_model({
-      this.elno,  this.equpnm,  this.actnm,  this.actaddr, this.tel, this.hp,  this.pernm,  this.emtelnum, this.actcd, this.equpcd,
+      this.elno,  this.equpnm,  this.actnm,  this.actaddr, this.tel, this.hp,  this.pernm,  this.emtelnum, this.actcd, this.equpcd, this.cltcd
 });
 
 

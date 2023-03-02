@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/app02/plan_model.dart';
+import 'appPager15Detail.dart';
 import 'appPager15register.dart';
 
 class AppPager15 extends StatefulWidget {
@@ -22,6 +23,8 @@ class _AppPager15State extends State<AppPager15> {
 
   late final String good;
   late String _dbnm;
+
+
 
   @override
   void initState(){
@@ -52,7 +55,7 @@ class _AppPager15State extends State<AppPager15> {
       },
       body: <String, String>{
         'dbnm': _dbnm,
-        'actcd': '%',
+        'actnm': _etSearch.text,
       },
     );
     if (response.statusCode == 200) {
@@ -67,6 +70,7 @@ class _AppPager15State extends State<AppPager15> {
           equpcd: alllist[i]['equpcd'],
           equpnm: alllist[i]['equpnm'],
           perid: alllist[i]['perid'],
+          cltcd: alllist[i]['cltcd'],
           pernm: alllist[i]['pernm'],
           remark: alllist[i]['remark'],
           kcpernm: alllist[i]['kcpernm'],
@@ -90,10 +94,10 @@ class _AppPager15State extends State<AppPager15> {
 
 
 
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
+
        appBar: AppBar(
          iconTheme: IconThemeData(
            color: GlobalStyle.appBarIconThemeColor,
@@ -103,6 +107,21 @@ class _AppPager15State extends State<AppPager15> {
            '점검계획',
            style: GlobalStyle.appBarTitle,
          ),
+         actions: <Widget>[
+           Row(
+             children: [
+               Padding(
+                 padding: const EdgeInsets.only(right: 10),
+                 child: TextButton(onPressed: (){
+                   setState(() {
+                     plan_getdata();
+                   });
+                 },
+                     child: Text('검색하기')),
+               )
+             ],
+           )
+         ],
          backgroundColor: GlobalStyle.appBarBackgroundColor,
          systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
          bottom: PreferredSize(
@@ -182,14 +201,15 @@ class _AppPager15State extends State<AppPager15> {
                       columns: <DataColumn>[
                         DataColumn(label: Text('No.')),
                         DataColumn(label: Text('검사일자')),
-                        DataColumn(label: Text('코드')),
                         DataColumn(label: Text('현장명')),
-                        DataColumn(label: Text('호기코드')),
                         DataColumn(label: Text('호기명')),
+                        DataColumn(label: Text('담당자')),
                         DataColumn(label: Text('검사자')),
+                        DataColumn(label: Text('검사기관')),
                         DataColumn(label: Text('대수')),
                         DataColumn(label: Text('기타호기')),
                         DataColumn(label: Text('입력날짜')),
+                        DataColumn(label: Container(), tooltip: '', onSort: null),
 
                       ],
                       rows: List<DataRow>.generate(planData.length, (index)
@@ -198,10 +218,10 @@ class _AppPager15State extends State<AppPager15> {
                         return
                             DataRow(
 
-                               /* onSelectChanged: (value){
+                                onSelectChanged: (value){
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => AppPage15view(MhData: item)));
-                                },*/
+                                      builder: (context) => AppPager15Detail(planData: item)));
+                                },
                                 color: MaterialStateColor.resolveWith((states){
                                   if (index % 2 == 0){
                                     return Color(0xB8E5E5E5);
@@ -221,29 +241,31 @@ class _AppPager15State extends State<AppPager15> {
                                           constraints: BoxConstraints(minWidth: 60, maxWidth: 65),
                                           child: Text(item.plandate
                                           ))),
-                                  DataCell(Container(
-                                    width: 80,
-                                    child: Text(item.actcd,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
+
                                   DataCell(Container(
                                     width: 120,
                                     child: Text(item.actnm,
                                         overflow: TextOverflow.ellipsis),
                                   )),
-                                  DataCell(Container(
-                                    width: 80,
-                                    child: Text(item.equpcd,
-                                        overflow: TextOverflow.ellipsis),
-                                  )),
+
                                   DataCell(Container(
                                     width: 50,
                                     child: Text(item.equpnm,
                                         overflow: TextOverflow.ellipsis),
                                   )),
                                   DataCell(Container(
-                                    width: 50,
+                                    width: 80,
                                     child: Text(item.pernm,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
+                                  DataCell(Container(
+                                    width: 80,
+                                    child: Text(item.kcpernm,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
+                                  DataCell(Container(
+                                    width: 80,
+                                    child: Text(item.kcspnm,
                                         overflow: TextOverflow.ellipsis),
                                   )),
                                   DataCell(Container(
@@ -252,7 +274,7 @@ class _AppPager15State extends State<AppPager15> {
                                         overflow: TextOverflow.ellipsis),
                                   )),
                                   DataCell(Container(
-                                    width: 120,
+                                    width: 100,
                                     child: Text(item.remark,
                                         overflow: TextOverflow.ellipsis),
                                   )),
@@ -261,7 +283,7 @@ class _AppPager15State extends State<AppPager15> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           ConstrainedBox(
-                                            constraints: BoxConstraints(minWidth: 50, maxWidth: 50),
+                                            constraints: BoxConstraints(minWidth: 60, maxWidth: 60),
                                             child: Text('${item.indate}',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
@@ -274,6 +296,11 @@ class _AppPager15State extends State<AppPager15> {
                                         ],
                                       )
                                   ),
+                                  DataCell(Container(
+                                    width: 0,
+                                    child: Text(item.cltcd,
+                                        overflow: TextOverflow.ellipsis),
+                                  )),
                                 ]);
                       }))
                 ],

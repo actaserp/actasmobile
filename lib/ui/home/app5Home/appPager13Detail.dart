@@ -171,6 +171,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
     /*print("$CLOUD_URL" + "/appx2/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MF");*/
     print("${_idxData}");
     print("${_seqData}");
+    print('object');
 
   }
 
@@ -222,6 +223,45 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
     //   return <MhmanualList_model>[];
     // }
   }
+
+
+  Future<bool> delete_data() async {
+    String _dbnm = await SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/apppgymobile/delete';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    // try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: <String, String>{
+        'dbnm'    : _dbnm,
+        'fseq'    :  widget.mfixData.fseq,
+
+      },
+    );
+    if (response.statusCode == 200) {
+      print('삭제됨');
+      return true;
+
+    } else {
+      // Fluttertoast.showToast(msg: e.toString());
+      throw Exception('불러오는데 실패했습니다');
+      return false;
+    }
+    // } catch (e) {
+    //   //만약 응답이 ok가 아니면 에러를 던집니다.
+    //   Fluttertoast.showToast(msg: '에러입니다.');
+    //   return <MhmanualList_model>[];
+    // }
+  }
+
+
+
 
 
   final List<String> _C750Data = [];
@@ -363,7 +403,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                     ],
                   ),
                 ),*/
-                Column(
+                /*Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
@@ -375,7 +415,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                       ),
                     )
                   ],
-                ),
+                ),*/
 
                 Container(
                     margin: EdgeInsets.only(top: 8),
@@ -428,30 +468,72 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
           SizedBox(
             height: 12,
           ),
-          ElevatedButton(onPressed: (){
-            /*Navigator.pop(context);*/
-            showDialog(context: context, builder: (context){
-              return AlertDialog(
-                content: Text('정말 수정하시겠습니까?'),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('OK'),
-                    onPressed: () {
-                      update_data();
-                     /* Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => AppPager13()),
-                      );*/
-                      Get.off(AppPager13());
-                    },
-                  ),
-                  TextButton(onPressed: (){
-                    Navigator.pop(context, "취소");
-                  }, child: Text('Cancel')),
-                ],
-              );
-            });
-          }, child: Text('수정하기'))
+          Row(
+            children: [
+              Container(
+                width:  0.38 * MediaQuery.of(context).size.width,
+                child: ElevatedButton(onPressed: (){
+                  /*Navigator.pop(context);*/
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: Text('수정하시겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            update_data();
+                           /* Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => AppPager13()),
+                            );*/
+                            Get.off(AppPager13());
+                          },
+                        ),
+                        TextButton(onPressed: (){
+                          Navigator.pop(context, "취소");
+                        }, child: Text('Cancel')),
+                      ],
+                    );
+                  });
+                }, child: Text('수정하기')),
+              ),
+
+
+              Container(
+                width: 0.38 * MediaQuery.of(context).size.width,
+                margin: EdgeInsets.only(left: 20),
+                child: ElevatedButton(onPressed: (){
+                  /*Navigator.pop(context);*/
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: Text('삭제하시겠습니까?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            delete_data();
+                            /* Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => AppPager13()),
+                            );*/
+                            Get.off(AppPager13());
+                          },
+                        ),
+                        TextButton(onPressed: (){
+                          Navigator.pop(context, "취소");
+                        }, child: Text('Cancel')),
+                      ],
+                    );
+                  });
+                }, child: Text('삭제하기'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent,
+                    //onPrimary: Colors.black,
+                  ),),
+              ),
+
+            ],
+          )
         ],
       ),
     );
