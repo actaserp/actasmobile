@@ -30,15 +30,15 @@ class AppPage05 extends StatefulWidget {
 }
 
 class _AppPage05State extends State<AppPage05> {
-  ///댓글 dialog
-  TextEditingController myController = TextEditingController();
+
+  String? _searchText;
 
   TextEditingController _etSearch = TextEditingController();
-  TextEditingController _etChat = TextEditingController();
   TextEditingController _etMemo = TextEditingController();
-  String _lastDate = '13 Sep 2019';
+  var _usernm = "";
   late String _dbnm;
-  List<ChatModel> _chatListReversed = [];
+  TextEditingController _memo = TextEditingController();
+  TextEditingController _flag = TextEditingController();
   /// 댓글창을 보여줄지 여부를 저장하는 변수
   bool _isCommentVisible = false;
   @override
@@ -49,6 +49,11 @@ class _AppPage05State extends State<AppPage05> {
 
   }
 
+  @override
+  Future<void> sessionData() async {
+    String username = await  SessionManager().get("username");
+    _usernm = utf8.decode(username.runes.toList());
+  }
 
 
   @override
@@ -57,14 +62,57 @@ class _AppPage05State extends State<AppPage05> {
     super.dispose();
   }
 
-  void _addDate(String currentDate){
-    _chatListReversed.insert(0, new ChatModel(15, null, 'date', currentDate, null, null));
-  }
-
-  void _addMessage(String message){
-    DateTime now = DateTime.now();
-    String _currentTime = DateFormat('kk:mm').format(now);
-    _chatListReversed.insert(0, new ChatModel(16, 'buyer', 'text', message, _currentTime, false));
+  //저장
+  @override
+  Future<bool> save_mhdata()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("----------------------------");
+    ///null처리
+    // if(_etCompdate.text == null || _etCompdate.text == "") {
+    //   showAlertDialog(context, "작성일자를 입력하세요");
+    //   return false;
+    // }
+    // if(_subject == null || _subject == "" ) {
+    //   showAlertDialog(context, "제목을 입력하세요");
+    //   return false;
+    // }
+    // if(_memo == null || _memo == "" ) {
+    //   showAlertDialog(context, "내용을 입력하세요");
+    //   return false;
+    // }
+    // if(_codeTxt == null || _codeTxt == "" ) {
+    //   showAlertDialog(context, "분류를 선택하세요");
+    //   return false;
+    // }
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        ///저장시 필수 값
+        ///sseq, sinputdate, smemo, spernm, sflag, subkey
+        ///custcd, spjangcd, hseq 컨트롤러
+        'sinputdate': DateTime.now().toString(),
+        'spernm': _usernm.toString(),
+        'smemo': _memo.toString(),
+        'sflag': _flag.toString(),
+        // 'subkey': dd,
+      },
+    );
+    if(response.statusCode == 200){
+      print("저장됨");
+      return   true;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('QnA 저장에 실패했습니다');
+      return   false;
+    }
   }
 
 
@@ -154,8 +202,6 @@ class _AppPage05State extends State<AppPage05> {
         );
         setState(() {
           SCData.add(SCObject);
-          // keyData.add(SCObject);
-          // _keyData.add(alllist[i]['subkey']);
         });
       }
       // debugPrint('comment data::: $SCData length::::${SCData.length}' );
@@ -203,31 +249,25 @@ class _AppPage05State extends State<AppPage05> {
                 textAlignVertical: TextAlignVertical.bottom,
                 maxLines: 1,
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                onChanged: (textValue) {
-                  setState(() {});
-                },
                 decoration: InputDecoration(
-                  fillColor: Colors.grey[100],
-                  filled: true,
-                  hintText: '질문 검색',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                  suffixIcon: (_etSearch.text == '')
-                      ? null
-                      : GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _etSearch = TextEditingController(text: '');
-                        });
-                      },
-                      child: Icon(Icons.close, color: Colors.grey[500])),
-                  focusedBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      borderSide: BorderSide(color: Colors.grey[200]!)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    borderSide: BorderSide(color: Colors.grey[200]!),
-                  ),
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    hintText: '질문 검색',
+                    prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                    focusedBorder:  UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!)),
+                    enabledBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!) )
                 ),
+                onFieldSubmitted: (String? value) {
+                  setState(() {
+                    this._searchText = value;
+                    debugPrint('텍스트 받는지 확인:::${this._searchText} ');
+                    // blist_getdata2();
+                  });
+                },
               ),
             ),
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -270,14 +310,12 @@ class _AppPage05State extends State<AppPage05> {
                           ),
                         ),
                       ),
-                       Column(
-                         ///칼럼으로 재배치하였다.
-                         children: [
-                           Cmemo(),
-                         ],
-                       )
+                      ///칼럼으로 엮으면 안됨
+                            Cmemo(),
+
                    ],
-              ),
+        ///listview 하단에도 padding 값이 필요하다. 혹은 margin으로 조절
+        ),
 
     );
   }
@@ -292,12 +330,12 @@ class _AppPage05State extends State<AppPage05> {
               child: TextFormField(
               controller: _etMemo,
                 minLines: 1,
-                maxLines: 4,
+                maxLines: 3,
                 textAlignVertical: TextAlignVertical.bottom,
                 style: TextStyle(fontSize: 16, color: Colors.white),
-                onChanged: (textValue) {
-                  setState(() {});
-                },
+                // onChanged: (textValue) {
+                //   setState(() {});
+                // },
                 decoration: InputDecoration(
                   fillColor: Colors.grey[500],
                   filled: true,
@@ -319,17 +357,12 @@ class _AppPage05State extends State<AppPage05> {
             Container(
             child: GestureDetector(
             onTap: (){
-            if(_etMemo.text != ''){
-            print('메시지 전송 출력 => '+_etMemo.text);
+              String inputText2 = _etMemo.text;
+              if(inputText2 != ''){
+            print('메시지 전송 출력 확인 => '+ inputText2);
             setState(() {
-            DateTime now = DateTime.now();
-            String currentDate = DateFormat('d MMM yyyy').format(now);
-            if(_lastDate!=currentDate){
-            _lastDate = currentDate;
-            _addDate(currentDate);
-            }
-            _addMessage(_etMemo.text);
-            _etMemo.text = '';
+              inputText2;
+              debugPrint('값 받는지 확인:::${inputText2} ');
             });
             }
             },
@@ -342,6 +375,7 @@ class _AppPage05State extends State<AppPage05> {
             ),
             ),
             ),
+
             ]
       )
     );
@@ -443,8 +477,7 @@ class _AppPage05State extends State<AppPage05> {
                   ///댓글입력 토글
                   GestureDetector(
                     onTap: (){
-                      _Comment();
-
+                      // _Comment();
                     },
                     child: ClipOval(
                     child: Container(
@@ -460,69 +493,62 @@ class _AppPage05State extends State<AppPage05> {
   }
 
   ///댓글창 입력
-  Widget commentinput(){
-    return Container(
-      margin: EdgeInsets.all(11),
-      child: Row(
-        children: [
-      Flexible(
-      child: TextFormField(
-      controller: _etChat,
-        minLines: 1,
-        maxLines: 4,
-        textAlignVertical: TextAlignVertical.bottom,
-        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-        onChanged: (textValue) {
-          setState(() {});
-        },
-        decoration: InputDecoration(
-          fillColor: Colors.grey[200],
-          filled: true,
-          hintText: '댓글을 입력해 주세요',
-          focusedBorder: UnderlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(color: Colors.grey[200]!)),
-          enabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            borderSide: BorderSide(color: Colors.grey[200]!),
-          ),
-        ),
-      ),
-    ),
-    SizedBox(
-    width: 10,
-    ),
-    Container(
-    child: GestureDetector(
-    onTap: (){
-    if(_etChat.text != ''){
-    print('댓글 전송 출력 => '+_etChat.text);
-    setState(() {
-    DateTime now = DateTime.now();
-    String currentDate = DateFormat('d MMM yyyy').format(now);
-    if(_lastDate!=currentDate){
-    _lastDate = currentDate;
-    _addDate(currentDate);
-    }
-    _addMessage(_etChat.text);
-    _etChat.text = '';
-    });
-    }
-    },
-    child: ClipOval(
-    child: Container(
-    color: SOFT_GREY,
-    padding: EdgeInsets.all(10),
-    child: Icon(Icons.keyboard_arrow_up, color: Colors.white)
-    ),
-    ),
-
-    ),
-    )
-    ]
-    ),
-    );
-  }
+  // Widget commentinput(){
+  //   return Container(
+  //     margin: EdgeInsets.all(11),
+  //     child: Row(
+  //       children: [
+  //     Flexible(
+  //     child: TextFormField(
+  //     controller: _etChat,
+  //       minLines: 1,
+  //       maxLines: 4,
+  //       textAlignVertical: TextAlignVertical.bottom,
+  //       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+  //       onChanged: (textValue) {
+  //         setState(() {});
+  //       },
+  //       decoration: InputDecoration(
+  //         fillColor: Colors.grey[200],
+  //         filled: true,
+  //         hintText: '댓글을 입력해 주세요',
+  //         focusedBorder: UnderlineInputBorder(
+  //             borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  //             borderSide: BorderSide(color: Colors.grey[200]!)),
+  //         enabledBorder: UnderlineInputBorder(
+  //           borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  //           borderSide: BorderSide(color: Colors.grey[200]!),
+  //         ),
+  //       ),
+  //     ),
+  //   ),
+  //   SizedBox(
+  //   width: 10,
+  //   ),
+  //   Container(
+  //   child: GestureDetector(
+  //   onTap: (){
+  //   if(_etChat.text != ''){
+  //   print('댓글 전송 출력 => '+_etChat.text);
+  //   setState(() {
+  //
+  //   });
+  //   }
+  //   },
+  //   child: ClipOval(
+  //   child: Container(
+  //   color: SOFT_GREY,
+  //   padding: EdgeInsets.all(10),
+  //   child: Icon(Icons.keyboard_arrow_up, color: Colors.white)
+  //   ),
+  //   ),
+  //
+  //   ),
+  //   )
+  //   ]
+  //   ),
+  //   );
+  // }
 
 
   ///댓글 리스트 생성
@@ -550,9 +576,7 @@ class _AppPage05State extends State<AppPage05> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: [
-
                 Flexible(
-
                   child: Text('${SCData.smemo}', style: TextStyle(
                       color: CHARCOAL
                   )),
@@ -565,6 +589,9 @@ class _AppPage05State extends State<AppPage05> {
                     Text('${SCData.sinputdate}', style: TextStyle(
                         color: SOFT_GREY, fontSize: 9
                     )),
+                    Text('subkey 확인 ::: ${SCData.subkey}', style: TextStyle(
+                        color: Colors.red, fontSize: 12
+                    )),
                   ],
                 ),
               ],
@@ -574,34 +601,38 @@ class _AppPage05State extends State<AppPage05> {
   }
 
   ///댓글 팝업
-  Future _Comment() {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('수리 Q&A 댓글 입력창'),
-          content: TextField(
-            controller: myController,
-            decoration: InputDecoration(hintText: '댓글을 입력해주세요.'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('확인'),
-              onPressed: () {
-                String inputText = myController.text;
-                // Do something with the text entered by the user
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // Future _Comment() {
+  //   _inputco.clear(); // 컨트롤러 이전 값 초기화
+  //   return showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('수리 Q&A 댓글 입력창'),
+  //         content: TextField(
+  //           controller: _inputco,
+  //           decoration: InputDecoration(hintText: '댓글을 입력해주세요.'),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text('취소'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text('확인'),
+  //             onPressed: () {
+  //               String inputText = _inputco.text;
+  //               setState(() {
+  //                 debugPrint('컨트롤러 받는지 확인:::${_inputco} ');
+  //                 debugPrint('값사용시에 _controller.text로 해줘야함 => ${inputText} ');
+  //               });
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

@@ -26,10 +26,8 @@ class AppPage03 extends StatefulWidget {
 }
 
 class _AppPage03State extends State<AppPage03> {
-  TextEditingController _etSearch = TextEditingController();
-
-  late final String good;
-  List<String> items = List.generate(20, (index) => 'Item $index');
+      TextEditingController _etSearch = TextEditingController();
+      String? _searchText;
 
   ///fileview
   final mobUrl = "";
@@ -50,10 +48,52 @@ class _AppPage03State extends State<AppPage03> {
   }
 
 
-  Future<void> _refresh() async {
-    mhlist_getdata();
-  }
+  Future mhlist_getdata2() async {
+    String _dbnm = await SessionManager().get("dbnm");
 
+    var uritxt = CLOUD_URL + '/appmobile/mhlist2';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    // try {
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: <String, String>{
+        'dbnm': _dbnm
+      },
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> alllist = [];
+      alllist = jsonDecode(utf8.decode(response.bodyBytes));
+      MhData.clear();
+      for (int i = 0; i < alllist.length; i++) {
+        MhmanualList_model MhObject = MhmanualList_model(
+            custcd: alllist[i]['custcd'],
+            spjangcd: alllist[i]['spjangcd'],
+            hseq: alllist[i]['hseq'],
+            hinputdate: alllist[i]['hinputdate'],
+            hgroupcd: alllist[i]['hgroupcd'],
+            hsubject: alllist[i]['hsubject'],
+            hpernm: alllist[i]['hpernm'],
+            hmemo: alllist[i]['hmemo'],
+            hflag: alllist[i]['hflag'],
+            attcnt : alllist[i]['attcnt']
+        );
+        setState(() {
+          MhData.add(MhObject);
+        });
+      }
+      print( 'test:::: ${MhData.length}');
+      return
+        MhData;
+    } else {
+      throw Exception('불러오는데 실패했습니다');
+    }
+
+  }
 
   Future mhlist_getdata() async {
     String _dbnm = await SessionManager().get("dbnm");
@@ -139,31 +179,25 @@ class _AppPage03State extends State<AppPage03> {
               textAlignVertical: TextAlignVertical.bottom,
               maxLines: 1,
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-              onChanged: (textValue) {
-                setState(() {});
-              },
               decoration: InputDecoration(
                 fillColor: Colors.grey[100],
                 filled: true,
                 hintText: '제목/내용 검색',
                 prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                suffixIcon: (_etSearch.text == '')
-                    ? null
-                    : GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _etSearch = TextEditingController(text: '');
-                      });
-                    },
-                    child: Icon(Icons.close, color: Colors.grey[500])),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder:  UnderlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     borderSide: BorderSide(color: Colors.grey[200]!)),
-                enabledBorder: UnderlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  borderSide: BorderSide(color: Colors.grey[200]!),
-                ),
+                    enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(color: Colors.grey[200]!) )
               ),
+              onFieldSubmitted: (String? value) {
+                setState(() {
+                  this._searchText = value;
+                  debugPrint('텍스트 받는지 확인:::${this._searchText} ');
+                  mhlist_getdata2();
+                });
+              },
             ),
           ),
           preferredSize: Size.fromHeight(kToolbarHeight),
