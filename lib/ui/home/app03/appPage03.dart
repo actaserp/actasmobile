@@ -29,6 +29,7 @@ class _AppPage03State extends State<AppPage03> {
   TextEditingController _etSearch = TextEditingController();
 
   late final String good;
+  List<String> items = List.generate(20, (index) => 'Item $index');
 
   ///fileview
   final mobUrl = "";
@@ -48,6 +49,10 @@ class _AppPage03State extends State<AppPage03> {
     super.dispose();
   }
 
+
+  Future<void> _refresh() async {
+    mhlist_getdata();
+  }
 
 
   Future mhlist_getdata() async {
@@ -88,7 +93,7 @@ class _AppPage03State extends State<AppPage03> {
           MhData.add(MhObject);
         });
       }
-      print( 'test:::: ${MhData[9].attcnt}');
+      print( 'test:::: ${MhData.length}');
       return
         MhData;
     } else {
@@ -178,100 +183,108 @@ class _AppPage03State extends State<AppPage03> {
             )),
           ),
           SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-                margin: EdgeInsets.only(top: 15),
-              // padding: EdgeInsets.all(16),
-              height: 700,
-              width: 900,
-              child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    DataTable(
-                      showCheckboxColumn: false,
-                    columnSpacing: 25, dataRowHeight: 40,
-                    headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                    headingRowColor:
-                    MaterialStateColor.resolveWith((states) => SOFT_BLUE),
-                      columns:
-                      <DataColumn>[
-                        DataColumn(label: Text('No.')),
-                        DataColumn(label: Text('분류')),
-                        DataColumn(label: Text('제목')),
-                        DataColumn(label: Text('내용')),
-                        DataColumn(label: Text('작성자')),
-                        DataColumn(label: Text('첨부파일건수')),
-                        DataColumn(label: Text('작성일자')),
-                      ],
-                  rows: List<DataRow>.generate(MhData.length, (index)
-                     {
-                    final MhmanualList_model item = MhData[index];
-                    return
-                      DataRow(
-                          onSelectChanged: (value){
-                          Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => AppPage03view(MhData: item)));
-                       },
-                      color: MaterialStateColor.resolveWith((states){
-                        if (index % 2 == 0){
-                          return Color(0xB8E5E5E5);
-                        }else{
-                          return Color(0x86FFFFFF);
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                  margin: EdgeInsets.only(top: 15),
+                // padding: EdgeInsets.all(16),
+                height: 700,
+                width: 900,
+                child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      GestureDetector(
+                      onVerticalDragUpdate: (details) {
+                        if (details.delta.dy > 0) {
+                          mhlist_getdata();
                         }
-                      }),
-                        cells: [
-                          DataCell(
-                              ConstrainedBox(
-                                  constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
-                                  child: Text('${index+1}',
-                                  ))),
-                      DataCell(
-                          ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
-                          child: Text(item.hgroupcd,
-                              overflow: TextOverflow.ellipsis
-                          ))),
-                      DataCell(Container(
-                        width: 180,
-                        child: Text(item.hsubject,
-                          overflow: TextOverflow.ellipsis),
-                      )),
-                      DataCell(Container(
-                        width:180,
-                        child: Text(item.hmemo,
-                            overflow: TextOverflow.ellipsis),
-                      )),
-                      DataCell(Text(item.hpernm,
-                          overflow: TextOverflow.ellipsis)),
-                      DataCell(Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(item.attcnt.toString()),
+                      },
+                      child: DataTable(
+                        showCheckboxColumn: false,
+                      columnSpacing: 25, dataRowHeight: 40,
+                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                      headingRowColor:
+                      MaterialStateColor.resolveWith((states) => SOFT_BLUE),
+                        columns:
+                        <DataColumn>[
+                          DataColumn(label: Text('No.')),
+                          DataColumn(label: Text('분류')),
+                          DataColumn(label: Text('제목')),
+                          DataColumn(label: Text('내용')),
+                          DataColumn(label: Text('작성자')),
+                          DataColumn(label: Text('첨부파일건수')),
+                          DataColumn(label: Text('작성일자')),
                         ],
-                      )),
-                      DataCell(
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                             ConstrainedBox(
-                                  constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
-                                  child: Text('${item.hinputdate}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: SOFT_BLUE,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold
-                                      )
+                    rows: List<DataRow>.generate(MhData.length, (index)
+                       {
+                      final MhmanualList_model item = MhData[index];
+                      return
+                        DataRow(
+                            onSelectChanged: (value){
+                            Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => AppPage03view(MhData: item)));
+                         },
+                        color: MaterialStateColor.resolveWith((states){
+                          if (index % 2 == 0){
+                            return Color(0xB8E5E5E5);
+                          }else{
+                            return Color(0x86FFFFFF);
+                          }
+                        }),
+                          cells: [
+                            DataCell(
+                                ConstrainedBox(
+                                    constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                    child: Text('${index+1}',
+                                    ))),
+                        DataCell(
+                            ConstrainedBox(
+                            constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                            child: Text(item.hgroupcd,
+                                overflow: TextOverflow.ellipsis
+                            ))),
+                        DataCell(Container(
+                          width: 180,
+                          child: Text(item.hsubject,
+                            overflow: TextOverflow.ellipsis),
+                        )),
+                        DataCell(Container(
+                          width:180,
+                          child: Text(item.hmemo,
+                              overflow: TextOverflow.ellipsis),
+                        )),
+                        DataCell(Text(item.hpernm,
+                            overflow: TextOverflow.ellipsis)),
+                        DataCell(Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(item.attcnt.toString()),
+                          ],
+                        )),
+                        DataCell(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                               ConstrainedBox(
+                                    constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                    child: Text('${item.hinputdate}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: SOFT_BLUE,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold
+                                        )
+                                    ),
                                   ),
-                                ),
-                            ],
-                          )
-                      ),
-                    ]);
-                  }),
-                  ),
-              ])),
-            ),
+                              ],
+                            )
+                        ),
+                      ]);
+                    }),
+                    ),
+                    ),
+                ])),
+              ),
+
           Container( ///노하우등록
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.all(12),
