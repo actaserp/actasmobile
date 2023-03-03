@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:actasm/ui/home/app5Home/appPager13.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
@@ -21,26 +24,28 @@ class AppPager13register extends StatefulWidget {
 }
 class _AppPager13registerState extends State<AppPager13register> {
 
+
   final List<String> _C750Data = [];
   final _reusableWidget = ReusableWidget();
 
   int _maxgoodParts = 2;
   final List<String> _eGregiData = [];
   List<String> dropdownList = ['합격', '불합격', '조건부'];
-  String? _selectedValue = "";
-  String _shared = "N";
+  String _selectedValue = "";
+  String ? _selectedValue2;
   var _usernm = "";
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
+  late String now;
+  late String now2;
 
   String _dbnm = '';
   String? _etGregicdTxt;
   String usernm = "";
-  TextEditingController _mhCustcd = TextEditingController();
-  TextEditingController _etAddressTitle = TextEditingController(text: 'Home Address');
-  TextEditingController _etpernm = TextEditingController();
-  TextEditingController _etState = TextEditingController(text: 'USA');
+  TextEditingController _memo = TextEditingController();
+  TextEditingController _subject = TextEditingController();
+
   TextEditingController _etCompdate = TextEditingController();
 
 
@@ -51,77 +56,61 @@ class _AppPager13registerState extends State<AppPager13register> {
   @override
   void initState() {
 
-    setData();
     super.initState();
+    initData();
+   /* now = DateTime.now().toString();
+    now2 = now.substring(0,10);
 
+    _etfintputdate = TextEditingController(text: now2);*/
   }
-
-  Future<void> setData() async {
-    String username = await  SessionManager().get("username");
-    // 문자열 디코딩
-    _usernm = utf8.decode(username.runes.toList());
-  }
-
-
-
-
 
   @override
-  Future pop_Com750()async {
-    _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/Com750';
-    var encoded = Uri.encodeFull(uritxt);
-    Uri uri = Uri.parse(encoded);
-    final response = await http.post(
-      uri,
-      headers: <String, String> {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept' : 'application/json'
-      },
-      body: <String, String> {
-        'dbnm': _dbnm,
-        'greginm': '%',
-      },
-    );
 
-    if(response.statusCode == 200){
-     /* List<dynamic> alllist = [];
-      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-      C751Data.clear();
-      _C751Data.clear();
-      for (int i = 0; i < alllist.length; i++) {
-        if (alllist[i]['gregicd'] != null || alllist[i]['gregicd'].length > 0 ){
-          Comm751_model emObject= Comm751_model(
-              code:alllist[i]['code'],
-              cnam:alllist[i]['cnam']
-          );
-          setState(() {
-            C751Data.add(emObject);
-            _C751Data.add(alllist[i]['code'] + '[' + alllist[i]['cnam'] + ']' );
-          });
-        }
-      }
-
-      return C751Data;*/
-    }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('고장부위 불러오는데 실패했습니다');
-    }
+  ///저장시 setData
+  Future<void> initData() async {
+    await sessionData();
+    setData();
   }
+  Future<void> sessionData() async {
+    String username = await SessionManager().get("username");
+    // 문자열 디코딩
+    setState(() {
+      _usernm = utf8.decode(username.runes.toList());
+    });
+  }
+
+  void setData() {
+    // 다른 데이터 설정
+  }
+
+
+
 
   //저장
   @override
   Future<bool> save_mhdata()async {
     _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+    var uritxt = CLOUD_URL + '/apppgymobile/mfixbbssave';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
-    //null처리
-    // if(widget.e401Data.compdate == null  ) {
-    //   showAlertDialog(context, "처리일자를 등록하세요");
-    //   return false;
-    // }
+    ///null처리
+    if(_etfintputdate.text == null || _etfintputdate.text == "") {
+      showAlertDialog(context, "작성일자를 입력하세요");
+      return false;
+    }
+    if(_subject.text == null || _subject.text == "" ) {
+      showAlertDialog(context, "제목을 입력하세요");
+      return false;
+    }
+    if(_memo.text == null || _memo.text == "" ) {
+      showAlertDialog(context, "내용을 입력하세요");
+      return false;
+    }
+    if(_selectedValue == null || _selectedValue == "" ) {
+      showAlertDialog(context, "분류를 선택하세요");
+      return false;
+    }
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -130,10 +119,15 @@ class _AppPager13registerState extends State<AppPager13register> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        // 'recedate': widget.e401Data.recedate.toString(),
-        // 'recenum': widget.e401Data.recenum.toString(),
-        // 'resuremark': widget.e401Data.resuremark.toString(),
-        'custcd': _mhCustcd.toString(),
+        'fseq': "",
+        ///저장시 필수 값 //작성된 groupcd랑 이름
+        ///custcd, spjangcd, hseq 컨트롤러
+        'finputdate': _etfintputdate.text,
+        'fpernm': _usernm.toString(),
+        'fmemo': _memo.text,
+        'fnsubject': _subject.text,
+        'fgroupcd': _selectedValue,
+        'fflag': 'Y'
       },
     );
     if(response.statusCode == 200){
@@ -153,6 +147,7 @@ class _AppPager13registerState extends State<AppPager13register> {
   }
   @override
   Widget build(BuildContext context){
+
     setData();
     final double boxImageSize = (MediaQuery.of(context).size.width / 5);
     return Scaffold(
@@ -189,27 +184,24 @@ class _AppPager13registerState extends State<AppPager13register> {
                       value: item,
                     );
                   }).toList(),
-                  onChanged: (String? value){
-                    setState(() {
-                      if(value.toString() == "합격"){
-                        _selectedValue = "001";
-                      }
+                  onChanged: (String? value) =>
+                      setState(() {
+                        if(value.toString() == "합격"){
+                          _selectedValue = "001";
+                        }
 
-                      if(value.toString() == "불합격"){
-                        _selectedValue = "002";
-                      }
+                        if(value.toString() == "불합격"){
+                          _selectedValue = "002";
+                        }
 
-                      if(value.toString() == "조건부"){
-                        _selectedValue = "003";
-                      }
+                        if(value.toString() == "조건부"){
+                          _selectedValue = "003";
+                        }
+                        this._selectedValue2 = value;
+                        print(_selectedValue);
+                      }),
+                  value: _selectedValue2,
 
-                    });
-
-                    print(_selectedValue);
-                    /*C751Data.clear();
-                    _C751Data.clear();
-                    pop_Com751();*/
-                  },
                 ),
               ),
             ),
@@ -243,11 +235,29 @@ class _AppPager13registerState extends State<AppPager13register> {
           SizedBox(
             height: 20,
           ),
+          Column(
+            children: [
+              _usernm == null ? Container() :
+              Row(
+                children: [
+                  Text( _usernm,
+                    style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
+                  ),
+                  Text( '님이 작성 중입니다.',
+                    style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
           TextField(
-            controller: _etState,
+            controller: _subject,
+            autofocus: true,
             decoration: InputDecoration(
-                fillColor: Colors.grey[200],
-                filled: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 hintText: '제목을 작성하세요',
                 focusedBorder: UnderlineInputBorder(
                     borderSide:
@@ -262,47 +272,11 @@ class _AppPager13registerState extends State<AppPager13register> {
           SizedBox(
             height: 20,
           ),
-
-          /*TextField(
-            enabled: false,
-            style: TextStyle(color: BLACK_GREY),
-            controller: _etpernm,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-
-                focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                    BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                ),
-                labelText: '작성자 *',
-                labelStyle:
-                TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-
-  Future<void> setData() async {
-    usernm = await  SessionManager().get("username");
-
-  }
-          ),*/
-           Text(
-            '작성자 :  ' + _usernm,
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                fontFamily: "Noto Sans KR"),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            height: 20,
-          ),
           TextField(
-            controller: _etAddressTitle,
+            autofocus: true,
+            controller: _memo,
             decoration: InputDecoration(
-                fillColor: Colors.grey[200],
-                filled: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 hintText: '내용을 작성하세요',
                 focusedBorder: UnderlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -318,68 +292,6 @@ class _AppPager13registerState extends State<AppPager13register> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              SizedBox(    //왼쪽 크기 정하기
-                width: 0,
-                height: 40,
-              ),
-              Text('첨부파일 목록', style: TextStyle(
-                  fontSize: 16,
-                  color: SOFT_BLUE,
-                  fontWeight: FontWeight.bold
-              ),
-                  textAlign: TextAlign.center
-              ),
-              SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(width: 500
-              ),
-              GestureDetector(
-                onTap: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => EAppPage03Detail()));
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: SOFT_BLUE,
-                    border: Border.all(
-                      color: SOFT_BLUE,
-                    ),
-
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(7),
-                    child: Text('업로드', style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold,
-                    ),
-                        textAlign: TextAlign.center
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            color: Colors.white,
-            //텍스트 넣고 싶다 첨부파일자리라고 ㅠ
-            child: Column(
-              children: List.generate(shoppingCartData.length,(index){
-                return _buildItem(index, boxImageSize);
-              }),
-            ),
-          ),
-          SizedBox(
-            height: 40,
-          ),
           Container(
             child: TextButton(
                 style: ButtonStyle(
@@ -394,9 +306,29 @@ class _AppPager13registerState extends State<AppPager13register> {
                   ),
                 ),
                 onPressed: () {
+                  save_mhdata();
+                  Get.off(AppPager13());
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: Text('저장되었습니다.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+
+                            Navigator.pop(context);
+                            /* Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => AppPager13()),
+                            );
+                            Get.off(AppPager14());*/
+                          },
+                        ),
+
+                      ],
+                    );
+                  });
                   /*_reusableWidget.startLoading(context, '등록 되었습니다.', 1);*/
-                  print(usernm);
-                  print("object");
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -411,7 +343,6 @@ class _AppPager13registerState extends State<AppPager13register> {
                 )
             ),
           ),
-
 
         ],
       ),
@@ -542,7 +473,7 @@ class _AppPager13registerState extends State<AppPager13register> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('수리노하우'),
+          title: Text('점검조치등록'),
           content: Text(as_msg),
           actions: <Widget>[
             TextButton(

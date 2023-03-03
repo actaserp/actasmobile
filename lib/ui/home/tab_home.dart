@@ -24,6 +24,7 @@ import 'app5Home/appPager12.dart';
 import 'app5Home/appPager13.dart';
 import 'app5Home/appPager14.dart';
 import 'app5Home/appPager15.dart';
+import 'app5Home/appPager16.dart';
 import 'app5Home/tab5_home.dart';
 import 'appPage02.dart';
 import 'app03/appPage03.dart';
@@ -259,7 +260,7 @@ class _Home1PageState extends State<TabHomePage> {
                 String ls_name = _categoryData[index].name.replaceAll('\n', ' ');
                 switch (ls_name){
                   case '고 장 접 수' :
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => CouponPage()));
+                     Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager16()));
                     break;
                   case '고 장 처 리' :
                     Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
