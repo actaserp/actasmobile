@@ -192,13 +192,7 @@ class _AppPage03State extends State<AppPage03> {
                 child: ListView(
                     scrollDirection: Axis.vertical,
                     children: [
-                      GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        if (details.delta.dy > 0) {
-                          mhlist_getdata();
-                        }
-                      },
-                      child: DataTable(
+                      DataTable(
                         showCheckboxColumn: false,
                       columnSpacing: 25, dataRowHeight: 40,
                       headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -280,7 +274,6 @@ class _AppPage03State extends State<AppPage03> {
                         ),
                       ]);
                     }),
-                    ),
                     ),
                 ])),
               ),

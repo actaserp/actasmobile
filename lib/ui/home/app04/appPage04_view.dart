@@ -200,7 +200,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
                   child: Row(
                     children: [
                       Text('작성자 <${widget.BData.bpernm}>, 구분 [${widget.BData.bgourpcd}]',style: TextStyle(
-                          fontSize: 11, color: CHARCOAL
+                          fontSize: 14, color: CHARCOAL
                       ))
                     ],
                   ),

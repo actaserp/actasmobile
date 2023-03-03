@@ -3,10 +3,14 @@ import 'dart:ffi';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/home/app03/appPage03.dart';
+import 'package:actasm/ui/home/app5Home/appPager13.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
@@ -52,15 +56,10 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   void initState() {
     sessionData();
     pop_Com75to00();
-    setData();
     super.initState();
   }
+
   @override
-
-  ///저장시 setData
-  void setData(){
-  }
-
   Future<void> sessionData() async {
     String username = await  SessionManager().get("username");
     // 문자열 디코딩
@@ -106,7 +105,9 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       throw Exception('분류 코드를 불러오는데 실패했습니다');
     }
   }
-  //저장
+  ///저장시 필수 값 //작성된 groupcd랑 이름
+  ///custcd, spjangcd, hseq 컨트롤러
+  /// 'hseq': 수정시 seq는 view에서 전달받은 데이터 다시 넘겨주기
   @override
   Future<bool> save_mhdata()async {
     _dbnm = await  SessionManager().get("dbnm");
@@ -115,6 +116,10 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
     ///null처리
+    if(_codeTxt == null || _codeTxt == "" ) {
+      showAlertDialog(context, "분류를 선택하세요");
+      return false;
+    }
     if(_etCompdate.text == null || _etCompdate.text == "") {
       showAlertDialog(context, "작성일자를 입력하세요");
       return false;
@@ -127,10 +132,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       showAlertDialog(context, "내용을 입력하세요");
       return false;
     }
-    if(_codeTxt == null || _codeTxt == "" ) {
-      showAlertDialog(context, "분류를 선택하세요");
-      return false;
-    }
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -139,12 +140,10 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        ///저장시 필수 값 //작성된 groupcd랑 이름
-        ///custcd, spjangcd, hseq 컨트롤러
-        'hinputdate': _etCompdate.toString(),
+        'hinputdate': _etCompdate.text.toString(),
         'hpernm': _usernm.toString(),
-       'hmemo': _memo.toString(),
-        'hsubject': _subject.toString(),
+       'hmemo': _memo.text.toString(),
+        'hsubject': _subject.text.toString(),
         'hgroupcd': this._codeTxt.toString().substring(0,2), 
       },
     );
@@ -157,7 +156,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       return   false;
     }
   }
-
 
   @override
   void dispose() {
@@ -320,8 +318,11 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                         )
                     ),
                   ),
-                  onPressed: () {
-                    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                  onPressed: ()async  {
+                    bool lb_save = await save_mhdata();
+                    if (lb_save){
+                      _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),

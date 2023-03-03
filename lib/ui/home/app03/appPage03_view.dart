@@ -226,7 +226,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   child: Row(
                     children: [
                       Text('작성자 <${widget.MhData.hpernm}> , 구분 [${widget.MhData.hgroupcd}]', style: TextStyle(
-                          fontSize: 11, color: CHARCOAL
+                          fontSize: 14, color: CHARCOAL
                       ))
                     ],
                   ),
