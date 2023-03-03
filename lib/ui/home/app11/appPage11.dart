@@ -10,6 +10,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../model/app04/E038List_model.dart';
+import 'appPage11Detail.dart';
 //import 'appPage11_view.dart';
 
 
@@ -88,7 +89,8 @@ class _AppPage11State extends State<AppPage11> {
           startkm:alllist[i]['startkm'],
           endkm:alllist[i]['endkm'],
           km:alllist[i]['km'],
-          cltcd:alllist[i]['cltcd']
+          cltcd:alllist[i]['cltcd'],
+          pernm:alllist[i]['pernm']
         );
         setState(() {
           e038Data.add(emObject);
@@ -127,7 +129,7 @@ class _AppPage11State extends State<AppPage11> {
                 });
                 /*searchBook(_etSearch.text);*/
                 /*searchBook2(_etSearch2.text);*/
-              }, child: Text('검색하기')),
+              }, child: const Text('검색하기')),
             )
             /*IconButton(onPressed: (){
               print('검색');
@@ -182,7 +184,21 @@ class _AppPage11State extends State<AppPage11> {
                 ),
 
 
+
               ),
+              Container(
+                margin: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Color(0xffcccccc),
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+
 
 
 
@@ -196,6 +212,46 @@ class _AppPage11State extends State<AppPage11> {
                   },
                 ),
               ) : Text("자료를 검색하세요."),
+
+              Container( //등록
+                margin: EdgeInsets.only(top: 10),
+                child: OutlinedButton(
+                    onPressed: () {
+
+                      /*  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => AppPager13register()));*/
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail()));
+
+                    },
+                    style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            )
+                        ),
+                        side: MaterialStateProperty.all(
+                          BorderSide(
+                              color: SOFT_BLUE,
+                              width: 1.0
+                          ),
+                        )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        '작업일보 등록',
+                        style: TextStyle(
+                            color: SOFT_BLUE,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                ),
+              ),
 
             ],
           ),
@@ -267,7 +323,7 @@ class _AppPage11State extends State<AppPage11> {
                     onTap: (){
                       // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
                     },
-                    child: Text(e038Data.perid, style: TextStyle(
+                    child: Text(e038Data.pernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
                     )),
                   ),

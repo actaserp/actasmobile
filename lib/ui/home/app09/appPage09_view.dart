@@ -17,6 +17,7 @@ import '../../../model/app03/AttachList_model.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../model/app04/EmanualList_model.dart';
 import '../../reusable/cache_image_network.dart';
+import '../app03/Nav_right.dart';
 import '../tab_home.dart';
 
 class AppPage09view extends StatefulWidget {
@@ -148,6 +149,8 @@ class _AppPage09viewState extends State<AppPage09view> {
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
         // bottom: _reusableWidget.bottomAppBar(),
       ),
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       body:
       ListView(
         padding: EdgeInsets.all(26),
@@ -296,7 +299,7 @@ class _AppPage09viewState extends State<AppPage09view> {
                                 ClipRRect(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(4)),
-                                    child: buildCacheNetworkImage(width: 200, height: 200, url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM")
+                                    child: buildCacheNetworkImage(width: 200, height: 200, url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=EE")
                                 ),
                                 Text('${_ATCData[index]}', style: TextStyle(
                                     fontSize: 20,

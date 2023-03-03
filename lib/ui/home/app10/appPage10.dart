@@ -108,7 +108,7 @@ class _AppPage10State extends State<AppPage10> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '기타자료실',
+            '부품자료실',
             style: GlobalStyle.appBarTitle,
           ),
           actions: <Widget>[
@@ -355,7 +355,7 @@ class _AppPage10State extends State<AppPage10> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('기타자료실'),
+          title: Text('부품자료실'),
           content: Text(as_msg),
           actions: <Widget>[
             TextButton(

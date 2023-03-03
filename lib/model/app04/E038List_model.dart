@@ -28,11 +28,12 @@ class E038List_model{
   late var endkm;
   late var km;
   late var cltcd;
+  late var pernm;
 
 
   E038List_model({ required this.custcd,required this.spjangcd,required this.rptdate,required this.perid,required this.rptnum,
   required this.wkcd,required this.actcd,required this.actnm,required this.frtime,required this.totime,required this.carcd,required this.carnum,
-  required this.remark,required this.filenum,required this.equpcd,required this.startkm,required this.endkm,required this.km,required this.cltcd
+  required this.remark,required this.filenum,required this.equpcd,required this.startkm,required this.endkm,required this.km,required this.cltcd, required this.pernm
 });
 }
 

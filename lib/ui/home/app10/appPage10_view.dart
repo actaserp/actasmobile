@@ -18,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../model/app04/DmanualList_model.dart';
 import '../../reusable/cache_image_network.dart';
+import '../app03/Nav_right.dart';
 import '../tab_home.dart';
 
 class AppPage10view extends StatefulWidget {
@@ -147,6 +148,8 @@ class _AppPage10viewState extends State<AppPage10view> {
         systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
         // bottom: _reusableWidget.bottomAppBar(),
       ),
+      endDrawer: Nav_right(text: Text('app03_nav'),
+        color: SOFT_BLUE,),
       body:
       ListView(
         padding: EdgeInsets.all(26),
