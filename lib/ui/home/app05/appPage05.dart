@@ -32,16 +32,19 @@ class AppPage05 extends StatefulWidget {
 }
 
 class _AppPage05State extends State<AppPage05> {
+  final _reusableWidget = ReusableWidget();
 
   String? _searchText;
 
   TextEditingController _etSearch = TextEditingController();
   TextEditingController _etMemo = TextEditingController();
+  TextEditingController _etMemo2 = TextEditingController();
+  var nullableBool = "";
   var _usernm = "";
   late String _dbnm;
-  TextEditingController _memo = TextEditingController();
   @override
   void initState() {
+    sessionData();
     SSlist_getdata();
     attachCM();
     super.initState();
@@ -65,7 +68,7 @@ class _AppPage05State extends State<AppPage05> {
   @override
   Future<bool> save_mhdata()async {
     _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+    var uritxt = CLOUD_URL + '/appmobile/saveeSS';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("@@@@@@@@@@@수리노하우 저장@@@@@@@@@@@@@@@@");
@@ -78,13 +81,13 @@ class _AppPage05State extends State<AppPage05> {
       body: <String, String> {
         'dbnm': _dbnm,
         ///저장시 필수 값
-        ///sseq, sinputdate, smemo, spernm, subkey
-        ///custcd, spjangcd, hseq 컨트롤러
+        ///sseq, sinputdate, smemo, spernm,
+        ///custcd, spjangcd, hseq,subkey 컨트롤러
         ///sflag 없앰
-        'sinputdate': DateTime.now().toString(),
+        // 'sinputdate': DateTime.now().toString(),
         'spernm': _usernm.toString(),
-        'smemo': _memo.toString(),
-        // 'sseq' : ,
+        'smemo': _etMemo.text.toString(),
+        'sseq' : nullableBool,
         // 'subkey': dd,
       },
     );
@@ -206,7 +209,7 @@ class _AppPage05State extends State<AppPage05> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '수리 Q&A',
+            '수리 Q&A' + _usernm,
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -373,15 +376,13 @@ class _AppPage05State extends State<AppPage05> {
             ),
             Container(
             child: GestureDetector(
-            onTap: (){
+            onTap: ()async {
               String inputText2 = _etMemo.text;
-              if(inputText2 != ''){
             print('메시지 전송 출력 확인 => '+ inputText2);
-            setState(() {
-              inputText2;
-              debugPrint('값 받는지 확인:::${inputText2} ');
-            });
-            }
+              bool lb_save = await save_mhdata();
+              if (lb_save){
+                _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+              }
             },
             child: ClipOval(
             child: Container(
@@ -460,12 +461,7 @@ class _AppPage05State extends State<AppPage05> {
                                     fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                                 )),
                               ),
-                              Container(
-                                padding:EdgeInsets.all(16),
-                                child: Text('${SData.sseq}', style: TextStyle(
-                                    fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                                )),
-                              )
+
                             ],
                           ),
                         ],

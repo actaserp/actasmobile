@@ -9,6 +9,7 @@ import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app05/SCmanualList_model.dart';
 import 'package:actasm/model/app05/SmanualList_model.dart';
 import 'package:actasm/ui/account/tab_account.dart';
+import 'package:actasm/ui/home/app03/Nav_right.dart';
 import 'package:actasm/ui/home/app05/appPage05.dart';
 import 'package:actasm/ui/home/tab_home.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
@@ -71,12 +72,16 @@ class _AppPage05ViewState extends State<AppPage05view> {
     final double boxChatSize = MediaQuery.of(context).size.width/1.3;
     int _selectedIndex = 0;
     return Scaffold(
+      endDrawer: Nav_right(
+        text: Text('qna'),
+        color: SOFT_BLUE,
+      ),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,
         ),
-        elevation: 0,
         automaticallyImplyLeading: false,
+        elevation: 0,
         title: Row(
           children: [
             Icon(Icons.question_answer),
@@ -173,7 +178,7 @@ class _AppPage05ViewState extends State<AppPage05view> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.question_answer),
             label: 'Q&A',
           ),
           BottomNavigationBarItem(
