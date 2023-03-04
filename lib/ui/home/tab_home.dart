@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:actasm/ui/home.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/model/feature/banner_slider_model.dart';
@@ -107,17 +108,7 @@ class _Home1PageState extends State<TabHomePage> {
             systemOverlayStyle: SystemUiOverlayStyle.light,
             title: Image.asset(LOCAL_IMAGES_URL+'/logo.png', height: 24, color: Colors.white),
             backgroundColor: _color1,
-            // leading: IconButton(
-            //     icon: Icon(Icons.help_outline),
-            //     onPressed: () {
-            //       Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
-            //     }),
             actions: <Widget>[
-              // IconButton(
-              //     icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
-              //     onPressed: () {
-              //       Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
-              //     }),
               IconButton(
                   icon: Icon(Icons.help_outline),
                   onPressed: () {
@@ -128,9 +119,10 @@ class _Home1PageState extends State<TabHomePage> {
           children: [
             _buildTop(),
             _buildHomeBanner(),
-            _createMenu()
+            _createMenu(),
           ],
-        )
+        ),
+bottomNavigationBar: SizedBox.shrink(),
     );
   }
 
@@ -335,7 +327,8 @@ class _Home1PageState extends State<TabHomePage> {
                             ),
                           )
                         ])),
-              )),
+              )
+          ),
         );
       }),
     );

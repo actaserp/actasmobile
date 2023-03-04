@@ -5,6 +5,7 @@ import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
 import 'package:actasm/ui/account/payment_method/add_payment_method.dart';
 import 'package:actasm/ui/account/payment_method/edit_payment_method.dart';
+import 'package:actasm/ui/account/tab_account.dart';
 import 'package:actasm/ui/home/app03/Nav_right.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
@@ -138,6 +139,7 @@ class _AppPage04State extends State<AppPage04> {
 
   @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 0;
     return Scaffold(
       endDrawer: Nav_right(
         text: Text('app04_nav'),
@@ -336,6 +338,37 @@ class _AppPage04State extends State<AppPage04> {
           ],
 
         ),
+      bottomNavigationBar:  BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          if (index == 0) { // 1번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AppPage04()));          }
+          if (index == 1) { // 2번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabHomePage()));          }
+          if (index == 2) { // 3번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabAccountPage()));            }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.refresh),
+            label: '새로고침',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 

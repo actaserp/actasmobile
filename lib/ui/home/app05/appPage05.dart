@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/account/tab_account.dart';
 import 'package:actasm/ui/home/app03/Nav_right.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:actasm/ui/reusable/cache_image_network.dart';
@@ -22,7 +23,6 @@ import '../appPage02.dart';
 import '../tab_home.dart';
 
 class AppPage05 extends StatefulWidget {
-
 
   @override
   _AppPage05State createState() => _AppPage05State();
@@ -182,6 +182,8 @@ class _AppPage05State extends State<AppPage05> {
           SCData.add(SCObject);
         });
       }
+      print( 'test:::: ${SCData.first.smemo}');
+
       return
         SCData;
     }else{
@@ -192,6 +194,7 @@ class _AppPage05State extends State<AppPage05> {
   @override
   Widget build(BuildContext context) {
     final double HSize = (MediaQuery.of(context).size.height/1.3);
+    int _selectedIndex = 0;
     return Scaffold(
       endDrawer: Nav_right(
         text: Text('app05_nav'),
@@ -248,51 +251,93 @@ class _AppPage05State extends State<AppPage05> {
             ),
             preferredSize: Size.fromHeight(kToolbarHeight),
           ),
+
         ),
+
         body:ListView(
           physics: NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(12),
                   children: [
                     Container(
-                      child: Text('수리 Q&A 게시판  ${SData.length} 건', style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-                      )),
+                      child: Text('수리 Q&A 게시판  ${SData.length} 건',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+                          )),
                     ),
-                  SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Color(0xffcccccc),
-                                width: 1.0,
-                              ),
-                              bottom: BorderSide(
-                                color: Color(0xffcccccc),
-                                width: 1.0,
+                    Column(
+                      children: [
+
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(
+                                  color: Color(0xffcccccc),
+                                  width: 1.0,
+                                ),
+                                bottom: BorderSide(
+                                  color: Color(0xffcccccc),
+                                  width: 1.0,
+                                ),
                               ),
                             ),
-                          ),
-                          width: 750,
-                          height: MediaQuery.of(context).size.height/1.3,
-                          child:
-                           ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: SData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                            return _buildHEAD(SData[index]);
-                            },
+                            width: 750,
+                            // height: MediaQuery.of(context).size.height/1.4,
+                            ///크기 미지정시 기기마다 다르게 설정된다. 고민해야할 지점
+                            height: 750,
+                            child:
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: SData.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return _buildHEAD(SData[index]);
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      ///칼럼으로 엮으면 안됨
-                            Cmemo(),
+                        ///칼럼으로 엮으면 안됨
+                        Cmemo(),
+                      ],
+                    ),
+
 
                    ],
         ///listview 하단에도 padding 값이 필요하다. 혹은 margin으로 조절
         ),
 
+      bottomNavigationBar:  BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          if (index == 0) { // 1번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AppPage05()));          }
+          if (index == 1) { // 2번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabHomePage()));          }
+          if (index == 2) { // 3번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabAccountPage()));            }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.refresh),
+            label: '새로고침',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 
@@ -366,33 +411,27 @@ class _AppPage05State extends State<AppPage05> {
               children:[
                 Container(
                   width: WidthSize,
-                  margin: EdgeInsets.all(18),
-                  decoration: BoxDecoration(
-                   border: Border(
-                     bottom: BorderSide(
-                    color: Color(0xffcccccc),
-                    width: 1.5
-                ),
-              ),
-            ),
+                  margin: EdgeInsets.only(top:15, bottom: 15),
                   /// 질문 제목
                   child: Row(
                     children: [
+                      Center(
+                        child: Text('No.${SData.sseq.toString().substring(7,9)} :: ', style: TextStyle(
+                            color: SOFT_GREY, fontSize: 12
+                        )),
+                      ),
                       Center(
                         child: Text('${SData.sinputdate}', style: TextStyle(
                             color: SOFT_GREY, fontSize: 12
                         )),
                       ),
-                      SizedBox(
-                        width: WidthSize/55,
-                      ),
                       Center(
-                        child: Text('${SData.spernm}', style: TextStyle(
+                        child: Text('  ${SData.spernm}', style: TextStyle(
                             color: SOFT_BLUE, fontWeight: FontWeight.bold, fontSize: 12
                         )),
                       ),
                       Center(
-                        child: Text('님이 작성한 질문입니다.', style: TextStyle(
+                        child: Text(' 님이 작성한 질문입니다.', style: TextStyle(
                             color: SOFT_GREY, fontSize: 12
                         )),
                       ),
@@ -413,6 +452,7 @@ class _AppPage05State extends State<AppPage05> {
                           bottomLeft: Radius.circular(5),
                           bottomRight: Radius.circular(12),
                         ),
+
                       ),
                       child: Column(
                         children: [
@@ -423,17 +463,27 @@ class _AppPage05State extends State<AppPage05> {
                                 child: Text('${SData.smemo}', style: TextStyle(
                                     fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                                 )),
-
                               )
                             ],
                           ),
                         ],
                       ),
                     ),
+                Container(
+                  margin: EdgeInsets.only(top:10, bottom: 10),
+                  decoration: UnderlineTabIndicator(
+                      borderSide: BorderSide(color: SOFT_BLUE)
+                  ),
+                ),
                 ///댓글창 생성
                 Container(
-                  height: 100,
+                  margin: EdgeInsets.only(top:10, bottom: 10),
+                  height: MediaQuery.of(context).size.height/12,
+                  // decoration: UnderlineTabIndicator(
+                  //   borderSide: BorderSide(color: SOFT_BLUE)
+                  // ),
                   child: ListView.builder(
+                    padding: EdgeInsets.only(top:10, bottom: 10,),
                     // physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
                     itemBuilder: (BuildContext context, int index) {

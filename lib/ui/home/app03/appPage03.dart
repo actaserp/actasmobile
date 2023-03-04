@@ -6,6 +6,7 @@ import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app03/MhmanualList_model.dart';
 import 'package:actasm/ui/home/app03/Nav_right.dart';
+import 'package:actasm/ui/home/app03/bottom.dart';
 
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
@@ -309,7 +310,8 @@ class _AppPage03State extends State<AppPage03> {
                       ]);
                     }),
                     ),
-                ])),
+                ]),
+              ),
               ),
 
           Container( ///노하우등록
@@ -352,6 +354,7 @@ class _AppPage03State extends State<AppPage03> {
         ],
 
       ),
+      bottomNavigationBar: Bottom(),
     );
   }
 
