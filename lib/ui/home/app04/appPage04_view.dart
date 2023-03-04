@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -28,13 +29,17 @@ class AppPage04view extends StatefulWidget {
 }
 
 class _AppPage04ViewState extends State<AppPage04view> {
-
+  final _reusableWidget = ReusableWidget();
   late String _dbnm, _attatchidx;
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
   String? _thumfile;
   Uint8List? _thumdata;
+  ///여기서부터 blank
+  TextEditingController _memo = TextEditingController();
+  TextEditingController _subject = TextEditingController();
+  TextEditingController _etCompdate = TextEditingController();
 
   @override
   void setData() {
@@ -171,13 +176,20 @@ class _AppPage04ViewState extends State<AppPage04view> {
       ),
       body:
      ListView(
-        padding: EdgeInsets.all(26),
+       physics: NeverScrollableScrollPhysics(),
+       padding: EdgeInsets.all(26),
         children: [
-          Text('Date.${widget.BData.binputdate}', style: TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
-          )),
           Container(
-            margin: EdgeInsets.only(top: 8),
+            margin: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Text('Date.${widget.BData.binputdate}', style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
+                )),
+              ],
+            ),
+          ),
+          Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               border: Border.all(
@@ -185,22 +197,67 @@ class _AppPage04ViewState extends State<AppPage04view> {
                 width: 1.0,
               ),
             ),
-
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('제목: ${widget.BData.bsubject}', style: TextStyle(
-                      fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                  )),
+                  child: TextField(
+                    controller: _subject,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: '제목을 수정해주세요',
+
+                      labelText: '${widget.BData.bsubject}',
+                      labelStyle:
+                      TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: SOFT_BLUE),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 8),
+                  margin: EdgeInsets.only(top: 2),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Color(0xffcccccc),
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 8, bottom: 2),
                   child: Row(
                     children: [
-                      Text('작성자 <${widget.BData.bpernm}>, 구분 [${widget.BData.bgourpcd}]',style: TextStyle(
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(7)
+                        ),
+                        child: Container(
+                          color: SOFT_BLUE,
+                          child: Text(' 작성자 ', style: TextStyle(
+                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
+                          )),
+                        ),
+                      ),
+                      Text(' ${widget.BData.bpernm} ', style: TextStyle(
                           fontSize: 14, color: CHARCOAL
+                      )),
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(7)
+                        ),
+                        child: Container(
+                          color: SOFT_BLUE,
+                          child: Text(' 구분 ', style: TextStyle(
+                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
+                          )),
+                        ),
+                      ),
+                      Text(' ${widget.BData.bgourpcd} ', style: TextStyle(
+                        fontSize: 14, color: CHARCOAL,
                       ))
                     ],
                   ),
@@ -217,11 +274,20 @@ class _AppPage04ViewState extends State<AppPage04view> {
                     ),
                   ),
                 ),
+
                 Container(
-                  margin: EdgeInsets.only(top: 8),
-                  child: Text('내용: ${widget.BData.bmemo}', style: TextStyle(
-                      fontSize: 14, color: CHARCOAL
-                  )),
+                  child: TextField(
+                    controller: _memo,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      hintText: '내용을 수정해주세요',
+                      labelText: '${widget.BData.bmemo}',
+                      labelStyle:
+                      TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: CHARCOAL),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15),
@@ -236,10 +302,16 @@ class _AppPage04ViewState extends State<AppPage04view> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Text('첨부파일리스트', style: TextStyle(
-                      fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
-                  )),
+                  child: Row(
+                    children: [
+                      Text('첨부파일리스트', style: TextStyle(
+                          fontSize:13, fontWeight: FontWeight.bold, color: CHARCOAL
+                      )),
+                      SizedBox( //여기수정
+                        width: MediaQuery.of(context).size.width/2.45,
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -252,10 +324,39 @@ class _AppPage04ViewState extends State<AppPage04view> {
               ],
             ),
           ),
-             SizedBox(
-                  height: 12,
-                ),
-
+    ///등록 시작
+    SizedBox(
+    height: 40,
+    ),
+    Container(
+    child: TextButton(
+    style: ButtonStyle(
+    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+    (Set<MaterialState> states) => SOFT_BLUE,
+    ),
+    overlayColor: MaterialStateProperty.all(Colors.transparent),
+    shape: MaterialStateProperty.all(
+    RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(3.0),
+    )
+    ),
+    ),
+    onPressed: () {
+    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+    },
+    child: Padding(
+    padding: const EdgeInsets.symmetric(vertical: 5.0),
+    child: Text(
+    '수정하기',
+    style: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.white),
+    textAlign: TextAlign.center,
+    ),
+    )
+    ),
+    ),
               ],
             ),
           );

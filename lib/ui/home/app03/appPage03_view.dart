@@ -221,28 +221,20 @@ class _AppPage03ViewState extends State<AppPage03view> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('${widget.MhData.hsubject}', style: TextStyle(
-                      fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                  )),
+                  child: TextField(
+                    controller: _subject,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: '제목을 수정해주세요',
+
+                        labelText: '${widget.MhData.hsubject}',
+                        labelStyle:
+                        TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: SOFT_BLUE),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
-                // Container(
-                //   child: TextField(
-                //     controller: _subject,
-                //     autofocus: true,
-                //     decoration: InputDecoration(
-                //         floatingLabelBehavior: FloatingLabelBehavior.always,
-                //         hintText: '${widget.MhData.hsubject}',
-                //         focusedBorder: UnderlineInputBorder(
-                //             borderSide:
-                //             BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                //         enabledBorder: UnderlineInputBorder(
-                //           borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                //         ),
-                //         labelText: '제목 *',
-                //         labelStyle:
-                //         TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
-                //   ),
-                // ),
                 Container(
                   margin: EdgeInsets.only(top: 2),
                   decoration: BoxDecoration(
@@ -303,10 +295,18 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.only(top: 8),
-                  child: Text(' ${widget.MhData.hmemo}', style: TextStyle(
-                      fontSize: 14, color: CHARCOAL
-                  )),
+                  child: TextField(
+                    controller: _memo,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        hintText: '내용을 수정해주세요',
+                        labelText: '${widget.MhData.hmemo}',
+                      labelStyle:
+                      TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: CHARCOAL),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15),

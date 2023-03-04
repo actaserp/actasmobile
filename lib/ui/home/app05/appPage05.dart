@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/model/app03/nav_model.dart';
 import 'package:actasm/ui/account/tab_account.dart';
 import 'package:actasm/ui/home/app03/Nav_right.dart';
+import 'package:actasm/ui/home/app05/appPage05_view.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:actasm/ui/reusable/cache_image_network.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -266,7 +268,6 @@ class _AppPage05State extends State<AppPage05> {
                     ),
                     Column(
                       children: [
-
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Container(
@@ -469,21 +470,18 @@ class _AppPage05State extends State<AppPage05> {
                         ],
                       ),
                     ),
-                Container(
-                  margin: EdgeInsets.only(top:10, bottom: 10),
-                  decoration: UnderlineTabIndicator(
-                      borderSide: BorderSide(color: SOFT_BLUE)
-                  ),
-                ),
+                // Container(
+                //   margin: EdgeInsets.only(top:10, ),
+                //   decoration: UnderlineTabIndicator(
+                //       borderSide: BorderSide(color: SOFT_BLUE)
+                //   ),
+                // ),
                 ///댓글창 생성
                 Container(
                   margin: EdgeInsets.only(top:10, bottom: 10),
                   height: MediaQuery.of(context).size.height/12,
-                  // decoration: UnderlineTabIndicator(
-                  //   borderSide: BorderSide(color: SOFT_BLUE)
-                  // ),
                   child: ListView.builder(
-                    padding: EdgeInsets.only(top:10, bottom: 10,),
+                    padding: EdgeInsets.only( bottom: 10,),
                     // physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -502,8 +500,9 @@ class _AppPage05State extends State<AppPage05> {
                   ///댓글입력 토글
                   GestureDetector(
                     onTap: (){
-                      // _Comment();
-                    },
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => AppPage05view(SData: SData)));
+                      },
                     child: ClipOval(
                     child: Container(
                     color: SOFT_GREY,
