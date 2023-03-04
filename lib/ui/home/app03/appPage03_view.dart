@@ -43,6 +43,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
   final List<String> _idxData = [];
   final List<String> _seqData = [];
 
+  ///여기서부터 blank
+  TextEditingController _memo = TextEditingController();
+  TextEditingController _subject = TextEditingController();
+  TextEditingController _etCompdate = TextEditingController();
 
 
   @override
@@ -221,21 +225,66 @@ class _AppPage03ViewState extends State<AppPage03view> {
                       fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
                   )),
                 ),
+                // Container(
+                //   child: TextField(
+                //     controller: _subject,
+                //     autofocus: true,
+                //     decoration: InputDecoration(
+                //         floatingLabelBehavior: FloatingLabelBehavior.always,
+                //         hintText: '${widget.MhData.hsubject}',
+                //         focusedBorder: UnderlineInputBorder(
+                //             borderSide:
+                //             BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                //         enabledBorder: UnderlineInputBorder(
+                //           borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                //         ),
+                //         labelText: '제목 *',
+                //         labelStyle:
+                //         TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+                //   ),
+                // ),
                 Container(
-                  margin: EdgeInsets.only(top: 8),
+                  margin: EdgeInsets.only(top: 2),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Color(0xffcccccc),
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 8, bottom: 2),
                   child: Row(
                     children: [
-                      Text('작성자｜', style: TextStyle(
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(7)
+                        ),
+                        child: Container(
+                          color: SOFT_BLUE,
+                          child: Text(' 작성자 ', style: TextStyle(
+                              fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
+                          )),
+                        ),
+                      ),
+                      Text(' ${widget.MhData.hpernm} ', style: TextStyle(
                           fontSize: 14, color: CHARCOAL
                       )),
-                      Text('${widget.MhData.hpernm} ', style: TextStyle(
-                          fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold,
-                      )),
-                      Text('구분｜', style: TextStyle(
-                          fontSize: 14, color: CHARCOAL
-                      )),
-                      Text('${widget.MhData.hgroupcd}', style: TextStyle(
-                          fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold,
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(7)
+                        ),
+                        child: Container(
+                          color: SOFT_BLUE,
+                          child: Text(' 구분 ', style: TextStyle(
+                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
+                          )),
+                        ),
+                      ),
+                      Text(' ${widget.MhData.hgroupcd} ', style: TextStyle(
+                          fontSize: 14, color: CHARCOAL,
                       ))
                     ],
                   ),
@@ -252,9 +301,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
                     ),
                   ),
                 ),
+
                 Container(
                   margin: EdgeInsets.only(top: 8),
-                  child: Text('내용: ${widget.MhData.hmemo}', style: TextStyle(
+                  child: Text(' ${widget.MhData.hmemo}', style: TextStyle(
                       fontSize: 14, color: CHARCOAL
                   )),
                 ),
