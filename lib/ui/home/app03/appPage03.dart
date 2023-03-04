@@ -26,7 +26,7 @@ class AppPage03 extends StatefulWidget {
 }
 
 class _AppPage03State extends State<AppPage03> {
-      TextEditingController _etSearch = TextEditingController();
+      TextEditingController _etSearch2 = TextEditingController();
       String? _searchText;
 
   ///fileview
@@ -43,7 +43,7 @@ class _AppPage03State extends State<AppPage03> {
 
   @override
   void dispose() {
-    _etSearch.dispose();
+    _etSearch2.dispose();
     super.dispose();
   }
 
@@ -62,7 +62,8 @@ class _AppPage03State extends State<AppPage03> {
         'Accept': 'application/json'
       },
       body: <String, String>{
-        'dbnm': _dbnm
+        'dbnm': _dbnm,
+        'hmemo': _etSearch2.text.toString(),
       },
     );
     if (response.statusCode == 200) {
@@ -175,7 +176,7 @@ class _AppPage03State extends State<AppPage03> {
             padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
             height: kToolbarHeight,
             child: TextFormField(
-              controller: _etSearch,
+              controller: _etSearch2,
               textAlignVertical: TextAlignVertical.bottom,
               maxLines: 1,
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
