@@ -40,9 +40,6 @@ class _AppPage05State extends State<AppPage05> {
   var _usernm = "";
   late String _dbnm;
   TextEditingController _memo = TextEditingController();
-  TextEditingController _flag = TextEditingController();
-  /// 댓글창을 보여줄지 여부를 저장하는 변수
-  bool _isCommentVisible = false;
   @override
   void initState() {
     SSlist_getdata();
@@ -81,12 +78,13 @@ class _AppPage05State extends State<AppPage05> {
       body: <String, String> {
         'dbnm': _dbnm,
         ///저장시 필수 값
-        ///sseq, sinputdate, smemo, spernm, sflag, subkey
+        ///sseq, sinputdate, smemo, spernm, subkey
         ///custcd, spjangcd, hseq 컨트롤러
+        ///sflag 없앰
         'sinputdate': DateTime.now().toString(),
         'spernm': _usernm.toString(),
         'smemo': _memo.toString(),
-        'sflag': _flag.toString(),
+        // 'sseq' : ,
         // 'subkey': dd,
       },
     );
@@ -355,9 +353,6 @@ class _AppPage05State extends State<AppPage05> {
                 maxLines: 3,
                 textAlignVertical: TextAlignVertical.bottom,
                 style: TextStyle(fontSize: 16, color: Colors.white),
-                // onChanged: (textValue) {
-                //   setState(() {});
-                // },
                 decoration: InputDecoration(
                   fillColor: Colors.grey[500],
                   filled: true,
@@ -462,6 +457,12 @@ class _AppPage05State extends State<AppPage05> {
                               Container(
                                 padding:EdgeInsets.all(16),
                                 child: Text('${SData.smemo}', style: TextStyle(
+                                    fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                                )),
+                              ),
+                              Container(
+                                padding:EdgeInsets.all(16),
+                                child: Text('${SData.sseq}', style: TextStyle(
                                     fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                                 )),
                               )

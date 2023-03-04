@@ -75,14 +75,19 @@ class _AppPage05ViewState extends State<AppPage05view> {
         iconTheme: IconThemeData(
           color: GlobalStyle.appBarIconThemeColor,
         ),
-        elevation: GlobalStyle.appBarElevation,
-        title: Text(
-          '수리 Q&A',
-          style: GlobalStyle.appBarTitle,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            Icon(Icons.question_answer),
+            Text(
+              ' 수리 Q&A',
+              style: GlobalStyle.appBarTitle,
+            ),
+          ],
         ),
         backgroundColor: GlobalStyle.appBarBackgroundColor,
-        systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
-        // bottom: _reusableWidget.bottomAppBar(),
+
       ),
       body:ListView(
         physics: NeverScrollableScrollPhysics(),
@@ -95,7 +100,8 @@ class _AppPage05ViewState extends State<AppPage05view> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(
                       Radius.circular(7)
-                  ),              child: Container(
+                  ),
+                  child: Container(
                     color: SOFT_BLUE,
                     child: Text('  질문 상세  ',
                         style: TextStyle(
