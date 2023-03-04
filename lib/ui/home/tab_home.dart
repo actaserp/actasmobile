@@ -45,6 +45,11 @@ class _Home1PageState extends State<TabHomePage> {
   List<BannerSliderModel> _bannerData = [];
   List<CategoryModel> _categoryData = [];
 
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 2),
+        () => 'Data Loaded',
+  );
+
   @override
   void initState()  {
     setData();
@@ -148,15 +153,11 @@ class _Home1PageState extends State<TabHomePage> {
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Fluttertoast.showToast(msg: 'Click name', toastLength: Toast.LENGTH_SHORT);
-                    },
-                    child: Text(
-                      _usernm + '님 반갑습니다.',
+                  start(),
+                    Text(  _usernm + '님 반갑습니다.',
                       style: TextStyle(
                           color: _color2,
                           fontWeight: FontWeight.bold,
@@ -164,8 +165,6 @@ class _Home1PageState extends State<TabHomePage> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-
                 ],
               ),
             ),
@@ -341,4 +340,53 @@ class _Home1PageState extends State<TabHomePage> {
       }),
     );
   }
+
+  Widget start(){
+   return Padding(
+     padding: const EdgeInsets.all(2.0),
+     child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.displayMedium!,
+        textAlign: TextAlign.center,
+        child: FutureBuilder<String>(
+          future: _calculation, // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            List<Widget> check;
+            if (snapshot.hasData) {
+              check = <Widget>[
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 20,
+                ),
+              ];
+            } else if (snapshot.hasError) {
+              check = <Widget>[
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 20,
+                ),
+              ];
+            } else {
+              check = const <Widget>[
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                ),
+              ];
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: check,
+              ),
+            );
+          },
+        ),
+      ),
+   );
+  }
+
+
 }

@@ -29,11 +29,6 @@ void main() async {
     runApp(MyApp());
   });
 
-///Initilaize
-//   WidgetsFlutterBinding.ensureInitialized();
-//     await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-//     runApp(MyApp());
-
 }
 
 

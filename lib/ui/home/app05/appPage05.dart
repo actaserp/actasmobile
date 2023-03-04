@@ -69,24 +69,7 @@ class _AppPage05State extends State<AppPage05> {
     var uritxt = CLOUD_URL + '/appmobile/saveeMh';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
-    print("----------------------------");
-    ///null처리
-    // if(_etCompdate.text == null || _etCompdate.text == "") {
-    //   showAlertDialog(context, "작성일자를 입력하세요");
-    //   return false;
-    // }
-    // if(_subject == null || _subject == "" ) {
-    //   showAlertDialog(context, "제목을 입력하세요");
-    //   return false;
-    // }
-    // if(_memo == null || _memo == "" ) {
-    //   showAlertDialog(context, "내용을 입력하세요");
-    //   return false;
-    // }
-    // if(_codeTxt == null || _codeTxt == "" ) {
-    //   showAlertDialog(context, "분류를 선택하세요");
-    //   return false;
-    // }
+    print("@@@@@@@@@@@수리노하우 저장@@@@@@@@@@@@@@@@");
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -109,9 +92,7 @@ class _AppPage05State extends State<AppPage05> {
       print("저장됨");
       return   true;
     }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('QnA 저장에 실패했습니다');
-      return   false;
     }
   }
 
@@ -178,7 +159,6 @@ class _AppPage05State extends State<AppPage05> {
         'Accept' : 'application/json'
       },
       body: <String, String> {
-        ///data를 String으로 전달
         'dbnm': _dbnm,
       },
     );
@@ -186,8 +166,6 @@ class _AppPage05State extends State<AppPage05> {
       List<dynamic> alllist = [];
       alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
       SCData.clear();
-      // keyData.clear();
-      // _keyData.clear();
 
       for (int i = 0; i < alllist.length; i++) {
         SCmanualList_model SCObject= SCmanualList_model(
@@ -204,12 +182,10 @@ class _AppPage05State extends State<AppPage05> {
           SCData.add(SCObject);
         });
       }
-      // debugPrint('comment data::: $SCData length::::${SCData.length}' );
-      // debugPrint('subkey data::: $keyData length::::${keyData.length}' );
       return
         SCData;
     }else{
-      throw Exception('불러오는데 실패했습니다');
+      throw Exception('수리qna를 불러오는데 실패했습니다');
     }
   }
 
@@ -425,7 +401,6 @@ class _AppPage05State extends State<AppPage05> {
                 ),
                     ///질문 내용
                     Container(
-                      margin: EdgeInsets.only(top: 8),
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         border: Border.all(

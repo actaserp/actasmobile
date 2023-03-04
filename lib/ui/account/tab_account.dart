@@ -193,7 +193,7 @@ class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAlive
             Text(menuTitle, style: TextStyle(
                 fontSize: 15, color: CHARCOAL
             )),
-            Icon(Icons.chevron_right, size: 20, color: SOFT_GREY),
+            // Icon(Icons.chevron_right, size: 20, color: SOFT_GREY),
           ],
         ),
       ),

@@ -217,7 +217,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  child: Text('제목: ${widget.MhData.hsubject}', style: TextStyle(
+                  child: Text('${widget.MhData.hsubject}', style: TextStyle(
                       fontSize:16, fontWeight: FontWeight.bold, color: SOFT_BLUE
                   )),
                 ),
@@ -225,8 +225,17 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   margin: EdgeInsets.only(top: 8),
                   child: Row(
                     children: [
-                      Text('작성자 <${widget.MhData.hpernm}> , 구분 [${widget.MhData.hgroupcd}]', style: TextStyle(
+                      Text('작성자｜', style: TextStyle(
                           fontSize: 14, color: CHARCOAL
+                      )),
+                      Text('${widget.MhData.hpernm} ', style: TextStyle(
+                          fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold,
+                      )),
+                      Text('구분｜', style: TextStyle(
+                          fontSize: 14, color: CHARCOAL
+                      )),
+                      Text('${widget.MhData.hgroupcd}', style: TextStyle(
+                          fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold,
                       ))
                     ],
                   ),
