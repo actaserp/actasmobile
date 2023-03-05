@@ -347,35 +347,76 @@ class _AppPage03ViewState extends State<AppPage03view> {
           SizedBox(
             height: 40,
           ),
-          Container(
-            child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) => SOFT_BLUE,
-                  ),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) => SOFT_BLUE,
+                        ),
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3.0),
+                            )
+                        ),
+                      ),
+                      onPressed: () {
+                        _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          '수정하기',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       )
                   ),
                 ),
-                onPressed: () {
-                  _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: Text(
-                    '수정하기',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                    textAlign: TextAlign.center,
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) => Colors.red,
+                        ),
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3.0),
+                            )
+                        ),
+                      ),
+                      onPressed: () {
+                        _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          '삭제하기',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
                   ),
-                )
-            ),
+                ),
+              ),
+            ],
           ),
+
               ],
             ),
 
