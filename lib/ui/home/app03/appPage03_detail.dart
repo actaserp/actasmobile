@@ -37,6 +37,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   final List<String> _C754Data = [];
   late String _dbnm ;
   String? _codeTxt, _eCompdate;
+  var nullableBool = "";
 ///작성자
   var _usernm = "";
 ///timepicker
@@ -144,7 +145,8 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         'hpernm': _usernm.toString(),
        'hmemo': _memo.text.toString(),
         'hsubject': _subject.text.toString(),
-        'hgroupcd': this._codeTxt.toString().substring(0,2), 
+        'hgroupcd': this._codeTxt.toString().substring(0,2),
+        'hseq':nullableBool,
       },
     );
     if(response.statusCode == 200){

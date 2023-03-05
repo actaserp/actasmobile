@@ -328,35 +328,75 @@ class _AppPage04ViewState extends State<AppPage04view> {
     SizedBox(
     height: 40,
     ),
-    Container(
-    child: TextButton(
-    style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-    (Set<MaterialState> states) => SOFT_BLUE,
-    ),
-    overlayColor: MaterialStateProperty.all(Colors.transparent),
-    shape: MaterialStateProperty.all(
-    RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(3.0),
-    )
-    ),
-    ),
-    onPressed: () {
-    _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
-    },
-    child: Padding(
-    padding: const EdgeInsets.symmetric(vertical: 5.0),
-    child: Text(
-    '수정하기',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    color: Colors.white),
-    textAlign: TextAlign.center,
-    ),
-    )
-    ),
-    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) => SOFT_BLUE,
+                        ),
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3.0),
+                            )
+                        ),
+                      ),
+                      onPressed: () {
+                        _reusableWidget.startLoading(context, '수정 되었습니다.', 1);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          '수정하기',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) => Colors.red,
+                        ),
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3.0),
+                            )
+                        ),
+                      ),
+                      onPressed: () {
+                        _reusableWidget.startLoading(context, '삭제 되었습니다.', 1);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: Text(
+                          '삭제하기',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                  ),
+                ),
+              ),
+            ],
+          ),
               ],
             ),
           );
@@ -431,24 +471,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
                             ),
                           ),
                         ),
-                        PdfThumb(),
-                        Divider(),
-                        // GestureDetector(
-                        //   onTap: ()  async{
-                        //     final _fileName = await VideoThumbnail.thumbnailFile(
-                        //       video: "http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD",
-                        //       // thumbnailPath: (await getTemporaryDirectory()).path,
-                        //       thumbnailPath: "sdcard/Android/data/com.bluestacks.home",
-                        //       imageFormat: ImageFormat.WEBP,
-                        //       maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
-                        //       quality: 100,
-                        //     );
-                        //     print("thumbnail file is located: $_fileName");
-                        //     print("캐시 폴더:: ${getTemporaryDirectory} 블루 스택 경로:: sdcard/Android/data/com.bluestacks.home ");
-                        //   },
-                        //     // child: Image(image: _fileName,
-                        //
-                        //     ),
 
 
                   ],
@@ -463,51 +485,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
     );
   }
   
-  ///video try 1
-  // VideoThumbnail.thumbnailFile(
-  // video: (
-  // "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH"),
-  // ///이미저장된 thumbnial가져와야하는데 에뮬레이터 아니라 확인불가
-  // thumbnailPath: '$dir',
-  // imageFormat: ImageFormat.JPEG,
-  // maxHeight: 200,
-  // maxWidth: 200,
-  // timeMs: 50,
-  // quality: 50);
-  
-  ///video try 2
-// try{
-//    await VideoThumbnail.thumbnailData(
-//         video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
-//         headers: {
-//           "USERHEADER1": "user defined header1",
-//           "USERHEADER2": "user defined header2",
-//         },
-//         imageFormat: ImageFormat.JPEG,
-//         timeMs: 10,
-//         quality: 50);
-//   }catch(e){
-//     print("eerror :::: $e");
-//   }
-
-///video try 3
-// GestureDetector(
-//   onTap: () async {
-//     try{
-//       await VideoThumbnail.thumbnailData(
-//           video: "http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD",
-//           headers: {
-//             "USERHEADER1": "user defined header1",
-//           },
-//           imageFormat: ImageFormat.JPEG,
-//           timeMs: 10,
-//           quality: 50);
-//     }catch(e){
-//       print("eerror :::: $e");
-//     }
-//   },
-//   child: Text("테스트임"),
-// )
 
 ///pdf try 1
 

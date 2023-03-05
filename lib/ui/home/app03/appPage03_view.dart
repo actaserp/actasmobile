@@ -54,7 +54,37 @@ class _AppPage03ViewState extends State<AppPage03view> {
     _attatchidx = widget.MhData.hseq;
   }
 
-
+  @override
+  Future<bool> re_mhdata()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/appmobile/saveeMh';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("------------부품가이드 수정----------------");
+    ///null처리
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'hinputdate': widget.MhData.hinputdate.toString(),
+        'hpernm': widget.MhData.hpernm.toString(),
+        'hmemo': _memo.text.toString(),
+        'hsubject': _subject.text.toString(),
+        'hgroupcd': '01'.toString(),
+        'hseq':widget.MhData.hseq.toString(),
+      },
+    );
+    if(response.statusCode == 200){
+      print("저장됨");
+      return   true;
+    }else{
+      throw Exception('수리노하우 수정에 실패했습니다');
+    }
+  }
 
   @override
   Future attachMH()async {
@@ -227,7 +257,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
                     decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         hintText: '제목을 수정해주세요',
-
                         labelText: '${widget.MhData.hsubject}',
                         labelStyle:
                         TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: SOFT_BLUE),
@@ -275,7 +304,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                           )),
                         ),
                       ),
-                      Text(' ${widget.MhData.hgroupcd} ', style: TextStyle(
+                      Text('${widget.MhData.hgroupcd} ', style: TextStyle(
                           fontSize: 14, color: CHARCOAL,
                       ))
                     ],
@@ -365,9 +394,12 @@ class _AppPage03ViewState extends State<AppPage03view> {
                             )
                         ),
                       ),
-                      onPressed: () {
-                        _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
-                      },
+                        onPressed: ()async  {
+                          bool lb_save = await re_mhdata();
+                          if (lb_save){
+                          _reusableWidget.startLoading(context, '수정 되었습니다', 1 );
+                          }
+                        },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: Text(
@@ -398,7 +430,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                         ),
                       ),
                       onPressed: () {
-                        _reusableWidget.startLoading(context, '등록 되었습니다.', 1);
+                        _reusableWidget.startLoading(context, '삭제 되었습니다.', 1);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
