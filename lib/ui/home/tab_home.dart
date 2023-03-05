@@ -47,7 +47,7 @@ class _Home1PageState extends State<TabHomePage> {
   List<CategoryModel> _categoryData = [];
 
   final Future<String> _calculation = Future<String>.delayed(
-    const Duration(seconds: 2),
+    const Duration(seconds: 3),
         () => 'Data Loaded',
   );
 
@@ -169,7 +169,7 @@ bottomNavigationBar: SizedBox.shrink(),
           ),
           GestureDetector(
             onTap: () {
-              Fluttertoast.showToast(msg: 'Click log out', toastLength: Toast.LENGTH_SHORT);
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
             },
             child: Text(
                 'Log Out',

@@ -21,8 +21,8 @@ class TabAccountPage extends StatefulWidget {
   _TabAccountPageState createState() => _TabAccountPageState();
 }
 
-class _TabAccountPageState extends State<TabAccountPage> {
-  // initialize reusable widget
+class _TabAccountPageState extends State<TabAccountPage> with SingleTickerProviderStateMixin {
+  // with SingleTickerProviderStateMixin
   final _reusableWidget = ReusableWidget();
   ///작성자
   var _usernm = "";
@@ -31,20 +31,22 @@ class _TabAccountPageState extends State<TabAccountPage> {
   @override
   void initState() {
     sessionData();
-    sessionData2();
     super.initState();
   }
+  @override
+  bool get wantKeepAlive => true;
   @override
   Future<void> sessionData() async {
     String username = await  SessionManager().get("username");
     _usernm = utf8.decode(username.runes.toList());
-  }
-
-  @override
-  Future<void> sessionData2() async {
     String userid = await  SessionManager().get("userid");
     _userid = utf8.decode(userid.runes.toList());
   }
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 4),
+        () => 'e',
+  );
+
   @override
   Widget build(BuildContext context) {
     // if we used AutomaticKeepAliveClientMixin, we must call super.build(context);
@@ -116,9 +118,9 @@ class _TabAccountPageState extends State<TabAccountPage> {
             width: profilePictureSize,
             height: profilePictureSize,
             child: GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AccountInformationPage()));
-              },
+              // onTap: () {
+              //   Navigator.push(context, MaterialPageRoute(builder: (context) => AccountInformationPage()));
+              // },
               child: CircleAvatar(
                 backgroundColor: Colors.grey[200],
                 radius: profilePictureSize,
@@ -138,10 +140,12 @@ class _TabAccountPageState extends State<TabAccountPage> {
           SizedBox(
             width: 16,
           ),
-          Expanded(
+          Flexible(
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                start(),
                 Text( _usernm,
                   style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
                 ),
@@ -172,6 +176,53 @@ class _TabAccountPageState extends State<TabAccountPage> {
             )),
             // Icon(Icons.chevron_right, size: 20, color: SOFT_GREY),
           ],
+        ),
+      ),
+    );
+  }
+  Widget start(){
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: DefaultTextStyle(
+        style: Theme.of(context).textTheme.displayMedium!,
+        textAlign: TextAlign.center,
+        child: FutureBuilder<String>(
+          future: _calculation, // a previously-obtained Future<String> or null
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            List<Widget> check;
+            if (snapshot.hasData) {
+              check = <Widget>[
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 20,
+                ),
+
+              ];
+            } else if (snapshot.hasError) {
+              check = <Widget>[
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 20,
+                ),
+              ];
+            } else {
+              check = const <Widget>[
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                ),
+              ];
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: check,
+              ),
+            );
+          },
         ),
       ),
     );

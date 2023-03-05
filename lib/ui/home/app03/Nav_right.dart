@@ -1,3 +1,4 @@
+import 'package:actasm/ui/account/tab_account.dart';
 import 'package:flutter/material.dart';
 
 import '../app5Home/appPager11.dart';
@@ -41,8 +42,8 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));
-                  },
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => TabHomePage()));                    },
                   child:  Row(
                       children:[
                         Icon(Icons.home),
@@ -53,8 +54,8 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage02()));
-                  },
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => AppPage02()));                    },
                   child:  Row(
                       children:[
                         Icon(Icons.favorite),
@@ -65,7 +66,8 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager11()));},
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => AppPager11()));                     },
                   child:  Row(
                       children:[
                         Icon(Icons.safety_check),
@@ -76,7 +78,9 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => TabAccountPage()));
+                    },
                   child:  Row(
                       children:[
                         Icon(Icons.person_outlined),
@@ -87,7 +91,8 @@ class Nav_right extends StatelessWidget{
           ListTile(
               title: GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => TabHomePage()));},
+                    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                    },
                   child:  Row(
                       children:[
                         // SizedBox(height: MediaQuery.of(context).size.height/1.4,
