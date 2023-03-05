@@ -64,14 +64,15 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
   final List<String> _eActperidData = [];
 
   String? _etPeridTxt;
-  bool chk = false;
+  bool chk = true;
 
   @override
   void initState(){
     setData();
     pop_epernm();
     super.initState();
-
+    cltcd = widget.planData.cltcd;
+    equpcd = widget.planData.equpcd;
   }
 
   @override
@@ -135,7 +136,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
-    if(_etplandate.text == null || _etplandate.text == "" ){
+    /*if(_etplandate.text == null || _etplandate.text == "" ){
       showAlertDialog(context, "계획일자를 기입하세요");
       chk = false;
       return false;
@@ -169,7 +170,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
       showAlertDialog(context, "관리대수를 입력해주세요. (숫자로만 입력)");
       chk = false;
       return false;
-    }
+    }*/
 
     final response = await http.post(
       uri,
@@ -182,9 +183,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
         'plandate':  _etplandate.text,
         'actcd' : _etactcd.text,
         'actnm' : _etactnm.text,
-        'equpcd' : equpcd,
         'cltcd'  : cltcd,
-        'equpnm' : _etequpnm.text,
         'perid'   : _etPeridTxt.toString(),
         'kcpernm' : _etPeridTxt.toString(),
         'remark'  : _etremark.text,
@@ -347,16 +346,13 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                   ),
                   ).then((value) {
                     setState(() {
-                      _etactnm.text = value[2];
+                      _etactnm.text = value[1];
                       _etactcd.text = value[0];
-                      _etequpnm.text = value[3];
-
-                      equpcd = value[1];
-                      cltcd = value[4];
+                      cltcd = value[2];
 
                     });
                   });
-                }, child: Text('수정하기')),
+                }, child: Text('검색하기')),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
@@ -370,7 +366,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
           SizedBox(
             height: 20,
           ),
-          TextField(
+          /*TextField(
             controller: _etequpnm,
             readOnly: true,
             maxLines: 1,
@@ -390,7 +386,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
           ),
           SizedBox(
             height: 20,
-          ),
+          ),*/
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Text('담당자'),
@@ -526,7 +522,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '관리대수',
+                labelText: '관리대수(숫자로만 입력)',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),

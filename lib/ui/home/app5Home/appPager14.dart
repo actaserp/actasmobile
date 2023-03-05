@@ -181,6 +181,7 @@ class _AppPager14State extends State<AppPager14>{
       body: <String, String>{
         'dbnm': _dbnm,
         'nsubject': _etSearch2.text,
+        'ngourpcd' : "01"
       },
     );
 

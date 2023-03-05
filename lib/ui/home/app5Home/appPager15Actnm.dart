@@ -38,7 +38,7 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
  Future getactnminfo() async {
    String _dbnm = await SessionManager().get("dbnm");
 
-   var uritxt = CLOUD_URL + '/appmobile/tbe601list';
+   var uritxt = CLOUD_URL + '/apppgymobile/tbe601list';
    var encoded = Uri.encodeFull(uritxt);
 
 
@@ -65,12 +65,9 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
      for (int i = 0; i < alllist.length; i++) {
        tbe601list_model emObject= tbe601list_model(
 
-           equpnm:    alllist[i]["equpnm"],
+
            actnm :    alllist[i]["actnm"],
-           /*actaddr  : alllist[i]["actaddr"],*/
-           pernm:    alllist[i]["pernm"],
            actcd:    alllist[i]["actcd"],
-           equpcd:    alllist[i]["equpcd"],
             cltcd:    alllist[i]["cltcd"],
 
        );
@@ -139,26 +136,13 @@ class _AppPager15ActnmState extends State<AppPager15Actnm> {
              TextButton(child: Text(e601Data.actnm, style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
                  onPressed: () {
 
-                   Navigator.pop(context, [e601Data.actcd, e601Data.equpcd, e601Data.actnm, e601Data.equpnm, e601Data.cltcd]);
+                   Navigator.pop(context, [e601Data.actcd, e601Data.actnm, e601Data.cltcd]);
                  },
                ),
              Text('현장코드: ' + e601Data.actcd, style: GlobalStyle.couponName),
              // Text(e401Data.contents, style: GlobalStyle.couponName),
              SizedBox(height: 12),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 Row(
-                   children: [
-                     SizedBox(
-                       width: 4,
-                     ),
-                     Text('호기명 '+e601Data.equpnm, style: GlobalStyle.couponExpired),
-                   ],
-                 ),
-               ],
-             ),
-             Text('호기코드: ' + e601Data.equpcd)
+
            ],
          ),
        ),

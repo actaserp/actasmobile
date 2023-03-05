@@ -202,7 +202,7 @@ class _AppPager15State extends State<AppPager15> {
                         DataColumn(label: Text('No.')),
                         DataColumn(label: Text('검사일자')),
                         DataColumn(label: Text('현장명')),
-                        DataColumn(label: Text('호기명')),
+                       /* DataColumn(label: Text('호기명')),*/
                         DataColumn(label: Text('담당자')),
                         DataColumn(label: Text('검사자')),
                         DataColumn(label: Text('검사기관')),
@@ -248,11 +248,11 @@ class _AppPager15State extends State<AppPager15> {
                                         overflow: TextOverflow.ellipsis),
                                   )),
 
-                                  DataCell(Container(
+                                  /*DataCell(Container(
                                     width: 50,
                                     child: Text(item.equpnm,
                                         overflow: TextOverflow.ellipsis),
-                                  )),
+                                  )),*/
                                   DataCell(Container(
                                     width: 80,
                                     child: Text(item.pernm,

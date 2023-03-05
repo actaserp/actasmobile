@@ -58,6 +58,11 @@ class _AppPager13registerState extends State<AppPager13register> {
 
     super.initState();
     initData();
+    _selectedValue2 = "합격";
+    _selectedValue = "001";
+    print(_selectedValue);
+    print("object!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    _etfintputdate.text = DateTime.now().toString().substring(0,10);
    /* now = DateTime.now().toString();
     now2 = now.substring(0,10);
 
@@ -70,6 +75,7 @@ class _AppPager13registerState extends State<AppPager13register> {
   Future<void> initData() async {
     await sessionData();
     setData();
+    _selectedValue = "001";
   }
   Future<void> sessionData() async {
     String username = await SessionManager().get("username");
@@ -174,10 +180,11 @@ class _AppPager13registerState extends State<AppPager13register> {
               padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
+
                   icon: Icon(Icons.keyboard_arrow_down),
                   dropdownColor: SOFT_BLUE,
                   iconEnabledColor: Colors.white,
-                  hint: Text("분류",  style: TextStyle(color: Colors.white)),
+                  /*hint: Text("합격",  style: TextStyle(color: Colors.white)),*/
                   items: dropdownList.map((item) {
                     return DropdownMenuItem<String>(
                       child: Text(item, style: TextStyle(color: Colors.white)),

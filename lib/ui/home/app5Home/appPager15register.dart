@@ -80,6 +80,8 @@ class _AppPager15registerState extends State<AppPager15register> {
     super.initState();
     pop_epernm();
     setData();
+
+    _etCompdate.text = DateTime.now().toString().substring(0,10);
   }
 
  @override
@@ -148,7 +150,7 @@ class _AppPager15registerState extends State<AppPager15register> {
   Future getactnminfo() async {
     String _dbnm = await SessionManager().get("dbnm");
 
-    var uritxt = CLOUD_URL + '/appmobile/tbe601list';
+    var uritxt = CLOUD_URL + '/apppgymobile/tbe601list';
     var encoded = Uri.encodeFull(uritxt);
 
 
@@ -211,19 +213,11 @@ class _AppPager15registerState extends State<AppPager15register> {
       return false;
     }
     if(actcd == null || actcd == "" ){
-      showAlertDialog(context, "현장조회를 하십시오.");
+      showAlertDialog(context, "현장코드조회를 하십시오.");
       return false;
     }
     if(actnm == null  || actnm == ""){
-      showAlertDialog(context, "현장조회를 하십시오");
-      return false;
-    }
-    if(equpcd == null  || equpcd == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
-      return false;
-    }
-    if(equpnm == null  || equpnm == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
+      showAlertDialog(context, "현장명조회를 하십시오");
       return false;
     }
     if(_etPeridTxt == null || _etPeridTxt == "" ){
@@ -250,8 +244,6 @@ class _AppPager15registerState extends State<AppPager15register> {
         'plandate':  _etCompdate.text,
         'actcd' : actcd.toString(),
         'actnm' : actnm.toString(),
-        'equpcd' : equpcd.toString(),
-        'equpnm' : equpnm.toString(),
         'perid'   : _etPeridTxt.toString(),
         'kcpernm' : _etPeridTxt.toString(),
         'remark'  : _etText.text.toString(),
@@ -374,15 +366,13 @@ class _AppPager15registerState extends State<AppPager15register> {
                       ).then((value) {
                           setState(() {
                             actcd = value[0];
-                            equpcd = value[1];
-                            actnm = value[2];
-                            equpnm = value[3];
-                            cltcd = value[4];
+                            actnm = value[1];
+                            cltcd = value[2];
 
-                            _etSearch2.text = value[2];
+                            _etSearch2.text = value[1];
 
                             actcd2 = value[0];
-                            equpcd2 = value[1];
+
                           });
 
                           print(actcd);
@@ -425,8 +415,8 @@ class _AppPager15registerState extends State<AppPager15register> {
             child: Row(
               children: [
                 Text('현장코드: ' + actcd2),
-                Container( margin: EdgeInsets.only(left: 20),
-                    child: Text('호기명: ' + equpnm)),
+               /* Container( margin: EdgeInsets.only(left: 20),
+                    child: Text('호기명: ' + equpnm)),*/
 
               ],
             ),
@@ -804,7 +794,7 @@ class _AppPager15registerState extends State<AppPager15register> {
 
 
               // Text(e401Data.contents, style: GlobalStyle.couponName),
-              SizedBox(height: 12),
+              /*SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -821,7 +811,7 @@ class _AppPager15registerState extends State<AppPager15register> {
 
                 ],
               ),
-              Text('호기코드: '+e601Data.equpcd+' ', style: GlobalStyle.couponName),
+              Text('호기코드: '+e601Data.equpcd+' ', style: GlobalStyle.couponName),*/
 
             ],
           ),

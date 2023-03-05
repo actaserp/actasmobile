@@ -4,10 +4,13 @@ import 'dart:ffi';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app02/eactpernm_model.dart';
+import 'package:actasm/ui/home/appPage02.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../model/app01/e401list_model.dart';
 import 'package:date_format/date_format.dart';
@@ -49,6 +52,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   late String _hour2, _minute2, _time2;
   late String _dbnm , _etrecedate, _etrecenum, _etrectime;
   String? _etGregicdTxt, _etRegicdTxt, _etResucdTxt ,_etResultcdTxt, _eCompdate, _eComptime, _etRemocdTxt, _etPeridTxt, _eArrivtime ;   // _etRegicdTxt, _etResucdTxt, _etResultcdTxt, _etResuremarkTxt;
+  bool chk = false;
+  bool chk2 = false;
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -437,6 +442,15 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
       showAlertDialog(context, "고장부위상세를 등록하세요");
       return false;
     }
+    if(_etPeridTxt.toString() == null  || _etPeridTxt.toString() == "" || chk == false){
+      showAlertDialog(context, "담당자를 등록하세요");
+      return false;
+    }
+
+    if(_etRemocdTxt.toString() == null  || _etRemocdTxt.toString() == "" || chk2 == false){
+      showAlertDialog(context, "고장요인을 등록하세요");
+      return false;
+    }
     if(widget.e401Data.resucd == null  ){
       showAlertDialog(context, "처리내용을 등록하세요");
       return false;
@@ -475,8 +489,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
         'equpcd' : widget.e401Data.equpcd.toString(), //
         'equpnm' : widget.e401Data.equpnm.toString(), //
         'recetime': widget.e401Data.recetime.toString(), //
-        /*'cltcd' : widget.e401Data.cltcd.toString(),
-        'divicd': widget.e401Data.divicd.toString(),*/
+        'cltcd' : widget.e401Data.cltcd.toString(),
+        'divicd': widget.e401Data.divicd.toString(),
         'actperid': _etPeridTxt.toString(),
         'remocd' : _etRemocdTxt.toString(),
         'remoremark': _etremoremark.text,
@@ -487,7 +501,34 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     if(response.statusCode == 200){
       print("저장됨");
 
+
+      /*showDialog(context: context, builder: (context){
+        return AlertDialog(
+
+          content: Text('저장되었습니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+
+              onPressed: () {
+
+                Navigator.pop(context);
+                Get.off(AppPage02());
+                *//* Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => AppPager13()),
+                            );
+                            Get.off(AppPager14());*//*
+              },
+            ),
+
+          ],
+        );
+      });*/
+
+
       return   true;
+
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('고장부위 불러오는데 실패했습니다');
@@ -752,7 +793,9 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
+
                         setState(() {
+                          chk2 = true;
                           this._etRemocdTxt = value;
                           /*widget.e401Data.remocd = value;*/   /*****************************************************************************************************************/
                         });
@@ -789,6 +832,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                         );
                       }).toList(),
                       onChanged: (String? value) {
+                        chk = true;
                         setState(() {
                           this._etPeridTxt = value;
                           /*widget.e401Data.remocd = value;*/   /*****************************************************************************************************************/
@@ -928,11 +972,13 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                         )
                     ),
                   ),
-                  onPressed: () {
-                    bool lb_save = save_e411data() as bool;
-                    if (lb_save){
-                      _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+                  onPressed: () async {
+                    await save_e411data();
+                    if(save_e411data == true){
+                      showAlertDialog(context, "저장되었습니다.");
+                      Get.off(AppPage02());
                     }
+
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
