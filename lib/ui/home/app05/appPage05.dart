@@ -148,6 +148,55 @@ class _AppPage05State extends State<AppPage05> {
       throw Exception('불러오는데 실패했습니다');
     }
   }
+  Future SSslist_getdata() async {
+    String _dbnm = await  SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/appmobile/SSslist';
+    var encoded = Uri.encodeFull(uritxt);
+
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'smemo': _etSearch.text.toString(),
+      },
+    );
+    if(response.statusCode == 200){
+      List<dynamic> alllist = [];
+      alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
+      SData.clear();
+      // seqKey.clear();
+      // _seqKey.clear();
+      for (int i = 0; i < alllist.length; i++) {
+        SmanualList_model SObject= SmanualList_model(
+          custcd:alllist[i]['custcd'],
+          spjangcd:alllist[i]['spjangcd'],
+          sseq:alllist[i]['sseq'],
+          sinputdate:alllist[i]['sinputdate'],
+          spernm:alllist[i]['spernm'],
+          smemo:alllist[i]['smemo'],
+          sflag:alllist[i]['sflag'],
+          subkey:alllist[i]['subkey'],
+        );
+        setState(() {
+          SData.add(SObject);
+          // seqKey.add(SObject);
+          // _seqKey.add(alllist[i]['sseq']);
+        });
+
+      }
+
+      return SData;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('불러오는데 실패했습니다');
+    }
+  }
 
   @override
   Future attachCM()async {
@@ -247,7 +296,7 @@ class _AppPage05State extends State<AppPage05> {
                   setState(() {
                     this._searchText = value;
                     debugPrint('텍스트 받는지 확인:::${this._searchText} ');
-                    // blist_getdata2();
+                    SSslist_getdata();
                   });
                 },
               ),
@@ -467,12 +516,6 @@ class _AppPage05State extends State<AppPage05> {
                         ],
                       ),
                     ),
-                // Container(
-                //   margin: EdgeInsets.only(top:10, ),
-                //   decoration: UnderlineTabIndicator(
-                //       borderSide: BorderSide(color: SOFT_BLUE)
-                //   ),
-                // ),
                 ///댓글창 생성
                 Container(
                   margin: EdgeInsets.only(top:10, bottom: 10),
@@ -512,65 +555,6 @@ class _AppPage05State extends State<AppPage05> {
       );
 
   }
-
-  ///댓글창 입력
-  // Widget commentinput(){
-  //   return Container(
-  //     margin: EdgeInsets.all(11),
-  //     child: Row(
-  //       children: [
-  //     Flexible(
-  //     child: TextFormField(
-  //     controller: _etChat,
-  //       minLines: 1,
-  //       maxLines: 4,
-  //       textAlignVertical: TextAlignVertical.bottom,
-  //       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-  //       onChanged: (textValue) {
-  //         setState(() {});
-  //       },
-  //       decoration: InputDecoration(
-  //         fillColor: Colors.grey[200],
-  //         filled: true,
-  //         hintText: '댓글을 입력해 주세요',
-  //         focusedBorder: UnderlineInputBorder(
-  //             borderRadius: BorderRadius.all(Radius.circular(5.0)),
-  //             borderSide: BorderSide(color: Colors.grey[200]!)),
-  //         enabledBorder: UnderlineInputBorder(
-  //           borderRadius: BorderRadius.all(Radius.circular(5.0)),
-  //           borderSide: BorderSide(color: Colors.grey[200]!),
-  //         ),
-  //       ),
-  //     ),
-  //   ),
-  //   SizedBox(
-  //   width: 10,
-  //   ),
-  //   Container(
-  //   child: GestureDetector(
-  //   onTap: (){
-  //   if(_etChat.text != ''){
-  //   print('댓글 전송 출력 => '+_etChat.text);
-  //   setState(() {
-  //
-  //   });
-  //   }
-  //   },
-  //   child: ClipOval(
-  //   child: Container(
-  //   color: SOFT_GREY,
-  //   padding: EdgeInsets.all(10),
-  //   child: Icon(Icons.keyboard_arrow_up, color: Colors.white)
-  //   ),
-  //   ),
-  //
-  //   ),
-  //   )
-  //   ]
-  //   ),
-  //   );
-  // }
-
 
   ///댓글 리스트 생성
   Widget _buildchat(SCmanualList_model SCData){

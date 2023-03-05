@@ -280,12 +280,12 @@ class _AppPage05ViewState extends State<AppPage05view> {
                         fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                     )),
                   ),
-                Container(
-                  padding:EdgeInsets.all(16),
-                  child: Text('${widget.SData.sseq}', style: TextStyle(
-                      fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                  ))
-                ),
+                // Container(
+                //   padding:EdgeInsets.all(16),
+                //   child: Text('${widget.SData.sseq}', style: TextStyle(
+                //       fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                //   ))
+                // ),
                 ],
               ),
             ],
