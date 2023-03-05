@@ -37,25 +37,18 @@ class AppPage05view extends StatefulWidget {
 class _AppPage05ViewState extends State<AppPage05view> {
   final _reusableWidget = ReusableWidget();
   late String _dbnm, _attatchidx;
-  final List<String> _ATCData = [];
-  final List<String> _idxData = [];
-  final List<String> _seqData = [];
-  String? _thumfile;
-  Uint8List? _thumdata;
-  ///여기서부터 blank
   TextEditingController _memo = TextEditingController();
-  TextEditingController _subject = TextEditingController();
-  TextEditingController _etCompdate = TextEditingController();
-
+  var _usernm = "";
+  var nullableBool = "";
   @override
-  void setData() {
-    _attatchidx = widget.SData.sseq;
+  Future<void> sessionData() async {
+    String username = await  SessionManager().get("username");
+    _usernm = utf8.decode(username.runes.toList());
   }
-
 
   @override
   void initState() {
-    setData();
+    sessionData();
     super.initState();
 
   }
@@ -66,6 +59,39 @@ class _AppPage05ViewState extends State<AppPage05view> {
     super.dispose();
   }
 
+  //저장
+  @override
+  Future<bool> save_scdata()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/appmobile/saveeSS2';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("@@@@@@@@@@@댓글 저장@@@@@@@@@@@@@@@@");
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        ///저장시 필수 값
+        ///sseq, sinputdate, smemo, spernm,
+        ///custcd, spjangcd, hseq,subkey 컨트롤러
+        ///sflag 없앰
+        'spernm': _usernm.toString(),
+        'smemo': _memo.text.toString(),
+        'sseq' : nullableBool,
+        'subkey':  widget.SData.sseq,
+      },
+    );
+    if(response.statusCode == 200){
+      print("저장됨");
+      return   true;
+    }else{
+      throw Exception('댓글 저장에 실패했습니다');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +279,13 @@ class _AppPage05ViewState extends State<AppPage05view> {
                     child: Text('${widget.SData.smemo}', style: TextStyle(
                         fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                     )),
-                  )
+                  ),
+                Container(
+                  padding:EdgeInsets.all(16),
+                  child: Text('${widget.SData.sseq}', style: TextStyle(
+                      fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
+                  ))
+                ),
                 ],
               ),
             ],
@@ -343,14 +375,12 @@ class _AppPage05ViewState extends State<AppPage05view> {
               ),
               Container(
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: ()async {
                     String inputText2 = _memo.text;
-                    if(inputText2 != ''){
-                      print('메시지 전송 출력 확인 => '+ inputText2);
-                      setState(() {
-                        inputText2;
-                        debugPrint('값 받는지 확인:::${inputText2} ');
-                      });
+                    print('메시지 전송 출력 확인 => '+ inputText2);
+                    bool lb_save = await save_scdata();
+                    if (lb_save){
+                      _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
                     }
                   },
                   child: ClipOval(

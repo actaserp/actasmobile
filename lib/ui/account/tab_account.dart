@@ -21,32 +21,34 @@ class TabAccountPage extends StatefulWidget {
   _TabAccountPageState createState() => _TabAccountPageState();
 }
 
-class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAliveClientMixin {
+class _TabAccountPageState extends State<TabAccountPage> {
   // initialize reusable widget
   final _reusableWidget = ReusableWidget();
   ///작성자
   var _usernm = "";
   var _userid = "";
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     sessionData();
+    sessionData2();
     super.initState();
   }
   @override
   Future<void> sessionData() async {
     String username = await  SessionManager().get("username");
     _usernm = utf8.decode(username.runes.toList());
+  }
+
+  @override
+  Future<void> sessionData2() async {
     String userid = await  SessionManager().get("userid");
     _userid = utf8.decode(userid.runes.toList());
-
   }
   @override
   Widget build(BuildContext context) {
     // if we used AutomaticKeepAliveClientMixin, we must call super.build(context);
-    super.build(context);
+    // super.build(context);
     return Scaffold(
         endDrawer: Nav_right(
           text: Text('acc_nav'),
@@ -67,7 +69,6 @@ class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAlive
         body: ListView(
           padding: EdgeInsets.all(16),
           children: [
-
             _createAccountInformation(),
             Container(
               margin: EdgeInsets.fromLTRB(0, 18, 0, 18),
@@ -99,28 +100,6 @@ class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAlive
               ),
             ),
             _reusableWidget.divider1(),
-
-            // Container(
-            //   margin: EdgeInsets.fromLTRB(0, 18, 0, 0),
-            //   child: GestureDetector(
-            //     behavior: HitTestBehavior.translucent,
-            //     onTap: (){
-            //       Fluttertoast.showToast(
-            //           msg: 'Click Sign Out',
-            //           toastLength: Toast.LENGTH_LONG);
-            //     },
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Icon(Icons.power_settings_new, size: 20, color: ASSENT_COLOR),
-            //         SizedBox(width: 8),
-            //         Text('Sign Out', style: TextStyle(
-            //             fontSize: 15, color: ASSENT_COLOR
-            //         )),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         )
     );
@@ -160,17 +139,14 @@ class _TabAccountPageState extends State<TabAccountPage> with AutomaticKeepAlive
             width: 16,
           ),
           Expanded(
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text( _usernm,
                   style: TextStyle(color: SOFT_BLUE ,fontSize: 18,fontWeight: FontWeight.bold),
                 ),
-                Text( '님 반갑습니다.',
+                Text( ' 님 반갑습니다.',
                   style: TextStyle(color: BLACK_GREY ,fontSize: 18),
-                ),
-                SizedBox(
-                  height: 8,
                 ),
               ],
             ),
