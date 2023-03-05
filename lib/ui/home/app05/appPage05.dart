@@ -610,9 +610,6 @@ class _AppPage05State extends State<AppPage05> {
                     Text('${SCData.sinputdate}', style: TextStyle(
                         color: SOFT_GREY, fontSize: 9
                     )),
-                    Text('subkey 확인 ::: ${SCData.subkey}', style: TextStyle(
-                        color: Colors.red, fontSize: 12
-                    )),
                   ],
                 ),
               ],
