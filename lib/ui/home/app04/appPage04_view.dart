@@ -45,6 +45,37 @@ class _AppPage04ViewState extends State<AppPage04view> {
   void setData() {
     _attatchidx = widget.BData.bseq;
   }
+  @override
+  Future<bool> re_mbdata()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/appmobile/saveeMB';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("------------부품가이드 수정----------------");
+    ///null처리
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'binputdate': widget.BData.binputdate.toString(),
+        'bpernm': widget.BData.bpernm.toString(),
+        'bmemo': _memo.text.toString(),
+        'bsubject': _subject.text.toString(),
+        'bgroupcd': '01'.toString(),
+        'bseq':widget.BData.bseq.toString(),
+      },
+    );
+    if(response.statusCode == 200){
+      print("저장됨");
+      return   true;
+    }else{
+      throw Exception('수리노하우 수정에 실패했습니다');
+    }
+  }
 
   @override
   Future attachMB()async {
@@ -119,6 +150,8 @@ class _AppPage04ViewState extends State<AppPage04view> {
 
   @override
   void initState() {
+    _subject.text = widget.BData.bsubject;
+    _memo.text = widget.BData.bmemo;
     attachMB();
     setData();
     super.initState();
@@ -207,9 +240,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
                     autofocus: true,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: '제목을 수정해주세요',
-
-                      labelText: '${widget.BData.bsubject}',
                       labelStyle:
                       TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: SOFT_BLUE),
                       border: InputBorder.none,
@@ -228,61 +258,11 @@ class _AppPage04ViewState extends State<AppPage04view> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 8, bottom: 2),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(7)
-                        ),
-                        child: Container(
-                          color: SOFT_BLUE,
-                          child: Text(' 작성자 ', style: TextStyle(
-                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
-                          )),
-                        ),
-                      ),
-                      Text(' ${widget.BData.bpernm} ', style: TextStyle(
-                          fontSize: 14, color: CHARCOAL
-                      )),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(7)
-                        ),
-                        child: Container(
-                          color: SOFT_BLUE,
-                          child: Text(' 구분 ', style: TextStyle(
-                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
-                          )),
-                        ),
-                      ),
-                      Text(' ${widget.BData.bgourpcd} ', style: TextStyle(
-                        fontSize: 14, color: CHARCOAL,
-                      ))
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Color(0xffcccccc),
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Container(
                   child: TextField(
                     controller: _memo,
                     autofocus: true,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: '내용을 수정해주세요',
-                      labelText: '${widget.BData.bmemo}',
                       labelStyle:
                       TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: CHARCOAL),
                       border: InputBorder.none,
@@ -346,10 +326,13 @@ class _AppPage04ViewState extends State<AppPage04view> {
                             )
                         ),
                       ),
-                      onPressed: () {
-                        _reusableWidget.startLoading(context, '수정 되었습니다.', 1);
+                      onPressed: ()async  {
+                      bool lb_save = await re_mbdata();
+                      if (lb_save){
+                      _reusableWidget.startLoading(context, '수정 되었습니다', 1 );
+                      }
                       },
-                      child: Padding(
+                          child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: Text(
                           '수정하기',

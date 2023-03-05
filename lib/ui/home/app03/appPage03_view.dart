@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:actasm/ui/home/app03/appPage03.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,10 +49,39 @@ class _AppPage03ViewState extends State<AppPage03view> {
   TextEditingController _subject = TextEditingController();
   TextEditingController _etCompdate = TextEditingController();
 
+  @override
+  void setData2() {
+    _attatchidx = widget.MhData.hseq;
+  }
 
   @override
   void setData() {
     _attatchidx = widget.MhData.hseq;
+  }
+  Future mhlist_del() async {
+    String _dbnm = await SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/appmobile/mhdel';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: <String, String>{
+        'dbnm': _dbnm,
+        'hseq' : widget.MhData.hseq.toString()
+      },
+    );
+    if (response.statusCode == 200) {
+      print('삭제됨');
+      return true;
+    } else {
+      throw Exception('불러오는데 실패했습니다');
+    }
+
   }
 
   @override
@@ -60,7 +90,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
     var uritxt = CLOUD_URL + '/appmobile/saveeMh';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
-    print("------------부품가이드 수정----------------");
+    print("------------수리노하우 수정----------------");
     ///null처리
     final response = await http.post(
       uri,
@@ -156,7 +186,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
 
   @override
   void initState() {
-
+    _subject.text = widget.MhData.hsubject;
+    _memo.text = widget.MhData.hmemo;
     attachMH();
     setData();
     super.initState();
@@ -256,8 +287,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
                     autofocus: true,
                     decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: '제목을 수정해주세요',
-                        labelText: '${widget.MhData.hsubject}',
+                        hintText: '제목 입력',
                         labelStyle:
                         TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: SOFT_BLUE),
                       border: InputBorder.none,
@@ -276,61 +306,12 @@ class _AppPage03ViewState extends State<AppPage03view> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 8, bottom: 2),
-                  child: Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(7)
-                        ),
-                        child: Container(
-                          color: SOFT_BLUE,
-                          child: Text(' 작성자 ', style: TextStyle(
-                              fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
-                          )),
-                        ),
-                      ),
-                      Text(' ${widget.MhData.hpernm} ', style: TextStyle(
-                          fontSize: 14, color: CHARCOAL
-                      )),
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(7)
-                        ),
-                        child: Container(
-                          color: SOFT_BLUE,
-                          child: Text(' 구분 ', style: TextStyle(
-                            fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold,
-                          )),
-                        ),
-                      ),
-                      Text('${widget.MhData.hgroupcd} ', style: TextStyle(
-                          fontSize: 14, color: CHARCOAL,
-                      ))
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        color: Color(0xffcccccc),
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                ),
-
-                Container(
                   child: TextField(
                     controller: _memo,
                     autofocus: true,
                     decoration: InputDecoration(
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        hintText: '내용을 수정해주세요',
-                        labelText: '${widget.MhData.hmemo}',
+                        hintText: '내용 입력',
                       labelStyle:
                       TextStyle(fontSize:23, fontWeight: FontWeight.bold, color: CHARCOAL),
                       border: InputBorder.none,
@@ -430,7 +411,28 @@ class _AppPage03ViewState extends State<AppPage03view> {
                         ),
                       ),
                       onPressed: () {
-                        _reusableWidget.startLoading(context, '삭제 되었습니다.', 1);
+                      showDialog(
+                        context: context,
+                      builder: (context) => AlertDialog(
+                      title: Text('삭제하시겠습니까?'),
+                            actions: [
+                              TextButton(
+                                child: Text('취소'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                child: Text('삭제'),
+                                onPressed: () async {
+                                  await mhlist_del();
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) => AppPage03()));
+                                },
+                              ),
+                            ],
+                      ),
+                      );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -539,19 +541,7 @@ Widget _buildFileList() {
                                        timeMs: 50,
                                        quality: 50);
                              });
-                                // try{
-                                //  await VideoThumbnail.thumbnailFile(
-                                //       video: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH",
-                                //       headers: {
-                                //         "USERHEADER1": "user defined header1",
-                                //         "USERHEADER2": "user defined header2",
-                                //       },
-                                //       imageFormat: ImageFormat.JPEG,
-                                //       timeMs: 10,
-                                //       quality: 50);
-                                // }catch(e){
-                                //   print("eerror :::: $e");
-                                // }
+
                            },
                            child: Icon(Icons.edit),
                          ),
@@ -567,80 +557,4 @@ Widget _buildFileList() {
   );
 }
 
-///비디오 썸네일
-
-  void getVideoThumbnail(String file) async {
-    String dir = (await getApplicationDocumentsDirectory()).path;
-
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
-        video: '$dir',
-        imageFormat: ImageFormat.JPEG,
-        timeMs: 10,
-        quality: 50);
-  }
-
-///썸네일
-//   Future<Thumbnail> getThumbnail(String mimeType, String filePath) async {
-//     switch (mimeType) {
-//       case 'image/jpeg':
-//       case 'image/png':
-//       case 'image/bmp':
-//         return await Thumbnailer.getThumbnail(
-//           thumbnailRequest: ThumbnailRequest(
-//             filePath: filePath,
-//             imageFormat: ImageFormat.JPEG,
-//             maxHeight: 256,
-//             maxWidth: 256,
-//           ),
-//         );
-//       case 'video/mp4':
-//       case 'video/quicktime':
-//         return await Thumbnailer.getThumbnail(
-//           thumbnailRequest: ThumbnailRequest(
-//             filePath: filePath,
-//             imageFormat: ImageFormat.JPEG,
-//             maxHeight: 256,
-//             maxWidth: 256,
-//             timeMs: 1000, // get thumbnail from the 1st second of the video
-//           ),
-//         );
-//
-//     case 'application/pdf':
-//       return await Thumbnailer.getThumbnail(
-//
-//     thumbnailRequest
-//
-//
-//     thumbnailRequest: ThumbnailRequest(
-//     filePath: filePath,
-//     imageFormat: ImageFormat.PNG,
-//
-//
-//     maxHeight: 256,
-//
-//
-//     maxWidth: 256,
-//
-//     pdfPageNumber
-//
-//     pdfPage
-//
-//
-//     pdfPageNumber: 1, // get thumbnail from the 1st page of the PDF document
-//     ),
-//     );
-//
-//     ),
-//     );
-//
-//
-//     ),
-//     );
-//     default:
-//     return null;
-//   }
-//   }
-//
-// }
-//
 }

@@ -317,7 +317,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
-                        )
+                        ),
                     ),
                   ),
                   onPressed: ()async  {

@@ -44,6 +44,7 @@ class _AppPage05State extends State<AppPage05> {
   late String _dbnm;
   @override
   void initState() {
+
     sessionData();
     SSlist_getdata();
     attachCM();
@@ -258,7 +259,7 @@ class _AppPage05State extends State<AppPage05> {
           ),
           elevation: GlobalStyle.appBarElevation,
           title: Text(
-            '수리 Q&A' + _usernm,
+            '수리 Q&A',
             style: GlobalStyle.appBarTitle,
           ),
           backgroundColor: GlobalStyle.appBarBackgroundColor,
