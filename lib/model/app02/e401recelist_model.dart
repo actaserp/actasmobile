@@ -7,6 +7,8 @@ class e401recelist_model{
   late var recetime;
   late var hitchhour;
   late var recenum;
+  late var cltcd;
+
   late var actcd;
   late var actnm;
   late var equpcd;
@@ -27,7 +29,7 @@ class e401recelist_model{
   e401recelist_model({
    required this.recedate, this.recedateyear, required this.hitchdate, this.recetime, this.hitchhour, this.recenum, this.actcd, required this.actnm,
     this.equpcd, this.equpnm, this.actpernm, this.contcd, this.contnm, this.tel, this.reperid, this.repernm, this.perid, this.pernm,
-    this.handphone, this.contents, this.addrtxt
+    this.handphone, this.contents, this.addrtxt, this.cltcd
 
 });
 }

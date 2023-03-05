@@ -9,6 +9,7 @@ import '../../../config/constant.dart';
 import '../../../model/app01/e401list_model.dart';
 import '../../../model/app02/e401recelist_model.dart';
 import 'appPager16Detail.dart';
+import 'appPager16register.dart';
 
 class AppPager16 extends StatefulWidget {
 
@@ -27,6 +28,7 @@ class _AppPager16State extends State<AppPager16> {
 
     super.initState();
     e401list_getdata();
+
   }
 
   @override
@@ -78,7 +80,8 @@ class _AppPager16State extends State<AppPager16> {
               recetime: alllist[i]['recetime'],
               repernm: alllist[i]['repernm'],
               contents: alllist[i]['contents'],
-              addrtxt: alllist[i]['addrtxt']
+              addrtxt: alllist[i]['addrtxt'],
+              cltcd: alllist[i]['cltcd']
         );
         setState(() {
           e401receData.add(emObject);
@@ -109,7 +112,9 @@ class _AppPager16State extends State<AppPager16> {
             Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: TextButton(onPressed: (){
-
+                    setState(() {
+                      e401list_getdata();
+                    });
                 }, child: Text('검색하기')),
             )
           ],
@@ -159,19 +164,65 @@ class _AppPager16State extends State<AppPager16> {
             ),
           ), preferredSize: Size.fromHeight(kToolbarHeight)),
         ),
-      body: WillPopScope(
-          child: ListView.builder(
-            itemCount: e401receData.length,
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            physics: AlwaysScrollableScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              return _buildListCard(e401receData[index]);
-            },
-          ),
-          onWillPop: (){
-            Navigator.pop(context);
-            return Future.value(true);
-      }),
+      body: Container(
+        height: 800,
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.715,
+              child: WillPopScope(
+                  child: ListView.builder(
+                    itemCount: e401receData.length,
+                    padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return _buildListCard(e401receData[index]);
+                    },
+                  ),
+                  onWillPop: (){
+                    Navigator.pop(context);
+                    return Future.value(true);
+              }),
+            ),
+            Container( ///노하우등록
+              padding: EdgeInsets.all(12),
+              child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager16register()));
+
+                  },
+                  style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )
+                      ),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                            color: SOFT_BLUE,
+                            width: 1.0
+                        ),
+                      )
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Text(
+                      '고장접수 등록',
+                      style: TextStyle(
+                          color: SOFT_BLUE,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+              ),
+            )
+          ],
+        ),
+      ),
+
     );
   }
 
