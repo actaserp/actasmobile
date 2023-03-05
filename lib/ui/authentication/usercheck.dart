@@ -35,7 +35,7 @@ Future<Map> Usercheck(String userid, String userpw) async{
     // await SessionManager().set("cltcd", userinfo['cltcd']);
     // await SessionManager().set("flag", userinfo['flag']);
     await SessionManager().set("dbnm", userinfo['dbnm']);
-    // await SessionManager().set("perid", userinfo['perid']);
+    await SessionManager().set("perid", userinfo['perid']);
     // await SessionManager().set("pernm", userinfo['pernm']);
     // dynamic user_saupnum = await SessionManager().get("saupnum");
 

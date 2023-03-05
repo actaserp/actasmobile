@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../model/app02/plan_model.dart';
 import '../../../model/app04/E038List_model.dart';
 import 'appPage11Detail.dart';
+import 'appPage11Regist.dart';
 //import 'appPage11_view.dart';
 
 
@@ -46,8 +48,10 @@ class _AppPage11State extends State<AppPage11> {
     super.dispose();
   }
 
+
   Future e038list_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
+    String _perid = await  SessionManager().get("perid")?? "";
 
     var uritxt = CLOUD_URL + '/e038mbc/list';
     var encoded = Uri.encodeFull(uritxt);
@@ -61,7 +65,8 @@ class _AppPage11State extends State<AppPage11> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'date': _etDate.text
+        'date': _etDate.text,
+        'perid': _perid
 
       },
     );
@@ -90,7 +95,8 @@ class _AppPage11State extends State<AppPage11> {
           endkm:alllist[i]['endkm'],
           km:alllist[i]['km'],
           cltcd:alllist[i]['cltcd'],
-          pernm:alllist[i]['pernm']
+          pernm:alllist[i]['pernm'],
+          equpnm:alllist[i]['equpnm']
         );
         setState(() {
           e038Data.add(emObject);
@@ -221,7 +227,7 @@ class _AppPage11State extends State<AppPage11> {
                       /*  Navigator.push(context, MaterialPageRoute(
                       builder: (context) => AppPager13register()));*/
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Regist()));
 
                     },
                     style: ButtonStyle(
@@ -300,6 +306,11 @@ class _AppPage11State extends State<AppPage11> {
         onTap: (){
           //Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11view(e038Data: e038Data)));
         },
+        child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: (){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail(E038Data: e038Data)));
+        },
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -321,7 +332,7 @@ class _AppPage11State extends State<AppPage11> {
                   ),
                   GestureDetector(
                     onTap: (){
-                      // Fluttertoast.showToast(msg: 'Coupon applied', toastLength: Toast.LENGTH_LONG);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail(E038Data: e038Data)));
                     },
                     child: Text(e038Data.pernm, style: TextStyle(
                         fontSize: 14, color: SOFT_BLUE, fontWeight: FontWeight.bold
@@ -333,7 +344,7 @@ class _AppPage11State extends State<AppPage11> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void showAlertDialog(BuildContext context, String as_msg) async {
