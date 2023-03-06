@@ -24,12 +24,14 @@ class _AppPager15State extends State<AppPager15> {
   late final String good;
   late String _dbnm;
 
-
+  late String perid;
 
   @override
   void initState(){
     super.initState();
+    sessionData();
     plan_getdata();
+
   }
 
   @override
@@ -37,6 +39,13 @@ class _AppPager15State extends State<AppPager15> {
     _etSearch.dispose();
     super.dispose();
 
+  }
+
+
+  Future<void> sessionData() async {
+     perid = (await SessionManager().get("perid")).toString();
+    // 문자열 디코딩
+    print(perid);
   }
 
 
@@ -56,6 +65,7 @@ class _AppPager15State extends State<AppPager15> {
       body: <String, String>{
         'dbnm': _dbnm,
         'actnm': _etSearch.text,
+        'perid': perid,
       },
     );
     if (response.statusCode == 200) {

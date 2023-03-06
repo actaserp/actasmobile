@@ -63,7 +63,7 @@ class _AppPager13registerState extends State<AppPager13register> {
     print(_selectedValue);
     print("object!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     _etfintputdate.text = DateTime.now().toString().substring(0,10);
-   /* now = DateTime.now().toString();
+    /* now = DateTime.now().toString();
     now2 = now.substring(0,10);
 
     _etfintputdate = TextEditingController(text: now2);*/

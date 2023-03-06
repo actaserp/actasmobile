@@ -124,6 +124,40 @@ class _AppPager16DetailState extends State<AppPager16Detail> {
 
 
   @override
+  Future<bool> delete_plandata()async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/apppgymobile/delete_e401';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("----------------------------");
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'recedate':  widget.e401receData.recedate,
+        'recenum' : widget.e401receData.recenum
+
+
+      },
+    );
+    if(response.statusCode == 200){
+      print("삭제됨");
+      chk = true;
+      Get.off(AppPager16());
+      return   true;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      chk = false;
+      throw Exception('고장부위 불러오는데 실패했습니다');
+      return   false;
+    }
+  }
+
+  @override
   Future<bool> update_plandata()async {
      _dbnm = await  SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/apppgymobile/update_e401';
@@ -711,18 +745,11 @@ class _AppPager16DetailState extends State<AppPager16Detail> {
                       actions: <Widget>[
                         TextButton(
                           child: Text('OK'),
-                          onPressed: () {
+                          onPressed: ()  async {
+                            Navigator.pop(context);
+                            await delete_plandata();
 
-                           /* delete_data();
 
-
-                            Get.off(AppPager15());*/
-                            /*delete_data();
-                             Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => AppPager13()),
-                            );
-                            Get.off(AppPager13());*/
                           },
                         ),
                         TextButton(onPressed: (){

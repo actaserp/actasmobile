@@ -21,13 +21,17 @@ class AppPager16 extends StatefulWidget {
 class _AppPager16State extends State<AppPager16> {
 
   TextEditingController _etSearch = TextEditingController();
+  late String perid;
 
 
   @override
   void initState() {
 
     super.initState();
+    sessionData();
     e401list_getdata();
+
+
 
   }
 
@@ -35,6 +39,14 @@ class _AppPager16State extends State<AppPager16> {
   void dispose() {
     super.dispose();
   }
+
+  Future<void> sessionData() async {
+    perid = (await SessionManager().get("perid")).toString();
+    // 문자열 디코딩
+    print(perid);
+  }
+
+
 
 
   Future e401list_getdata() async {
@@ -52,7 +64,8 @@ class _AppPager16State extends State<AppPager16> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'actnm': _etSearch.text
+        'actnm': _etSearch.text,
+        'perid': perid
       },
     );
     if(response.statusCode == 200){
@@ -169,7 +182,7 @@ class _AppPager16State extends State<AppPager16> {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.715,
+              height: MediaQuery.of(context).size.height * 0.615,
               child: WillPopScope(
                   child: ListView.builder(
                     itemCount: e401receData.length,

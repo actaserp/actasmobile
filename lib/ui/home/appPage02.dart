@@ -21,9 +21,12 @@ class AppPage02 extends StatefulWidget {
 class _AppPage02State extends State<AppPage02> {
   TextEditingController _etSearch = TextEditingController();
 
+  late String perid;
+
   @override
   void initState() {
     super.initState();
+    sessionData();
     e401list_getdata() ;
   }
   @override
@@ -32,7 +35,11 @@ class _AppPage02State extends State<AppPage02> {
     super.dispose();
   }
 
-
+  Future<void> sessionData() async {
+    perid = (await SessionManager().get("perid")).toString();
+    // 문자열 디코딩
+    print(perid);
+  }
 
   Future e401list_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
@@ -49,7 +56,8 @@ class _AppPage02State extends State<AppPage02> {
       },
       body: <String, String> {
         'dbnm': _dbnm,
-        'actnm': _etSearch.text
+        'actnm': _etSearch.text,
+        'perid' : perid
       },
     );
     if(response.statusCode == 200){
