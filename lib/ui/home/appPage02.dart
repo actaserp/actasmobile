@@ -29,7 +29,8 @@ class _AppPage02State extends State<AppPage02> {
     super.initState();
   setState(() {
     sessionData();
-    e401list_getdata() ;
+    getdate();
+   /* e401list_getdata() ;*/
 
   });
   }
@@ -43,6 +44,10 @@ class _AppPage02State extends State<AppPage02> {
     perid = (await SessionManager().get("perid")).toString();
     // 문자열 디코딩
     print(perid);
+  }
+
+  Future getdate() async {
+    await e401list_getdata();
   }
 
   Future e401list_getdata() async {
