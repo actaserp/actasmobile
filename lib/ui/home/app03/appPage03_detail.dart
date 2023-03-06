@@ -324,7 +324,10 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     bool lb_save = await save_mhdata();
                     if (lb_save){
                       _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+                      await Future.delayed(Duration(milliseconds: 100));
                     }
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => AppPage03()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),

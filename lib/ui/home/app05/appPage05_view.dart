@@ -280,12 +280,6 @@ class _AppPage05ViewState extends State<AppPage05view> {
                         fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
                     )),
                   ),
-                // Container(
-                //   padding:EdgeInsets.all(16),
-                //   child: Text('${widget.SData.sseq}', style: TextStyle(
-                //       fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
-                //   ))
-                // ),
                 ],
               ),
             ],
@@ -375,10 +369,28 @@ class _AppPage05ViewState extends State<AppPage05view> {
                   onTap: ()async {
                     String inputText2 = _memo.text;
                     print('메시지 전송 출력 확인 => '+ inputText2);
-                    bool lb_save = await save_scdata();
-                    if (lb_save){
-                      _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-                    }
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('등록하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            child: Text('취소'),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          TextButton(
+                            child: Text('등록'),
+                            onPressed: () async {
+                              await  save_scdata();
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) => AppPage05()));
+                            },
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   child: ClipOval(
                     child: Container(

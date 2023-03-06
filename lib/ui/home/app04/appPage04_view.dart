@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/home/app04/appPage04.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,32 @@ class _AppPage04ViewState extends State<AppPage04view> {
   @override
   void setData() {
     _attatchidx = widget.BData.bseq;
+  }
+
+  Future Blist_del() async {
+    String _dbnm = await SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/appmobile/Bdel';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: <String, String>{
+        'dbnm': _dbnm,
+        'bseq' : widget.BData.bseq.toString()
+      },
+    );
+    if (response.statusCode == 200) {
+      print('삭제됨');
+      return true;
+    } else {
+      throw Exception('불러오는데 실패했습니다');
+    }
+
   }
   @override
   Future<bool> re_mbdata()async {
@@ -304,10 +331,10 @@ class _AppPage04ViewState extends State<AppPage04view> {
               ],
             ),
           ),
-    ///등록 시작
-    SizedBox(
-    height: 40,
-    ),
+          ///등록 시작
+          SizedBox(
+            height: 40,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -327,12 +354,12 @@ class _AppPage04ViewState extends State<AppPage04view> {
                         ),
                       ),
                       onPressed: ()async  {
-                      bool lb_save = await re_mbdata();
-                      if (lb_save){
-                      _reusableWidget.startLoading(context, '수정 되었습니다', 1 );
-                      }
+                        bool lb_save = await re_mbdata();
+                        if (lb_save){
+                          _reusableWidget.startLoading(context, '수정 되었습니다', 1 );
+                        }
                       },
-                          child: Padding(
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: Text(
                           '수정하기',
@@ -362,7 +389,28 @@ class _AppPage04ViewState extends State<AppPage04view> {
                         ),
                       ),
                       onPressed: () {
-                        _reusableWidget.startLoading(context, '삭제 되었습니다.', 1);
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('삭제하시겠습니까?'),
+                            actions: [
+                              TextButton(
+                                child: Text('취소'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                child: Text('삭제'),
+                                onPressed: () async {
+                                  await  Blist_del();
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(builder: (context) => AppPage04()));
+                                },
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -380,9 +428,11 @@ class _AppPage04ViewState extends State<AppPage04view> {
               ),
             ],
           ),
-              ],
-            ),
-          );
+
+        ],
+     ),
+
+    );
 
   }
 

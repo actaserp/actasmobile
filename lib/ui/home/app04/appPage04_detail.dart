@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/home/app04/appPage04.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -95,12 +96,12 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
     var uritxt = CLOUD_URL + '/appmobile/saveeMB';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
-    print("----------------------------");
+    print("-------------부품가이드 저장시도---------------");
     ///null처리
-    if(_codeTxt == null || _codeTxt == "" ) {
-      showAlertDialog(context, "분류를 선택하세요");
-      return false;
-    }
+    // if(_codeTxt == null || _codeTxt == "" ) {
+    //   showAlertDialog(context, "분류를 선택하세요");
+    //   return false;
+    // }
     if(_etCompdate.text == null || _etCompdate.text == "") {
       showAlertDialog(context, "작성일자를 입력하세요");
       return false;
@@ -295,8 +296,11 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
                           bool lb_save = await save_mBdata();
                           if (lb_save){
                             _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-                          }
-                        },
+                            await Future.delayed(Duration(milliseconds: 100));
+                            }
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => AppPage04()));
+                          },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
                           child: Text(

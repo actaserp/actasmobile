@@ -427,13 +427,31 @@ class _AppPage05State extends State<AppPage05> {
             Container(
             child: GestureDetector(
             onTap: ()async {
-              String inputText2 = _etMemo.text;
-            print('메시지 전송 출력 확인 => '+ inputText2);
-              bool lb_save = await save_mhdata();
-              if (lb_save){
-                _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-              }
-            },
+                  String inputText2 = _etMemo.text;
+                  print('메시지 전송 출력 확인 => '+ inputText2);
+                          showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                          title: Text('등록하시겠습니까?'),
+                          actions: [
+                          TextButton(
+                          child: Text('취소'),
+                          onPressed: () {
+                          Navigator.pop(context);
+                          },
+                          ),
+                          TextButton(
+                          child: Text('등록'),
+                          onPressed: () async {
+                          await  save_mhdata();
+                          Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => AppPage05()));
+                          },
+                          ),
+                          ],
+                          ),
+                          );
+                          },
             child: ClipOval(
             child: Container(
             color: SOFT_BLUE,
