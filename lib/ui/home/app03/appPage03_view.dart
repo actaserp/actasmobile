@@ -487,7 +487,7 @@ Widget _buildFileList() {
                                  String dir = (await getApplicationDocumentsDirectory()).path;
                                  try{
                                    await FlutterDownloader.enqueue(
-                                     url: "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
+                                     url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
                                      savedDir: '$dir',	// 저장할 dir
                                      fileName: '${_ATCData[index]}',	// 파일명
                                      showNotification: true, // show download progress in status bar (for Android)

@@ -474,7 +474,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
                               print("파일 다운로드 완료");
                             }catch(e){
                               print("eerror :::: $e");
-                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $LOCAL_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB");
+                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $CLOUD_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB");
                             }
                           },
                           child: ConstrainedBox(
