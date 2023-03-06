@@ -98,22 +98,10 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
     Uri uri = Uri.parse(encoded);
     print("-------------부품가이드 저장시도---------------");
     ///null처리
-    // if(_codeTxt == null || _codeTxt == "" ) {
-    //   showAlertDialog(context, "분류를 선택하세요");
-    //   return false;
-    // }
-    if(_etCompdate.text == null || _etCompdate.text == "") {
-      showAlertDialog(context, "작성일자를 입력하세요");
-      return false;
+    if(_codeTxt == null || _codeTxt == "" ) {
+      _codeTxt = "01".toString();
     }
-    if(_subject == null || _subject == "" ) {
-      showAlertDialog(context, "제목을 입력하세요");
-      return false;
-    }
-    if(_memo == null || _memo == "" ) {
-      showAlertDialog(context, "내용을 입력하세요");
-      return false;
-    }
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -293,11 +281,11 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
                           ),
                         ),
                         onPressed: ()async  {
-                          bool lb_save = await save_mBdata();
-                          if (lb_save){
-                            _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-                            await Future.delayed(Duration(milliseconds: 100));
-                            }
+                          // bool lb_save = await save_mBdata();
+                          // if (lb_save){
+                          //    _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+                          //   }
+                          save_mBdata();
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) => AppPage04()));
                           },

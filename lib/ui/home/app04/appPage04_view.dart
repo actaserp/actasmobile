@@ -356,7 +356,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
                       onPressed: ()async  {
                         bool lb_save = await re_mbdata();
                         if (lb_save){
-                          _reusableWidget.startLoading(context, '수정 되었습니다', 1 );
+                          _reusableWidget.startLoading(context, '수정 되었습니다. 새로고침해주세요.', 1 );
                         }
                       },
                       child: Padding(

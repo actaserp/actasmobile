@@ -133,7 +133,7 @@ bottomNavigationBar: SizedBox.shrink(),
         children: [
           GestureDetector(
             onTap: () {
-              Fluttertoast.showToast(msg: 'Click profile picture', toastLength: Toast.LENGTH_SHORT);
+              // Fluttertoast.showToast(msg: 'Click profile picture', toastLength: Toast.LENGTH_SHORT);
             },
             child: Hero(
               tag: 'profilePicture',

@@ -106,9 +106,6 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       throw Exception('분류 코드를 불러오는데 실패했습니다');
     }
   }
-  ///저장시 필수 값 //작성된 groupcd랑 이름
-  ///custcd, spjangcd, hseq 컨트롤러
-  /// 'hseq': 수정시 seq는 view에서 전달받은 데이터 다시 넘겨주기
   @override
   Future<bool> save_mhdata()async {
     _dbnm = await  SessionManager().get("dbnm");
@@ -118,21 +115,9 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
     print("----------------------------");
     ///null처리
     if(_codeTxt == null || _codeTxt == "" ) {
-      showAlertDialog(context, "분류를 선택하세요");
-      return false;
+      _codeTxt = "00".toString();
     }
-    if(_etCompdate.text == null || _etCompdate.text == "") {
-      showAlertDialog(context, "작성일자를 입력하세요");
-      return false;
-    }
-    if(_subject == null || _subject == "" ) {
-      showAlertDialog(context, "제목을 입력하세요");
-      return false;
-    }
-    if(_memo == null || _memo == "" ) {
-      showAlertDialog(context, "내용을 입력하세요");
-      return false;
-    }
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -153,9 +138,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
       print("저장됨");
       return   true;
     }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('수리노하우 저장에 실패했습니다');
-      return   false;
     }
   }
 
@@ -321,11 +304,12 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                     ),
                   ),
                   onPressed: ()async  {
-                    bool lb_save = await save_mhdata();
-                    if (lb_save){
-                      _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
-                      await Future.delayed(Duration(milliseconds: 100));
-                    }
+                    // bool lb_save = await save_mhdata();
+                    // if (lb_save){
+                    //   _reusableWidget.startLoading(context, '처리등록되었습니다', 1 );
+                    //   await Future.delayed(Duration(milliseconds: 1000));
+                    // }
+                    save_mhdata();
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => AppPage03()));
                   },
