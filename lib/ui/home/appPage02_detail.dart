@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
 import 'package:actasm/model/app02/eactpernm_model.dart';
+import 'package:actasm/ui/home/app5Home/appPager16.dart';
 import 'package:actasm/ui/home/appPage02.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ import '../../model/popup/egreginm_model.dart';
 import '../../model/popup/ereginm_model.dart';
 import '../../model/popup/eresultnm_model.dart';
 import '../../model/popup/eresunm_model.dart';
+import 'app03/Nav_right.dart';
 
 class AppPage02Detail extends StatefulWidget {
   final e401list_model e401Data;
@@ -463,6 +465,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
       showAlertDialog(context, "처리상세내용을 등록하세요");
       return false;
     }
+
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -500,36 +504,11 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
     );
     if(response.statusCode == 200){
       print("저장됨");
-
-
-      /*showDialog(context: context, builder: (context){
-        return AlertDialog(
-
-          content: Text('저장되었습니다.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-
-              onPressed: () {
-
-                Navigator.pop(context);
-                Get.off(AppPage02());
-                *//* Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => AppPager13()),
-                            );
-                            Get.off(AppPager14());*//*
-              },
-            ),
-
-          ],
-        );
-      });*/
-
-
-      return   true;
-
+      chk = true;
+      Get.off(AppPage02());
+      return true;
     }else{
+      chk = false;
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('고장부위 불러오는데 실패했습니다');
       return   false;
@@ -546,6 +525,8 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        endDrawer: Nav_right(text: Text('app03_nav'),
+          color: SOFT_BLUE,),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: GlobalStyle.appBarIconThemeColor,
@@ -960,6 +941,33 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
               height: 30,
             ),
             Container(
+              margin: EdgeInsets.only(left: 5),
+              width:  0.38 * MediaQuery.of(context).size.width,
+              child: ElevatedButton(onPressed: (){
+                /*Navigator.pop(context);*/
+                showDialog(context: context, builder: (context){
+                  return AlertDialog(
+                    content: Text('저장하시겠습니까?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          /*await update_plandata();*/
+                          await save_e411data();
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => AppPage02()));
+                        },
+                      ),
+                      TextButton(onPressed: (){
+                        Navigator.pop(context, "취소");
+                      }, child: Text('Cancel')),
+                    ],
+                  );
+                });
+              }, child: Text('저장하기')),
+            ),
+            /*Container(
               child: TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -992,7 +1000,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                     ),
                   )
               ),
-            ),
+            ),*/
           ],
         )
     );

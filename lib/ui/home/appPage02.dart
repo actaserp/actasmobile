@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 
 import '../../model/app01/e401list_model.dart';
 import '../account/set_address/edit_address.dart';
+import 'app03/Nav_right.dart';
 
 class AppPage02 extends StatefulWidget {
   @override
@@ -26,8 +27,11 @@ class _AppPage02State extends State<AppPage02> {
   @override
   void initState() {
     super.initState();
+  setState(() {
     sessionData();
     e401list_getdata() ;
+
+  });
   }
   @override
   void dispose() {
@@ -116,6 +120,10 @@ class _AppPage02State extends State<AppPage02> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        endDrawer: Nav_right(
+          text: Text('app03_nav'),
+          color: SOFT_BLUE,
+        ),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: GlobalStyle.appBarIconThemeColor,
@@ -125,7 +133,8 @@ class _AppPage02State extends State<AppPage02> {
             '고장 미처리 리스트 ' + e401Data.length.toString(),
             style: GlobalStyle.appBarTitle,
           ),
-          actions: <Widget>[
+
+          /*actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 10),
               child: TextButton(onPressed: (){
@@ -138,56 +147,75 @@ class _AppPage02State extends State<AppPage02> {
 
                   e401list_getdata();
                 });
-                /*searchBook(_etSearch.text);*/
-                /*searchBook2(_etSearch2.text);*/
+                *//*searchBook(_etSearch.text);*//*
+                *//*searchBook2(_etSearch2.text);*//*
               }, child: Text('검색하기')),
             )
-          ],
+          ],*/
           backgroundColor: GlobalStyle.appBarBackgroundColor,
           systemOverlayStyle: GlobalStyle.appBarSystemOverlayStyle,
           bottom: PreferredSize(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                      color: Colors.grey[100]!,
-                      width: 1.0,
-                    )
-                ),
-              ),
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-              height: kToolbarHeight,
-              child: TextFormField(
-                controller: _etSearch,
-                textAlignVertical: TextAlignVertical.bottom,
-                maxLines: 1,
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                onChanged: (textValue) {
-                  setState(() {});
-                },
-                decoration: InputDecoration(
-                  fillColor: Colors.grey[100],
-                  filled: true,
-                  hintText: '보수현장명',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-                  suffixIcon: (_etSearch.text == '')
-                      ? null
-                      : GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _etSearch = TextEditingController(text: '');
-                        });
-                      },
-                      child: Icon(Icons.close, color: Colors.grey[500])),
-                  focusedBorder: UnderlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      borderSide: BorderSide(color: Colors.grey[200]!)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    borderSide: BorderSide(color: Colors.grey[200]!),
+            child: Row(
+              children: [
+                Container(
+                  width: 300,
+                  decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey[100]!,
+                          width: 1.0,
+                        )
+                    ),
+                  ),
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  height: kToolbarHeight,
+                  child: TextFormField(
+                    controller: _etSearch,
+                    textAlignVertical: TextAlignVertical.bottom,
+                    maxLines: 1,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    onChanged: (textValue) {
+                      setState(() {});
+                    },
+                    decoration: InputDecoration(
+                      fillColor: Colors.grey[300],
+                      filled: true,
+                      hintText: '보수현장명',
+                      prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                      suffixIcon: (_etSearch.text == '')
+                          ? null
+                          : GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _etSearch = TextEditingController(text: '');
+                            });
+                          },
+                          child: Icon(Icons.close, color: Colors.grey[500])),
+                      focusedBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          borderSide: BorderSide(color: Colors.grey[200]!)),
+                      enabledBorder: UnderlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        borderSide: BorderSide(color: Colors.grey[200]!),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.178,
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: TextButton(onPressed: (){
+                    setState(() {
+
+                      if(_etSearch.text == ""){
+                        showAlertDialog(context, "현장명을 입력하세요.");
+                      }
+
+                      e401list_getdata();
+                    });
+                  }, child: Text('검색하기')),
+                )
+              ],
             ),
             preferredSize: Size.fromHeight(kToolbarHeight),
           ),
