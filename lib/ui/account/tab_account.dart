@@ -38,12 +38,17 @@ class _TabAccountPageState extends State<TabAccountPage> with SingleTickerProvid
   @override
   Future<void> sessionData() async {
     String username = await  SessionManager().get("username");
-    _usernm = utf8.decode(username.runes.toList());
+    // _usernm = utf8.decode(username.runes.toList());
     String userid = await  SessionManager().get("userid");
-    _userid = utf8.decode(userid.runes.toList());
+    // _userid = utf8.decode(userid.runes.toList());
+    setState(() {
+      _usernm = utf8.decode(username.runes.toList());
+      _userid = utf8.decode(userid.runes.toList());
+    });
+
   }
   final Future<String> _calculation = Future<String>.delayed(
-    const Duration(seconds: 4),
+    const Duration(seconds: 0),
         () => 'e',
   );
 
@@ -73,6 +78,7 @@ class _TabAccountPageState extends State<TabAccountPage> with SingleTickerProvid
           children: [
             _createAccountInformation(),
             Container(
+              height: 20,
               margin: EdgeInsets.fromLTRB(0, 18, 0, 18),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -87,6 +93,7 @@ class _TabAccountPageState extends State<TabAccountPage> with SingleTickerProvid
 
             _reusableWidget.divider1(),
             Container(
+              height: 20,
               margin: EdgeInsets.fromLTRB(0, 18, 0, 18),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
