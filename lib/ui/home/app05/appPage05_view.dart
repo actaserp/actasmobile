@@ -44,6 +44,9 @@ class _AppPage05ViewState extends State<AppPage05view> {
   Future<void> sessionData() async {
     String username = await  SessionManager().get("username");
     _usernm = utf8.decode(username.runes.toList());
+    setState(() {
+      _usernm;
+    });
   }
 
   @override
@@ -67,6 +70,7 @@ class _AppPage05ViewState extends State<AppPage05view> {
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("@@@@@@@@@@@댓글 저장@@@@@@@@@@@@@@@@");
+    print(_usernm);
     final response = await http.post(
       uri,
       headers: <String, String> {

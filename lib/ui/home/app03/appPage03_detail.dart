@@ -38,20 +38,16 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
   late String _dbnm ;
   String? _codeTxt, _eCompdate;
   var nullableBool = "";
-///작성자
   var _usernm = "";
-///timepicker
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
-  ///저장전 등록 controller
   TextEditingController _mhCustcd = TextEditingController();
-  ///여기서부터 blank
   TextEditingController _memo = TextEditingController();
   TextEditingController _subject = TextEditingController();
   TextEditingController _etCompdate = TextEditingController();
-
-
+///회원사공유 (2) 체크박스
+ bool _isChecked = false;
 
   @override
   void initState() {
@@ -132,6 +128,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
         'hsubject': _subject.text.toString(),
         'hgroupcd': this._codeTxt.toString().substring(0,2),
         'hseq':nullableBool,
+        ///flag 값 넣을 시에 checkvalue.toString()으로 넣어준다.
       },
     );
     if(response.statusCode == 200){
@@ -213,6 +210,17 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                               Text( '님이 작성 중입니다.',
                                 style: TextStyle(color: BLACK_GREY ,fontSize: 18),
                               ),
+                            ///회원사공유(1)
+                            //   Checkbox(
+                            //   value: _isChecked,
+                            //   onChanged: (bool? value) {
+                            //     setState(() {
+                            //       this._isChecked = value ?? false;
+                            //       String checkvalue = this._isChecked ? 'Y' : '';
+                            //       print('회원사 공유확인 :::'+ checkvalue.toString());
+                            //     });
+                            //   },
+                            // )
                             ],
                           ),
                         SizedBox(
