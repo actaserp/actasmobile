@@ -28,9 +28,12 @@ class _AppPager15State extends State<AppPager15> {
 
   @override
   void initState(){
+
     super.initState();
+
     sessionData();
     plan_getdata();
+
 
   }
 
@@ -125,6 +128,7 @@ class _AppPager15State extends State<AppPager15> {
                  child: TextButton(onPressed: (){
                    setState(() {
                      plan_getdata();
+
                    });
                  },
                      child: Text('검색하기')),

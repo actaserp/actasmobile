@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import '../../model/app01/e401list_model.dart';
 import '../account/set_address/edit_address.dart';
 import 'app03/Nav_right.dart';
+import 'app5Home/appPager17.dart';
 
 class AppPage02 extends StatefulWidget {
   @override
@@ -32,7 +33,10 @@ class _AppPage02State extends State<AppPage02> {
     getdate();
    /* e401list_getdata() ;*/
 
+
+
   });
+
   }
   @override
   void dispose() {
@@ -225,22 +229,64 @@ class _AppPage02State extends State<AppPage02> {
             preferredSize: Size.fromHeight(kToolbarHeight),
           ),
         ),
-        body: WillPopScope(
-          onWillPop: (){
-            Navigator.pop(context);
-            return Future.value(true);
-          },
-          child: ListView.builder(
-            itemCount: e401Data.length,
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            physics: AlwaysScrollableScrollPhysics(),
-            // Add one more item for progress indicator
-            itemBuilder: (BuildContext context, int index) {
-              return _buildListCard(e401Data[index]);
-            },
-          ),
+        body: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.68,
+              child: WillPopScope(
+                onWillPop: (){
+                  Navigator.pop(context);
+                  return Future.value(true);
+                },
+                child: ListView.builder(
+                  itemCount: e401Data.length,
+                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  // Add one more item for progress indicator
+                  itemBuilder: (BuildContext context, int index) {
+                    return _buildListCard(e401Data[index]);
+                  },
+                ),
 
 
+              ),
+            ),
+            Container( ///노하우등록
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.all(12),
+              child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager17()));
+                  },
+                  style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )
+                      ),
+                      side: MaterialStateProperty.all(
+                        BorderSide(
+                            color: SOFT_BLUE,
+                            width: 1.0
+                        ),
+                      )
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 40),
+                    child: Text(
+                      '고장처리 조회',
+                      style: TextStyle(
+                          color: SOFT_BLUE,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+              ),
+            )
+          ],
         ));
   }
 
