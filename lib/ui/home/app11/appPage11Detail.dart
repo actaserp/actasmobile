@@ -58,6 +58,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
   TextEditingController _etcarcd = TextEditingController();
   TextEditingController _etcarnm = TextEditingController();
   TextEditingController _etmemo = TextEditingController();
+  TextEditingController _etrptnum = TextEditingController();
 
 
   String? _ePlandate;
@@ -75,6 +76,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
 
   @override
   void initState(){
+    sessionData();
     setData();
     pop_epernm();
     super.initState();
@@ -94,6 +96,12 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
     _etcarnm = TextEditingController(text: widget.E038Data.carnum);
     _etcarcd = TextEditingController(text: widget.E038Data.carcd);
     _etmemo = TextEditingController(text: widget.E038Data.remark);
+    _etrptnum = TextEditingController(text: widget.E038Data.rptnum);
+  }
+
+  Future<void> sessionData() async{
+    perid = (await SessionManager().get("perid")).toString();
+    print(perid);
   }
 
   Future<bool> delete_data() async {
@@ -114,11 +122,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
         // 'recedate': widget.e401Data.recedate.toString(),
         // 'recenum': widget.e401Data.recenum.toString(),
         // 'resuremark': widget.e401Data.resuremark.toString(),
-        'rptdate': _etDate.text,
-        'actcd' : _etactcd.text,
-        'equpcd' : _etequpcd.text,
-        'carcd' : _etcarcd.text
-
+        'rptnum': _etrptnum.text
       },
     );
     if (response.statusCode == 200) {
@@ -178,6 +182,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
         // 'recedate': widget.e401Data.recedate.toString(),
         // 'recenum': widget.e401Data.recenum.toString(),
         // 'resuremark': widget.e401Data.resuremark.toString(),
+        'rptnum' : _etrptnum.text,
         'rptdate': _etDate.text,
         'actcd' : _etactcd.text,
         'equpcd' : _etequpcd.text,
