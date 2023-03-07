@@ -141,6 +141,81 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
   }
 
 
+  @override
+  Future<bool> update_plandata()async {
+    String _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/apppgymobile/e411_update';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print("----------------------------");
+    if(_etResultcdTxt == null || _etResultcdTxt == "" ){
+      showAlertDialog(context, "처리결과를 기입하세요");
+      chk = false;
+      return false;
+    }
+    if(_etGregicdTxt == null || _etGregicdTxt == "" ){
+      showAlertDialog(context, "고장부위를 확인 하십시오.");
+      chk = false;
+      return false;
+    }
+    if(_etRegicdTxt == null  || _etRegicdTxt == ""){
+      showAlertDialog(context, "고장부위상세를 하십시오");
+      chk = false;
+      return false;
+    }
+    if(_etResucdTxt == null  || _etResucdTxt == ""){
+      showAlertDialog(context, "처리내용을 확인 하십시오.");
+      chk = false;
+      return false;
+    }
+    if( _etRemocdTxt == null  || _etRemocdTxt == ""){
+      showAlertDialog(context, "고장요인을 확인 하십시오.");
+      chk = false;
+      return false;
+    }
+    if(_etPeridTxt == null || _etPeridTxt == "" ){
+      showAlertDialog(context, "담당자 선택을 하십시오.");
+      chk = false;
+      return false;
+    }
+
+    final response = await http.post(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept' : 'application/json'
+      },
+      body: <String, String> {
+        'dbnm': _dbnm,
+        'resultcd':  _etResultcdTxt.toString(),
+        'gregicd' : _etGregicdTxt.toString(),
+        'regicd' : _etRegicdTxt.toString(),
+        'resucd'  : _etResucdTxt.toString(),
+        'resuremark'   : _etResuremark.text,
+        'remocd' : _etRemocdTxt.toString(),
+        'perid'  : _etPeridTxt.toString(),
+        'remoremark'     : _etremoremark.text.toString(),
+        'compnum'        : widget.e411Data.compnum,
+        'compdate' :       widget.e411Data.compdate,
+        'recenum'  :       widget.e411Data.recenum,
+
+
+      },
+    );
+    if(response.statusCode == 200){
+      print("수정됨");
+      chk = true;
+      return   true;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('고장부위 불러오는데 실패했습니다');
+      return   false;
+    }
+  }
+
+
+
+
 
   @override
   Future pop_epernm()async {
@@ -461,14 +536,13 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
             controller: _etCompdate,
             readOnly: true,
             onTap: () {
-              _selectDateWithMinMaxDate(context);
+              /*_selectDateWithMinMaxDate(context);*/
             },
             maxLines: 1,
             cursorColor: Colors.grey[600],
             style: TextStyle(fontSize: 16, color: Colors.grey[700]),
             decoration: InputDecoration(
                 isDense: true,
-                suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
@@ -780,10 +854,12 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
                           child: Text('OK'),
                           onPressed: () async {
                             try{
-                            /*  await update_plandata();
+                              Navigator.pop(context);
+                              await update_plandata();
 
-                              Get.off(AppPager15());*/
+
                               if(chk == true) {
+                                Get.off(AppPager17());
                                 showDialog(context: context, builder: (context) {
                                   return AlertDialog(
                                     content: Text('수정되었습니다.'),
@@ -806,7 +882,7 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
                               } else if(chk==false){
                                 showDialog(context: context, builder: (context) {
                                   return AlertDialog(
-                                    content: Text('입력값이 잘못되었습니다.'),
+                                    content: Text('입력값이 잘못되었습니다. 빈 값이 있으면 안됩니다.'),
                                     actions: <Widget>[
                                       TextButton(
                                         child: Text('OK'),
@@ -944,5 +1020,27 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
             [hh, ':', nn, " ", am]).toString();
         widget.e411Data.comptime = _etComptime.text.toString();
       });
+  }
+
+
+  void showAlertDialog(BuildContext context, String as_msg) async {
+    String result = await showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('점검계획수정'),
+          content: Text(as_msg),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context, "확인");
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

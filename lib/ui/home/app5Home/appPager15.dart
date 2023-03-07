@@ -25,15 +25,19 @@ class _AppPager15State extends State<AppPager15> {
   late String _dbnm;
 
   late String perid;
+  late String perid2;
+  bool chk = false;
 
   @override
   void initState(){
 
     super.initState();
 
-    sessionData();
-    plan_getdata();
-
+/*    sessionData();
+    plan_getdata();*/
+    setState(() {
+      _initalizeState();
+    });
 
   }
 
@@ -44,11 +48,21 @@ class _AppPager15State extends State<AppPager15> {
 
   }
 
+  Future<void> _initalizeState() async {
+    await sessionData();
+    await plan_getdata();
+  }
+
 
   Future<void> sessionData() async {
-     perid = (await SessionManager().get("perid")).toString();
+
+    if(chk == true){
+      perid = '%';
+    }
+    perid = (await SessionManager().get("perid")).toString();
+    perid2 = (await SessionManager().get("perid")).toString();
     // 문자열 디코딩
-    print(perid);
+
   }
 
 
@@ -58,6 +72,15 @@ class _AppPager15State extends State<AppPager15> {
     var uritxt = CLOUD_URL + '/apppgymobile/planlist';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
+
+
+    if(chk == true){
+      perid = '%';
+    }else if(chk == false){
+      perid = perid2;
+    }
+
+
     // try {
     final response = await http.post(
       uri,
@@ -201,7 +224,7 @@ class _AppPager15State extends State<AppPager15> {
             scrollDirection: Axis.horizontal,
             child: Container(
               margin: EdgeInsets.only(top: 15),
-              height: 500,
+              height: MediaQuery.of(context).size.height * 0.574,
               width: 1000,
               child: ListView(
                 scrollDirection: Axis.vertical,
@@ -324,36 +347,64 @@ class _AppPager15State extends State<AppPager15> {
           Container( ///노하우등록
             margin: EdgeInsets.only(top: 10),
             padding: EdgeInsets.all(12),
-            child: OutlinedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15register()));
-                },
-                style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+            child: Column(
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15register()));
+                    },
+                    style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            )
+                        ),
+                        side: MaterialStateProperty.all(
+                          BorderSide(
+                              color: SOFT_BLUE,
+                              width: 1.0
+                          ),
                         )
                     ),
-                    side: MaterialStateProperty.all(
-                      BorderSide(
-                          color: SOFT_BLUE,
-                          width: 1.0
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Text(
+                        '점검계획 등록',
+                        style: TextStyle(
+                            color: SOFT_BLUE,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     )
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(
-                    '점검계획 등록',
-                    style: TextStyle(
-                        color: SOFT_BLUE,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          child: ElevatedButton(onPressed: (){
+                            chk = true;
+                            setState(() {
+                              plan_getdata();
+                            });
+                          }, child: Text("전체보기"))
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Expanded(
+                      child: Container(
+                        child: ElevatedButton(onPressed: (){
+                          chk = false;
+                          setState(() {
+                            plan_getdata();
+                          });
+                        }, child: Text('내것만 보기'), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent)),
+                      ),
+                    )
+                  ],
                 )
+              ],
             ),
           )
         ],

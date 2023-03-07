@@ -24,15 +24,18 @@ class _AppPage02State extends State<AppPage02> {
   TextEditingController _etSearch = TextEditingController();
 
   late String perid;
+  late String perid2;
+  bool chk = false;
 
   @override
   void initState() {
     super.initState();
   setState(() {
-    sessionData();
+   /* sessionData();
     getdate();
-   /* e401list_getdata() ;*/
-
+    원래 잘되던거 아래는 도전코드  */
+    _initalizeState();
+    getdate();
 
 
   });
@@ -44,10 +47,20 @@ class _AppPage02State extends State<AppPage02> {
     super.dispose();
   }
 
+  Future<void> _initalizeState() async {
+    await sessionData();
+    await e401list_getdata();
+  }
+
   Future<void> sessionData() async {
+
+    if(chk == true){
+      perid = '%';
+    }
     perid = (await SessionManager().get("perid")).toString();
+    perid2 = (await SessionManager().get("perid")).toString();
     // 문자열 디코딩
-    print(perid);
+
   }
 
   Future getdate() async {
@@ -61,6 +74,14 @@ class _AppPage02State extends State<AppPage02> {
     var encoded = Uri.encodeFull(uritxt);
 
     Uri uri = Uri.parse(encoded);
+
+    if(chk == true){
+      perid = '%';
+    }else if(chk == false){
+      perid = perid2;
+    }
+
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -232,7 +253,7 @@ class _AppPage02State extends State<AppPage02> {
         body: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.68,
+              height: MediaQuery.of(context).size.height * 0.638,
               child: WillPopScope(
                 onWillPop: (){
                   Navigator.pop(context);
@@ -252,39 +273,68 @@ class _AppPage02State extends State<AppPage02> {
               ),
             ),
             Container( ///노하우등록
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 0),
               padding: EdgeInsets.all(12),
-              child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager17()));
-                  },
-                  style: ButtonStyle(
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+              child: Column(
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager17()));
+                      },
+                      style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )
+                          ),
+                          side: MaterialStateProperty.all(
+                            BorderSide(
+                                color: SOFT_BLUE,
+                                width: 1.0
+                            ),
                           )
                       ),
-                      side: MaterialStateProperty.all(
-                        BorderSide(
-                            color: SOFT_BLUE,
-                            width: 1.0
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+                        child: Text(
+                          '고장처리 조회',
+                          style: TextStyle(
+                              color: SOFT_BLUE,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       )
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 40),
-                    child: Text(
-                      '고장처리 조회',
-                      style: TextStyle(
-                          color: SOFT_BLUE,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                            child: ElevatedButton(onPressed: (){
+                              chk = true;
+                              setState(() {
+                                e401list_getdata();
+                              });
+                            }, child: Text("전체보기"))
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                      Expanded(
+                        child: Container(
+                          child: ElevatedButton(onPressed: (){
+                            chk = false;
+                            setState(() {
+                              e401list_getdata();
+                            });
+                          }, child: Text('내것만 보기'), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent)),
+                        ),
+                      )
+                    ],
                   )
+                ],
               ),
+
             )
           ],
         ));
@@ -340,6 +390,8 @@ class _AppPage02State extends State<AppPage02> {
             ],
           ),
         ),
+
+
       ),
     );
   }

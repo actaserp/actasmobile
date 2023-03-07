@@ -22,28 +22,43 @@ class _AppPager16State extends State<AppPager16> {
 
   TextEditingController _etSearch = TextEditingController();
   late String perid;
-
+  late String perid2;
+  bool chk = false;
 
   @override
   void initState() {
 
     super.initState();
-    sessionData();
-    e401list_getdata();
+    _initalizeState();
+    /*sessionData();
+    e401list_getdata();*/
 
 
 
+  }
+
+  Future<void> _initalizeState() async {
+    await sessionData();
+    await e401list_getdata();
   }
 
   @override
   void dispose() {
+
+    _etSearch.dispose();
     super.dispose();
+
   }
 
   Future<void> sessionData() async {
+
+    if(chk == true){
+      perid = '%';
+    }
     perid = (await SessionManager().get("perid")).toString();
+    perid2 = (await SessionManager().get("perid")).toString();
     // 문자열 디코딩
-    print(perid);
+
   }
 
 
@@ -56,6 +71,12 @@ class _AppPager16State extends State<AppPager16> {
     var encoded = Uri.encodeFull(uritxt);
 
     Uri uri = Uri.parse(encoded);
+
+    if(chk == true){
+      perid = '%';
+    }else if(chk == false){
+      perid = perid2;
+    }
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -101,6 +122,7 @@ class _AppPager16State extends State<AppPager16> {
         });
 
       }
+      print(perid);
       return e401receData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
@@ -199,37 +221,65 @@ class _AppPager16State extends State<AppPager16> {
             ),
             Container( ///노하우등록
               padding: EdgeInsets.all(12),
-              child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager16register()));
+              child: Column(
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager16register()));
 
-                  },
-                  style: ButtonStyle(
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
-                      shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                      },
+                      style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )
+                          ),
+                          side: MaterialStateProperty.all(
+                            BorderSide(
+                                color: SOFT_BLUE,
+                                width: 1.0
+                            ),
                           )
                       ),
-                      side: MaterialStateProperty.all(
-                        BorderSide(
-                            color: SOFT_BLUE,
-                            width: 1.0
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text(
+                          '고장접수 등록',
+                          style: TextStyle(
+                              color: SOFT_BLUE,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       )
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: Text(
-                      '고장접수 등록',
-                      style: TextStyle(
-                          color: SOFT_BLUE,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: ElevatedButton(onPressed: (){
+                            chk = true;
+                            setState(() {
+                              e401list_getdata();
+                            });
+                          }, child: Text("전체보기"))
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                      Expanded(
+                        child: Container(
+                          child: ElevatedButton(onPressed: (){
+                            chk = false;
+                            setState(() {
+                              e401list_getdata();
+                            });
+                          }, child: Text('내것만 보기'), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent)),
+                        ),
+                      )
+                    ],
                   )
+                ],
               ),
             )
           ],
