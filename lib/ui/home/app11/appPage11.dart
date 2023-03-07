@@ -30,12 +30,15 @@ class _AppPage11State extends State<AppPage11> {
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   bool chk = true;
+  String perid = '';
 
 
 
 
   @override
   void initState(){
+
+    sessionData();
     super.initState();
     e038list_getdata();
 
@@ -49,9 +52,14 @@ class _AppPage11State extends State<AppPage11> {
   }
 
 
+  Future<void> sessionData() async{
+    perid = (await SessionManager().get("perid")).toString();
+    print(perid);
+  }
+
+
   Future e038list_getdata() async {
     String _dbnm = await  SessionManager().get("dbnm");
-    String _perid = await  SessionManager().get("perid")?? "";
 
     var uritxt = CLOUD_URL + '/e038mbc/list';
     var encoded = Uri.encodeFull(uritxt);
@@ -66,8 +74,7 @@ class _AppPage11State extends State<AppPage11> {
       body: <String, String> {
         'dbnm': _dbnm,
         'date': _etDate.text,
-        'perid': _perid
-
+        'perid': perid
       },
     );
     if(response.statusCode == 200){
@@ -184,7 +191,7 @@ class _AppPage11State extends State<AppPage11> {
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey[600]!),
                       ),
-                      labelText: '등록일자',
+                      labelText: '조회일자',
                       labelStyle:
                       TextStyle(color: BLACK_GREY)),
                 ),

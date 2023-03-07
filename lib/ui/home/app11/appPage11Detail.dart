@@ -304,7 +304,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey[600]!),
                   ),
-                  labelText: '등록일자',
+                  labelText: '조회일자',
                   labelStyle:
                   TextStyle(color: BLACK_GREY)),
             ),

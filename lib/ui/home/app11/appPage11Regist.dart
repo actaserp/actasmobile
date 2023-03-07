@@ -6,9 +6,11 @@ import 'package:actasm/config/global_style.dart';
 import 'package:actasm/ui/home/app11/appPage11Car.dart';
 import 'package:actasm/ui/home/app11/appPage11Equp.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
@@ -30,6 +32,9 @@ class AppPage11Regist extends StatefulWidget {
 class _AppPage11RegistState extends State<AppPage11Regist> {
 
   TextEditingController _etDate = TextEditingController();
+  late String perid;
+  String _efrtime = '';
+  String _etotime = '';
 
   final List<String> _C751Data = [];
   final _reusableWidget = ReusableWidget();
@@ -60,7 +65,19 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
 
   @override
   void initState() {
+    sessionData();
     super.initState();
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> sessionData() async{
+    perid = (await SessionManager().get("perid")).toString();
+    print(perid);
   }
 
   //저장
@@ -91,10 +108,10 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
         'actcd' : _etactcd.text,
         'equpcd' : _etequpcd.text,
         'carcd' : _etcarcd.text,
-        'frtime' : _etfrtime.text,
-        'totime' : _ettotime.text,
-        'remark' : _etmemo.text
-
+        'frtime' : _efrtime,
+        'totime' : _etotime,
+        'remark' : _etmemo.text,
+        'perid' : perid
       },
     );
     if(response.statusCode == 200){
@@ -105,12 +122,6 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
       throw Exception('작업일보 저장에 실패했습니다');
       return   false;
     }
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
 
@@ -163,7 +174,7 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey[600]!),
                     ),
-                    labelText: '등록일자',
+                    labelText: '조회일자',
                     labelStyle:
                     TextStyle(color: BLACK_GREY)),
               ),
@@ -248,34 +259,60 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
             SizedBox(
               height: 20,
             ),
-            TextField(
-              controller: _etfrtime,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '시작시간 *',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              width: MediaQuery.of(context).size.width * 0.381,
+              child: TextField(
+                controller: _etfrtime,
+                readOnly: true,
+                onTap: () {
+                  _selectTime(context);
+                },
+                maxLines: 1,
+                cursorColor: Colors.grey[600],
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                decoration: InputDecoration(
+                    isDense: true,
+                    suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[600]!),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[600]!),
+                    ),
+                    labelText: '시작시간 *',
+                    labelStyle:
+                    TextStyle(color: BLACK_GREY)),
+              ),
             ),
             SizedBox(
               height: 20,
             ),
-            TextField(
-              controller: _ettotime,
-              decoration: InputDecoration(
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                  ),
-                  labelText: '종료시간',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
+            Container(
+              margin: EdgeInsets.only(left: 20),
+              width: MediaQuery.of(context).size.width * 0.381,
+              child: TextField(
+                controller: _ettotime,
+                readOnly: true,
+                onTap: () {
+                  _selectTime2(context);
+                },
+                maxLines: 1,
+                cursorColor: Colors.grey[600],
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                decoration: InputDecoration(
+                    isDense: true,
+                    suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[600]!),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[600]!),
+                    ),
+                    labelText: '종료시간 *',
+                    labelStyle:
+                    TextStyle(color: BLACK_GREY)),
+              ),
             ),
             SizedBox(
               height: 20,
@@ -415,5 +452,66 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
             text: _selectedDate.toLocal().toString().split('-')[0]+_selectedDate.toLocal().toString().split('-')[1]+_selectedDate.toLocal().toString().split('-')[2].substring(0,2));
       });
     }
+  }
+
+  Future<Null> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        if(selectedTime.hour < 10){
+          _hour = '0' + selectedTime.hour.toString();
+        }else{
+          _hour = selectedTime.hour.toString();
+        }
+        if(selectedTime.minute < 10){
+          _minute = '0' + selectedTime.minute.toString();
+        }else{
+          _minute = selectedTime.minute.toString();
+        }
+        _minute = selectedTime.minute.toString();
+        _time = _hour + ' : ' + _minute;
+        _etfrtime.text = _time;
+        _efrtime =  _hour  + _minute;
+
+        _etfrtime.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+    print(_etfrtime);
+    print(_efrtime);
+  }
+
+
+  Future<Null> _selectTime2(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null)
+      setState(() {
+        selectedTime = picked;
+        if(selectedTime.hour < 10){
+          _hour = '0' + selectedTime.hour.toString();
+        }else{
+          _hour = selectedTime.hour.toString();
+        }
+        if(selectedTime.minute < 10){
+          _minute = '0' + selectedTime.minute.toString();
+        }else{
+          _minute = selectedTime.minute.toString();
+        }
+        _time = _hour + ' : ' + _minute;
+        _ettotime.text = _time;
+        _etotime =  _hour  + _minute;
+        _ettotime.text = formatDate(
+            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+    print(_ettotime);
+    print(_etotime);
   }
 }
