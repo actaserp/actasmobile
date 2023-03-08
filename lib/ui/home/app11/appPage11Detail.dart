@@ -524,7 +524,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
                             try{
                               await update_plandata();
 
-                              Get.off(AppPage11());
+                              Get.off(() =>AppPage11());
                               if(chk == true) {
                                 showDialog(context: context, builder: (context) {
                                   return AlertDialog(
