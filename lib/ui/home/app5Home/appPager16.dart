@@ -23,6 +23,9 @@ class _AppPager16State extends State<AppPager16> {
   TextEditingController _etSearch = TextEditingController();
   late String perid;
   late String perid2;
+  late String username;
+  late String username2;
+
   bool chk = false;
 
   @override
@@ -39,6 +42,7 @@ class _AppPager16State extends State<AppPager16> {
 
   Future<void> _initalizeState() async {
     await sessionData();
+    await sessionData2();
     await e401list_getdata();
   }
 
@@ -57,6 +61,22 @@ class _AppPager16State extends State<AppPager16> {
     }
     perid = (await SessionManager().get("perid")).toString();
     perid2 = (await SessionManager().get("perid")).toString();
+
+    // 문자열 디코딩
+
+  }
+
+  Future<void> sessionData2() async {
+
+    if(chk == true){
+      username  = '%';
+    }
+    username = (await SessionManager().get("username")).toString();
+    username = utf8.decode(username.codeUnits);
+    username2 = (await SessionManager().get("username")).toString();
+    username2 = utf8.decode(username2.codeUnits);
+
+
     // 문자열 디코딩
 
   }
@@ -74,8 +94,10 @@ class _AppPager16State extends State<AppPager16> {
 
     if(chk == true){
       perid = '%';
+      username = '%';
     }else if(chk == false){
       perid = perid2;
+      username = username2;
     }
     final response = await http.post(
       uri,
@@ -86,7 +108,8 @@ class _AppPager16State extends State<AppPager16> {
       body: <String, String> {
         'dbnm': _dbnm,
         'actnm': _etSearch.text,
-        'perid': perid
+        'perid': perid,
+        'pernm': username
       },
     );
     if(response.statusCode == 200){

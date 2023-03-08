@@ -59,6 +59,7 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   // create controller to edit text field
@@ -587,31 +588,6 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
               height: 20,
             ),
             TextField(
-              controller: _etComptime,
-              readOnly: true,
-              onTap: () {
-                _selectTime(context);
-              },
-              maxLines: 1,
-              cursorColor: Colors.grey[600],
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-              decoration: InputDecoration(
-                  isDense: true,
-                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey[600]!),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey[600]!),
-                  ),
-                  labelText: '처리시간 *',
-                  labelStyle:
-                  TextStyle(color: BLACK_GREY)),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
               controller: _etArrivtime,
               readOnly: true,
               onTap: () {
@@ -633,6 +609,33 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
                   labelStyle:
                   TextStyle(color: BLACK_GREY)),
             ),
+
+            SizedBox(
+              height: 20,
+            ),
+            TextField(
+              controller: _etComptime,
+              readOnly: true,
+              onTap: () {
+                _selectTime(context);
+              },
+              maxLines: 1,
+              cursorColor: Colors.grey[600],
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              decoration: InputDecoration(
+                  isDense: true,
+                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey[600]!),
+                  ),
+                  labelText: '처리시간 *',
+                  labelStyle:
+                  TextStyle(color: BLACK_GREY)),
+            ),
+
             SizedBox(
               height: 20,
             ),
@@ -1069,20 +1072,19 @@ class _AppPage02DetailState extends State<AppPage02Detail> {
   Future<Null> _selectTime2(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: selectedTime2,
     );
     if (picked != null)
       setState(() {
-        selectedTime = picked;
-        _hour2 = selectedTime.hour.toString();
-        _minute2 = selectedTime.minute.toString();
+        selectedTime2 = picked;
+        _hour2 = selectedTime2.hour.toString();
+        _minute2 = selectedTime2.minute.toString();
         _time2 = _hour2 + ' : ' + _minute2;
         _etArrivtime.text = _time2;
-        _etrectime = _hour  + _minute;
         widget.e401Data.arrivetime  = _hour2  + _minute2;
         _eArrivtime =  _hour2  + _minute2;
         _etArrivtime.text = formatDate(
-            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            DateTime(2019, 08, 1, selectedTime2.hour, selectedTime2.minute),
             [hh, ':', nn, " ", am]).toString();
         widget.e401Data.arrivetime = _etArrivtime.text.toString();
       });

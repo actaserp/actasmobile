@@ -26,6 +26,8 @@ class _AppPager15State extends State<AppPager15> {
 
   late String perid;
   late String perid2;
+  late String username;
+  late String username2;
   bool chk = false;
 
   @override
@@ -50,6 +52,7 @@ class _AppPager15State extends State<AppPager15> {
 
   Future<void> _initalizeState() async {
     await sessionData();
+    await sessionData2();
     await plan_getdata();
   }
 
@@ -65,7 +68,20 @@ class _AppPager15State extends State<AppPager15> {
 
   }
 
+  Future<void> sessionData2() async {
 
+    if(chk == true){
+      username  = '%';
+    }
+    username = (await SessionManager().get("username")).toString();
+    username = utf8.decode(username.codeUnits);
+    username2 = (await SessionManager().get("username")).toString();
+    username2 = utf8.decode(username2.codeUnits);
+
+
+    // 문자열 디코딩
+
+  }
   Future plan_getdata() async {
     String _dbnm = await SessionManager().get("dbnm");
 
@@ -76,8 +92,10 @@ class _AppPager15State extends State<AppPager15> {
 
     if(chk == true){
       perid = '%';
+      username = '%';
     }else if(chk == false){
       perid = perid2;
+      username = username2;
     }
 
 
@@ -92,6 +110,7 @@ class _AppPager15State extends State<AppPager15> {
         'dbnm': _dbnm,
         'actnm': _etSearch.text,
         'perid': perid,
+        'pernm': username,
       },
     );
     if (response.statusCode == 200) {
@@ -150,7 +169,7 @@ class _AppPager15State extends State<AppPager15> {
                  padding: const EdgeInsets.only(right: 10),
                  child: TextButton(onPressed: (){
                    setState(() {
-                     plan_getdata();
+                     plan_getdata();print(MediaQuery.of(context).size.width);
 
                    });
                  },
@@ -349,36 +368,39 @@ class _AppPager15State extends State<AppPager15> {
             padding: EdgeInsets.all(12),
             child: Column(
               children: [
-                OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15register()));
-                    },
-                    style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            )
-                        ),
-                        side: MaterialStateProperty.all(
-                          BorderSide(
-                              color: SOFT_BLUE,
-                              width: 1.0
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.916,
+                  child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15register()));
+                      },
+                      style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )
                           ),
-                        )
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text(
-                        '점검계획 등록',
-                        style: TextStyle(
-                            color: SOFT_BLUE,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13
-                        ),
-                        textAlign: TextAlign.center,
+                          side: MaterialStateProperty.all(
+                            BorderSide(
+                                color: SOFT_BLUE,
+                                width: 1.0
+                            ),
+                          )
                       ),
-                    )
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Text(
+                          '점검계획 등록',
+                          style: TextStyle(
+                              color: SOFT_BLUE,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      )
+                  ),
                 ),
                 Row(
                   children: [

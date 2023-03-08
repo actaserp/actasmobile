@@ -59,9 +59,11 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
   TextEditingController _etremoremark = TextEditingController();
   TextEditingController _etResunm = TextEditingController();
 
+  TextEditingController _etTest = TextEditingController();
+  TextEditingController _etTest2 = TextEditingController();
 
 
-      @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -88,7 +90,8 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
         _etResultcdTxt = widget.e411Data.resultnm + " [" + widget.e411Data.resultcd + "]";
         _etremoremark = TextEditingController(text: widget.e411Data.remoremark);
 
-
+        _etTest = TextEditingController(text: widget.e411Data.comptime);
+        _etTest2 = TextEditingController(text: widget.e411Data.arrivtime);
 
 
   }
@@ -550,6 +553,54 @@ class _AppPager17DetailState extends State<AppPager17Detail> {
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
                 labelText: '처리일자 *',
+                labelStyle:
+                TextStyle(color: BLACK_GREY)),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
+            controller: _etTest,
+            readOnly: true,
+            onTap: () {
+              /*_selectDateWithMinMaxDate(context);*/
+            },
+            maxLines: 1,
+            cursorColor: Colors.grey[600],
+            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            decoration: InputDecoration(
+                isDense: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[600]!),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[600]!),
+                ),
+                labelText: '처리시간 *',
+                labelStyle:
+                TextStyle(color: BLACK_GREY)),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
+            controller: _etTest2,
+            readOnly: true,
+            onTap: () {
+              /*_selectDateWithMinMaxDate(context);*/
+            },
+            maxLines: 1,
+            cursorColor: Colors.grey[600],
+            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            decoration: InputDecoration(
+                isDense: true,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[600]!),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey[600]!),
+                ),
+                labelText: '도착시간 *',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),

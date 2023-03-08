@@ -20,6 +20,11 @@ class _AppPager17State extends State<AppPager17> {
   TextEditingController _etSearch = TextEditingController();
 
   late String perid;
+  late String perid2;
+  late String username;
+  late String username2;
+
+  bool chk = false;
 
 
   @override
@@ -27,10 +32,34 @@ class _AppPager17State extends State<AppPager17> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      sessionData();
-      getdate();
+      _initalizeState();
+
+      /*sessionData();
+      getdate();*/
 
     });
+  }
+
+
+  Future<void> _initalizeState() async {
+    await sessionData();
+    await sessionData2();
+    await e401list_getdata();
+  }
+
+  Future<void> sessionData2() async {
+
+    if(chk == true){
+      username  = '%';
+    }
+    username = (await SessionManager().get("username")).toString();
+    username = utf8.decode(username.codeUnits);
+    username2 = (await SessionManager().get("username")).toString();
+    username2 = utf8.decode(username2.codeUnits);
+
+
+    // 문자열 디코딩
+
   }
 
   @override
@@ -39,10 +68,16 @@ class _AppPager17State extends State<AppPager17> {
     super.dispose();
   }
 
+
   Future<void> sessionData() async {
+
+    if(chk == true){
+      perid = '%';
+    }
     perid = (await SessionManager().get("perid")).toString();
+    perid2 = (await SessionManager().get("perid")).toString();
     // 문자열 디코딩
-    print(perid);
+
   }
 
   Future getdate() async {
@@ -58,6 +93,15 @@ class _AppPager17State extends State<AppPager17> {
     var encoded = Uri.encodeFull(uritxt);
 
     Uri uri = Uri.parse(encoded);
+
+    if(chk == true){
+      perid = '%';
+      username = '%';
+    }else if(chk == false){
+      perid = perid2;
+      username = username2;
+    }
+
     final response = await http.post(
       uri,
       headers: <String, String> {
@@ -67,7 +111,8 @@ class _AppPager17State extends State<AppPager17> {
       body: <String, String> {
         'dbnm': _dbnm,
         'actnm': _etSearch.text,
-        'perid' : perid
+        'perid' : perid,
+        'pernm' : username
       },
     );
     if(response.statusCode == 200){
@@ -127,7 +172,7 @@ class _AppPager17State extends State<AppPager17> {
         ),
         elevation: GlobalStyle.appBarElevation,
         title: Text(
-          '고장 처리 리스트 ',
+          '고장 처리 리스트 ' + e411Data2.length.toString(),
           style: GlobalStyle.appBarTitle,
         ),
         backgroundColor: GlobalStyle.appBarBackgroundColor,
@@ -199,23 +244,56 @@ class _AppPager17State extends State<AppPager17> {
 
 
 
-             WillPopScope(
-              onWillPop: (){
-                Navigator.pop(context);
-                return Future.value(true);
-              },
-              child: ListView.builder(
-                itemCount: e411Data2.length,
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                physics: AlwaysScrollableScrollPhysics(),
-                // Add one more item for progress indicator
-                itemBuilder: (BuildContext context, int index) {
-                  return _buildListCard(e411Data2[index]);
-                },
-              ),
+             Column(
+               children: [
+                 Container(
+                   height: MediaQuery.of(context).size.height * 0.7407,
+                   child: WillPopScope(
+                    onWillPop: (){
+                      Navigator.pop(context);
+                      return Future.value(true);
+                    },
+                    child: ListView.builder(
+                      itemCount: e411Data2.length,
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      // Add one more item for progress indicator
+                      itemBuilder: (BuildContext context, int index) {
+                        return _buildListCard(e411Data2[index]);
+                      },
+                    ),
 
 
             ),
+                 ),
+                 Container(
+                    child: Row(
+                       children: [
+                         Expanded(
+                           child: Container(
+                               child: ElevatedButton(onPressed: (){
+                                 chk = true;
+                                 setState(() {
+                                   e401list_getdata();
+                                 });
+                               }, child: Text("전체보기"))
+                           ),
+                         ),
+                         Expanded(
+                           child: Container(
+                             child: ElevatedButton(onPressed: (){
+                               chk = false;
+                               setState(() {
+                                 e401list_getdata();
+                               });
+                             }, child: Text('내것만 보기'), style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent)),
+                           ),
+                         )
+                       ],
+                     )
+                 ),
+               ],
+             ),
 
 
 
