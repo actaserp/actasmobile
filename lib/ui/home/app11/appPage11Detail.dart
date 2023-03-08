@@ -42,6 +42,7 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
   late String perid;
   String _efrtime = '';
   String _etotime = '';
+  late String errorMessage;
 
   late String _hour, _minute, _time;
 
@@ -71,14 +72,12 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
 
   final List<String> _eActperidData = [];
 
-  String? _etPeridTxt;
   bool chk = false;
 
   @override
   void initState(){
     sessionData();
     setData();
-    pop_epernm();
     super.initState();
 
   }
@@ -150,22 +149,26 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
     if(_etactcd.text == null || _etactcd == "" ){
-      showAlertDialog(context, "현장조회를 하십시오.");
+      errorMessage = "현장을 조회 하십시오.";
+      showAlertDialog(context);
       chk = false;
       return false;
     }
     if(_etactnm.text == null  || _etactnm == ""){
-      showAlertDialog(context, "현장조회를 하십시오");
+      errorMessage = "현장을 조회 하십시오.";
+      showAlertDialog(context);
       chk = false;
       return false;
     }
     if(equpcd == null  || equpcd == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
+      errorMessage = "호기를 조회하십시오.";
+      showAlertDialog(context);
       chk = false;
       return false;
     }
     if(_etequpnm.text == null  || _etequpnm == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
+      errorMessage = "호기를 조회하십시오.";
+      showAlertDialog(context);
       chk = false;
       return false;
     }
@@ -183,12 +186,10 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
         // 'recenum': widget.e401Data.recenum.toString(),
         // 'resuremark': widget.e401Data.resuremark.toString(),
         'rptnum' : _etrptnum.text,
-        'rptdate': _etDate.text,
         'actcd' : _etactcd.text,
+        'actnm' : _etactnm.text,
         'equpcd' : _etequpcd.text,
         'carcd' : _etcarcd.text,
-        'frtime' : _etfrtime.text,
-        'totime' : _ettotime.text,
         'remark' : _etmemo.text
 
       },
@@ -199,60 +200,14 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
       return   true;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('고장부위 불러오는데 실패했습니다');
+      throw Exception('작업일보 수정 실패하였습니다');
       return   false;
     }
   }
 
 
 
-  @override
-  Future pop_epernm()async {
-    try{
-      String _dbnm = await  SessionManager().get("dbnm");
-      var uritxt = CLOUD_URL + '/appmobile/wpernm';
-      var encoded = Uri.encodeFull(uritxt);
-      Uri uri = Uri.parse(encoded);
-      final response = await http.post(
-        uri,
-        headers: <String, String> {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept' : 'application/json'
-        },
-        body: <String, String> {
-          'dbnm': _dbnm,
-          'wpernm': '%',
-        },
-      );
-      if(response.statusCode == 200){
-        List<dynamic> alllist = [];
-        alllist =  jsonDecode(utf8.decode(response.bodyBytes))  ;
-        ePernmData.clear();
-        _eActperidData.clear();
-        for (int i = 0; i < alllist.length; i++) {
-          if (alllist[i]['wperid'] != null || alllist[i]['wperid'].length > 0 ){
-            eactpernm_model emObject= eactpernm_model(
-                wperid:alllist[i]['wperid'],
-                wpernm:alllist[i]['wpernm']
-            );
-            setState(() {
-              ePernmData.add(emObject);
-              _eActperidData.add(alllist[i]['wpernm'] + ' [' + alllist[i]['wperid'] + ']' );
-              // _etResucdTxt = alllist[0]['resunm'] + ' [' + alllist[0]['resucd'] + ']'  ;
-            });
-          }
-        }
-        // print(_eResuData.length);
-        return ePernmData;
-      }else{
-        //만약 응답이 ok가 아니면 에러를 던집니다.
-        throw Exception('처리내용 불러오는데 실패했습니다');
-      }
-    }catch(e){
-      print('e : $e');
-    }
 
-  }
 
 
 
@@ -299,15 +254,11 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
             child: TextField(
               controller: _etDate,
               readOnly: true,
-              onTap: () {
-                _selectDateWithMinMaxDate(context);
-              },
               maxLines: 1,
               cursorColor: Colors.grey[600],
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               decoration: InputDecoration(
                   isDense: true,
-                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey[600]!),
                   ),
@@ -370,7 +321,8 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
                 isDense: true,
                 suffixIcon: TextButton(onPressed: () async {
                   if(_etactcd.text == null || _etactcd == "" || _etactnm.text ==null || _etactnm == ""){
-                    showAlertDialog(context, "현장조회를 하십시오.");
+                    errorMessage = "현장조회를 하십시오.";
+                    showAlertDialog(context);
                   }else {
                     Navigator.push(context,
                       MaterialPageRoute(builder: (context) =>
@@ -403,15 +355,11 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
             child: TextField(
               controller: _etfrtime,
               readOnly: true,
-              onTap: () {
-                _selectTime(context);
-              },
               maxLines: 1,
               cursorColor: Colors.grey[600],
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               decoration: InputDecoration(
                   isDense: true,
-                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey[600]!),
                   ),
@@ -432,15 +380,11 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
             child: TextField(
               controller: _ettotime,
               readOnly: true,
-              onTap: () {
-                _selectTime2(context);
-              },
               maxLines: 1,
               cursorColor: Colors.grey[600],
               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               decoration: InputDecoration(
                   isDense: true,
-                  suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey[600]!),
                   ),
@@ -732,19 +676,20 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
   }
 
 
-  void showAlertDialog(BuildContext context, String as_msg) async {
-    String result = await showDialog(
+  void showAlertDialog(BuildContext context) {
+    String message = errorMessage ?? 'An error has occurred.';
+
+    showDialog(
       context: context,
-      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('작업일보수정'),
-          content: Text(as_msg),
-          actions: <Widget>[
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.pop(context, "확인");
+                Navigator.of(context).pop();
               },
             ),
           ],

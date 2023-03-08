@@ -104,6 +104,7 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
         // 'recedate': widget.e401Data.recedate.toString(),
         // 'recenum': widget.e401Data.recenum.toString(),
         // 'resuremark': widget.e401Data.resuremark.toString(),
+        'actnm' : _etactnm.text,
         'rptdate': _etDate.text,
         'actcd' : _etactcd.text,
         'equpcd' : _etequpcd.text,

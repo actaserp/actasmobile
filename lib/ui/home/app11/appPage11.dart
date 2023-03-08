@@ -225,46 +225,51 @@ class _AppPage11State extends State<AppPage11> {
                   },
                 ),
               ) : Text("자료를 검색하세요."),
-
-              Container( //등록
-                margin: EdgeInsets.only(top: 10),
-                child: OutlinedButton(
-                    onPressed: () {
-
-                      /*  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AppPager13register()));*/
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Regist()));
-
-                    },
-                    style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                      child: Container( ///노하우등록
+                        margin: EdgeInsets.only(top: 10),
+                        padding: EdgeInsets.all(12),
+                        child: OutlinedButton(
+                            onPressed: () {
+                              // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => AppPage11Regist()));
+                            },
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    )
+                                ),
+                                side: MaterialStateProperty.all(
+                                  BorderSide(
+                                      color: SOFT_BLUE,
+                                      width: 1.0
+                                  ),
+                                )
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12.0),
+                              child: Text(
+                                '작업일보 등록',
+                                style: TextStyle(
+                                    color: SOFT_BLUE,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             )
                         ),
-                        side: MaterialStateProperty.all(
-                          BorderSide(
-                              color: SOFT_BLUE,
-                              width: 1.0
-                          ),
-                        )
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: Text(
-                        '작업일보 등록',
-                        style: TextStyle(
-                            color: SOFT_BLUE,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                ),
+                      )
+                  )
+                ]
               ),
+
 
             ],
           ),
