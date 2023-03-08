@@ -210,17 +210,20 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                               Text( '님이 작성 중입니다.',
                                 style: TextStyle(color: BLACK_GREY ,fontSize: 18),
                               ),
+                              Text( '     회원사 공유 :::',
+                                style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                              ),
                             ///회원사공유(1)
-                            //   Checkbox(
-                            //   value: _isChecked,
-                            //   onChanged: (bool? value) {
-                            //     setState(() {
-                            //       this._isChecked = value ?? false;
-                            //       String checkvalue = this._isChecked ? 'Y' : '';
-                            //       print('회원사 공유확인 :::'+ checkvalue.toString());
-                            //     });
-                            //   },
-                            // )
+                              Checkbox(
+                              value: _isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  this._isChecked = value ?? false;
+                                  String checkvalue = this._isChecked ? 'Y' : '';
+                                  print('회원사 공유확인 :::'+ checkvalue.toString());
+                                });
+                              },
+                            ),
                             ],
                           ),
                         SizedBox(
