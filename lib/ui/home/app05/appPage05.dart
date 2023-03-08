@@ -601,6 +601,11 @@ class _AppPage05State extends State<AppPage05> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Flexible(
+                  child: Text('${SCData.spernm}  ', style: TextStyle(
+                      color: SOFT_BLUE, fontWeight: FontWeight.bold
+                  )),
+                ),
+                Flexible(
                   child: Text('${SCData.smemo}', style: TextStyle(
                       color: CHARCOAL
                   )),

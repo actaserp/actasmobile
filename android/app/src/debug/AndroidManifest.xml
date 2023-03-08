@@ -68,7 +68,7 @@
                 android:value="2" />
         <provider
                 android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-                android:authorities="com.actas.ems.flutter_downloader.provider"
+                android:authorities="com.actasm.actasm.flutter_downloader.provider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data

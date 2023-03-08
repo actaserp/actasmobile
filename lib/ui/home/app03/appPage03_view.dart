@@ -15,18 +15,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:thumbnailer/thumbnailer.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 
 import '../../../model/app03/AttachList_model.dart';
 import '../../reusable/cache_image_network.dart';
-import '../tab_home.dart';
-import 'appPage03_Edetail.dart';
-import 'appPage03_detail.dart';
 
 class AppPage03view extends StatefulWidget {
   final MhmanualList_model MhData;
@@ -48,11 +41,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
   TextEditingController _memo = TextEditingController();
   TextEditingController _subject = TextEditingController();
   TextEditingController _etCompdate = TextEditingController();
-
-  @override
-  void setData2() {
-    _attatchidx = widget.MhData.hseq;
-  }
 
   @override
   void setData() {
@@ -176,6 +164,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
     }
   }
 
+  ///다운로드
+
   final ReceivePort _port = ReceivePort();
 
   @pragma('vm:entry-point')
@@ -202,10 +192,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
-    ///썸네일
-    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
-      'custom/mimeType': FontAwesomeIcons.key,
-    });
+
   }
 
   @override
@@ -484,11 +471,14 @@ Widget _buildFileList() {
                        children: [
                            GestureDetector(
                                onTap: () async{
-                                 String dir = (await getApplicationDocumentsDirectory()).path;
+                                 var externalStorageDirPath;
+                                 final directory = await getApplicationDocumentsDirectory();
+                                 externalStorageDirPath = directory?.path;
+                                 String dir2 = "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH";
                                  try{
                                    await FlutterDownloader.enqueue(
-                                     url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH", 	// file url
-                                     savedDir: '$dir',	// 저장할 dir
+                                   url: dir2, 	// file url
+                                     savedDir: '$externalStorageDirPath',	// 저장할 dir
                                      fileName: '${_ATCData[index]}',	// 파일명
                                      showNotification: true, // show download progress in status bar (for Android)
                                      saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
@@ -496,7 +486,6 @@ Widget _buildFileList() {
                                    print("파일 다운로드 완료");
                                  }catch(e){
                                    print("eerror :::: $e");
-                                   print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $LOCAL_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH");
                                  }
                                },
                                child: ConstrainedBox(
@@ -504,7 +493,7 @@ Widget _buildFileList() {
                                child:  Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
-                                   InteractiveViewer( 
+                                   InteractiveViewer(
                                      ///이미지 확대기능
                                      boundaryMargin: const EdgeInsets.all(20.0),
                                      minScale: 0.5,
@@ -526,27 +515,6 @@ Widget _buildFileList() {
                                ),
                                ),
                            ),
-                         FloatingActionButton.small(
-                           tooltip: "Generate a data of thumbnail",
-                           onPressed: () async{
-                             String dir = (await getApplicationDocumentsDirectory()).path;
-                             setState(() {
-                               VideoThumbnail.thumbnailFile(
-                                       video: (
-                                       "$LOCAL_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH"),
-                                       thumbnailPath: '$dir',
-                                       imageFormat: ImageFormat.JPEG,
-                                       maxHeight: 200,
-                                       maxWidth: 200,
-                                       timeMs: 50,
-                                       quality: 50);
-                             });
-
-                           },
-                           child: Icon(Icons.edit),
-                         ),
-                         Divider(),
-
                           ],
                         );}
   ),

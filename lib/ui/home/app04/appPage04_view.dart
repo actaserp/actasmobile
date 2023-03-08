@@ -462,11 +462,13 @@ class _AppPage04ViewState extends State<AppPage04view> {
                       children: [
                         GestureDetector(
                           onTap: () async{
-                            String dir = (await getApplicationDocumentsDirectory()).path;
+                            var externalStorageDirPath;
+                            final directory = await getApplicationDocumentsDirectory();
+                            externalStorageDirPath = directory?.path;
                             try{
                               await FlutterDownloader.enqueue(
-                                url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB", 	// file url
-                                savedDir: "$dir",	// 저장할 dir
+                                url: "$CLOUD_URL" + "/appx3/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB", 	// file url
+                                savedDir: "$externalStorageDirPath",	// 저장할 dir
                                 fileName: '${_ATCData[index]}',	// 파일명
                                 showNotification: true, // show download progress in status bar (for Android)
                                 saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
@@ -474,7 +476,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
                               print("파일 다운로드 완료");
                             }catch(e){
                               print("eerror :::: $e");
-                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $CLOUD_URL + /happx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB");
                             }
                           },
                           child: ConstrainedBox(
