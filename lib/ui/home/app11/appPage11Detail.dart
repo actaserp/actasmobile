@@ -144,34 +144,12 @@ class _AppPage11DetailState extends State<AppPage11Detail> {
   @override
   Future<bool> update_plandata()async {
     String _dbnm = await  SessionManager().get("dbnm");
+    print(_dbnm);
     var uritxt = CLOUD_URL + '/e038mbc/updateE038';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
-    if(_etactcd.text == null || _etactcd == "" ){
-      errorMessage = "현장을 조회 하십시오.";
-      showAlertDialog(context);
-      chk = false;
-      return false;
-    }
-    if(_etactnm.text == null  || _etactnm == ""){
-      errorMessage = "현장을 조회 하십시오.";
-      showAlertDialog(context);
-      chk = false;
-      return false;
-    }
-    if(equpcd == null  || equpcd == ""){
-      errorMessage = "호기를 조회하십시오.";
-      showAlertDialog(context);
-      chk = false;
-      return false;
-    }
-    if(_etequpnm.text == null  || _etequpnm == ""){
-      errorMessage = "호기를 조회하십시오.";
-      showAlertDialog(context);
-      chk = false;
-      return false;
-    }
+
 
 
     final response = await http.post(
