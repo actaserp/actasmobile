@@ -48,6 +48,8 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
 
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay selectedTime2 = TimeOfDay(hour: 00, minute: 00);
+
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
 
   List<String> elvlrt = [];
@@ -473,7 +475,6 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
         }else{
           _minute = selectedTime.minute.toString();
         }
-        _minute = selectedTime.minute.toString();
         _time = _hour + ' : ' + _minute;
         _etfrtime.text = _time;
         _efrtime =  _hour  + _minute;
@@ -490,26 +491,26 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
   Future<Null> _selectTime2(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: selectedTime2,
     );
     if (picked != null)
       setState(() {
-        selectedTime = picked;
-        if(selectedTime.hour < 10){
-          _hour = '0' + selectedTime.hour.toString();
+        selectedTime2 = picked;
+        if(selectedTime2.hour < 10){
+          _hour = '0' + selectedTime2.hour.toString();
         }else{
-          _hour = selectedTime.hour.toString();
+          _hour = selectedTime2.hour.toString();
         }
-        if(selectedTime.minute < 10){
-          _minute = '0' + selectedTime.minute.toString();
+        if(selectedTime2.minute < 10){
+          _minute = '0' + selectedTime2.minute.toString();
         }else{
-          _minute = selectedTime.minute.toString();
+          _minute = selectedTime2.minute.toString();
         }
         _time = _hour + ' : ' + _minute;
         _ettotime.text = _time;
         _etotime =  _hour  + _minute;
         _ettotime.text = formatDate(
-            DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
+            DateTime(2019, 08, 1, selectedTime2.hour, selectedTime2.minute),
             [hh, ':', nn, " ", am]).toString();
       });
     print(_ettotime);
