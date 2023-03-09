@@ -248,8 +248,8 @@ class _AppPage08viewState extends State<AppPage08view> {
   }
 
 
-//첨부파일리스트
   Widget _buildFileList() {
+    final double boxImageSize = (MediaQuery.of(context).size.width / 5);
     return Container(
         margin: EdgeInsets.all(8),
         padding: EdgeInsets.all(16),
@@ -260,6 +260,7 @@ class _AppPage08viewState extends State<AppPage08view> {
           scrollDirection: Axis.vertical,
           child: Container(
             child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: _ATCData.length,
                 itemBuilder:(BuildContext context, int index)
@@ -269,43 +270,52 @@ class _AppPage08viewState extends State<AppPage08view> {
                       ///왼쪽배열
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         GestureDetector(
                           onTap: () async{
-                            String dir = (await getApplicationDocumentsDirectory()).path;
+                            var externalStorageDirPath;
+                            final directory = await getApplicationDocumentsDirectory();
+                            externalStorageDirPath = directory?.path;
+                            String dir2 = "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM";
                             try{
-                              await FlutterDownloader.enqueue(
-                                url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM", 	// file url
-                                savedDir: '$dir',	// 저장할 dir
-                                fileName: '${_ATCData[index]}',	// 파일명
-                                showNotification: true, // show download progress in status bar (for Android)
-                                saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-                              );
-                              print("파일 다운로드 완료");
+                            await FlutterDownloader.enqueue(
+                            url: dir2, 	// file url
+                            savedDir: '$externalStorageDirPath',	// 저장할 dir
+                            fileName: '${_ATCData[index]}',	// 파일명
+                            showNotification: true, // show download progress in status bar (for Android)
+                            saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
+                            );
+                            print("파일 다운로드 완료");
                             }catch(e){
-                              print("eerror :::: $e");
-                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $CLOUD_URL + /appx/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM");
+                            print("eerror :::: $e");
                             }
                           },
                           child: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 105, ),
-                            child: Column(
+                            constraints: BoxConstraints(minWidth: 105, ),
+                            child:  Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(4)),
-                                    child: buildCacheNetworkImage(width: 200, height: 200, url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM")
+                                InteractiveViewer(
+                                  ///이미지 확대기능
+                                  boundaryMargin: const EdgeInsets.all(20.0),
+                                  minScale: 0.5,
+                                  maxScale: 2.6,
+                                  child: ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(14)),
+                                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM")
+                                  ),
                                 ),
-                                Text('${_ATCData[index]}', style: TextStyle(
-                                    fontSize: 20,
-                                    color: SOFT_BLUE,
-                                    fontWeight: FontWeight.bold
-                                ),
+                                Text('${_ATCData[index]}',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: SOFT_BLUE,
+                                      fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               ],
                             ),
-                            ),
-                            ),
+                          ),
+                        ),
                       ],
                     );}
             ),
@@ -315,5 +325,7 @@ class _AppPage08viewState extends State<AppPage08view> {
 
     );
   }
+
+
 
 }
