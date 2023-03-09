@@ -599,7 +599,7 @@ class _AppPager15registerState extends State<AppPager15register> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xFFCCCCCC)),
                 ),
-                labelText: '검사기관',
+                labelText: '점검내용',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
             onChanged: (text){

@@ -254,7 +254,7 @@ class _AppPager13State extends State<AppPager13> {
             scrollDirection: Axis.horizontal,
             child: Container(
               margin: EdgeInsets.only(top: 15),
-              height: 500,
+              height: 0.638 * MediaQuery.of(context).size.height,
               width: 900,
               child: ListView(
                 scrollDirection: Axis.vertical,

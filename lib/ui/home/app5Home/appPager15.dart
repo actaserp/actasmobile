@@ -261,7 +261,7 @@ class _AppPager15State extends State<AppPager15> {
                        /* DataColumn(label: Text('호기명')),*/
                         DataColumn(label: Text('담당자')),
                         DataColumn(label: Text('검사자')),
-                        DataColumn(label: Text('검사기관')),
+                        DataColumn(label: Text('점검내용')),
                         DataColumn(label: Text('대수')),
                         DataColumn(label: Text('기타호기')),
                         DataColumn(label: Text('입력날짜')),
