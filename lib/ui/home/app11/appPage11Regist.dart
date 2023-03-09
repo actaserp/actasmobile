@@ -70,6 +70,8 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
     sessionData();
     super.initState();
 
+    _etDate.text = DateTime.now().toString().substring(0,4)+DateTime.now().toString().substring(5,7)+DateTime.now().toString().substring(8,10);
+
   }
 
   @override
