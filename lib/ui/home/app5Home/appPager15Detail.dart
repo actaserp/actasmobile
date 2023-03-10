@@ -480,7 +480,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '검사기관',
+                labelText: '점검내용',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),
@@ -501,7 +501,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[600]!),
                 ),
-                labelText: '기타호기 ',
+                labelText: '보조자 ',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
           ),

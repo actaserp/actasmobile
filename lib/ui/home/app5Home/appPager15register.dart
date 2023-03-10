@@ -225,7 +225,7 @@ class _AppPager15registerState extends State<AppPager15register> {
       return false;
     }
     if(_etText.text == null  || _etText.text == "" ){
-      showAlertDialog(context, "기타호기를 작성해주세요.");
+      showAlertDialog(context, "보조자를 작성해주세요.");
       return false;
     }
     if(_etqty.text == "" || _etqty.text == null){
@@ -580,7 +580,7 @@ class _AppPager15registerState extends State<AppPager15register> {
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xFFCCCCCC)),
                 ),
-                labelText: '기타호기 ',
+                labelText: '보조자 ',
                 labelStyle:
                 TextStyle(color: BLACK_GREY)),
             onChanged: (text){
