@@ -49,7 +49,7 @@ class _BottomState extends State<Bottom> {
       items: [
                     BottomNavigationBarItem(
                     icon: Icon(Icons.refresh),
-                    label: '새로고침',
+                    label: '상단으로',
                     ),
                     BottomNavigationBarItem(
                     icon: Icon(Icons.home),

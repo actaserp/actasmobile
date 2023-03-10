@@ -204,154 +204,164 @@ class _AppPage03State extends State<AppPage03> {
         ),
       ),
       body:
-      ListView(
-        physics: NeverScrollableScrollPhysics(),
-       ///막으면 전체화면
-       // padding: EdgeInsets.all(16),
-        children: [
-          Container(
-            padding:EdgeInsets.only(top:16, bottom: 2, left: 10),
-            child: Text('수리 노하우 자료실  ${MhData.length} 건',
-                style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
-            )),
-          ),
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                  margin: EdgeInsets.only(top: 15),
-                // padding: EdgeInsets.all(16),
-                height: 700,
-                width: 900,
-                child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: [
-                      DataTable(
-                        showCheckboxColumn: false,
-                      columnSpacing: 25, dataRowHeight: 40,
-                      headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                      headingRowColor:
-                      MaterialStateColor.resolveWith((states) => SOFT_BLUE),
-                        columns:
-                        <DataColumn>[
-                          DataColumn(label: Text('No.')),
-                          DataColumn(label: Text('분류')),
-                          DataColumn(label: Text('제목')),
-                          DataColumn(label: Text('내용')),
-                          DataColumn(label: Text('작성자')),
-                          DataColumn(label: Text('첨부파일건수')),
-                          DataColumn(label: Text('작성일자')),
-                        ],
-                    rows: List<DataRow>.generate(MhData.length, (index)
-                       {
-                      final MhmanualList_model item = MhData[index];
-                      return
-                        DataRow(
-                            onSelectChanged: (value){
-                            Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => AppPage03view(MhData: item)));
-                         },
-                        color: MaterialStateColor.resolveWith((states){
-                          if (index % 2 == 0){
-                            return Color(0xB8E5E5E5);
-                          }else{
-                            return Color(0x86FFFFFF);
-                          }
-                        }),
-                          cells: [
-                            DataCell(
-                                ConstrainedBox(
-                                    constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
-                                    child: Text('${index+1}',
-                                    ))),
-                        DataCell(
-                            ConstrainedBox(
-                            constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
-                            child: Text(item.hgroupcd,
-                                overflow: TextOverflow.ellipsis
-                            ))),
-                        DataCell(Container(
-                          width: 180,
-                          child: Text(item.hsubject,
-                            overflow: TextOverflow.ellipsis),
-                        )),
-                        DataCell(Container(
-                          width:180,
-                          child: Text(item.hmemo,
-                              overflow: TextOverflow.ellipsis),
-                        )),
-                        DataCell(Text(item.hpernm,
-                            overflow: TextOverflow.ellipsis)),
-                        DataCell(Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+      Scrollbar(
+        thickness: 8.0,
+        isAlwaysShown: true,
+        child: ListView(
+          // physics: NeverScrollableScrollPhysics(),
+         ///막으면 전체화면
+          children: [
+            Container(
+              padding:EdgeInsets.only(top:16, bottom: 2, left: 10),
+              child: Text('수리 노하우 자료실  ${MhData.length} 건',
+                  style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w500, color: CHARCOAL
+              )),
+            ),
+            Column(
+              children: [
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                        margin: EdgeInsets.only(top: 15),
+                      // padding: EdgeInsets.all(16),
+                      height: 400,
+                      width: 900,
+                      child: ListView(
+                          // physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
                           children: [
-                            Text(item.attcnt.toString()),
-                          ],
-                        )),
-                        DataCell(
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                               ConstrainedBox(
-                                    constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
-                                    child: Text('${item.hinputdate}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: SOFT_BLUE,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold
-                                        )
-                                    ),
-                                  ),
+                            DataTable(
+                              showCheckboxColumn: false,
+                            columnSpacing: 25, dataRowHeight: 40,
+                            headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                            headingRowColor:
+                            MaterialStateColor.resolveWith((states) => SOFT_BLUE),
+                              columns:
+                              <DataColumn>[
+                                DataColumn(label: Text('No.')),
+                                DataColumn(label: Text('분류')),
+                                DataColumn(label: Text('제목')),
+                                DataColumn(label: Text('내용')),
+                                DataColumn(label: Text('작성자')),
+                                DataColumn(label: Text('첨부파일건수')),
+                                DataColumn(label: Text('작성일자')),
                               ],
+                          rows: List<DataRow>.generate(MhData.length, (index)
+                             {
+                            final MhmanualList_model item = MhData[index];
+                            return
+                              DataRow(
+                                  onSelectChanged: (value){
+                                  Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) => AppPage03view(MhData: item)));
+                               },
+                              color: MaterialStateColor.resolveWith((states){
+                                if (index % 2 == 0){
+                                  return Color(0xB8E5E5E5);
+                                }else{
+                                  return Color(0x86FFFFFF);
+                                }
+                              }),
+                                cells: [
+                                  DataCell(
+                                      ConstrainedBox(
+                                          constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                          child: Text('${index+1}',
+                                          ))),
+                              DataCell(
+                                  ConstrainedBox(
+                                  constraints: BoxConstraints(minWidth: 50, maxWidth: 53),
+                                  child: Text(item.hgroupcd,
+                                      overflow: TextOverflow.ellipsis
+                                  ))),
+                              DataCell(Container(
+                                width: 180,
+                                child: Text(item.hsubject,
+                                  overflow: TextOverflow.ellipsis),
+                              )),
+                              DataCell(Container(
+                                width:180,
+                                child: Text(item.hmemo,
+                                    overflow: TextOverflow.ellipsis),
+                              )),
+                              DataCell(Text(item.hpernm,
+                                  overflow: TextOverflow.ellipsis)),
+                              DataCell(Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(item.attcnt.toString()),
+                                ],
+                              )),
+                              DataCell(
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                     ConstrainedBox(
+                                          constraints: BoxConstraints(minWidth: 95, maxWidth: 95),
+                                          child: Text('${item.hinputdate}',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: SOFT_BLUE,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold
+                                              )
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                              ),
+                            ]);
+                          }),
+                          ),
+                      ]),
+                    ),
+                    ),
+                Flexible(
+                  flex: 0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width/0.6,
+                    margin: EdgeInsets.only(top: 10, bottom: 15),
+                    padding: EdgeInsets.all(12),
+                    child: OutlinedButton(
+                        onPressed: () {
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => AppPage03Detail()));
+                        },
+                        style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                )
+                            ),
+                            side: MaterialStateProperty.all(
+                              BorderSide(
+                                  color: SOFT_BLUE,
+                                  width: 1.0
+                              ),
                             )
                         ),
-                      ]);
-                    }),
-                    ),
-                ]),
-              ),
-              ),
-
-          Container( ///노하우등록
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.all(12),
-            child: OutlinedButton(
-                onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => AppPage03Detail()));
-                },
-                style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Text(
+                            '노하우 등록',
+                            style: TextStyle(
+                                color: SOFT_BLUE,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         )
                     ),
-                    side: MaterialStateProperty.all(
-                      BorderSide(
-                          color: SOFT_BLUE,
-                          width: 1.0
-                      ),
-                    )
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(
-                    '노하우 등록',
-                    style: TextStyle(
-                        color: SOFT_BLUE,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13
-                    ),
-                    textAlign: TextAlign.center,
                   ),
                 )
+              ],
             ),
-          )
-        ],
-
+          ],
+        ),
       ),
       bottomNavigationBar: Bottom(),
     );
