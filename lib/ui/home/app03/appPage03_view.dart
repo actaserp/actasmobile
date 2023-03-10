@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:actasm/ui/home/app03/appPage03.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:actasm/config/constant.dart';
@@ -36,7 +37,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
-
+  final List<String> _inData = [];
+  final List<String> _SaNData = [];
   ///여기서부터 blank
   TextEditingController _memo = TextEditingController();
   TextEditingController _subject = TextEditingController();
@@ -132,6 +134,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
       _idxData.clear();
       seqData.clear();
       _seqData.clear();
+      _inData.clear();
+      _SaNData.clear();
 
       for (int i = 0; i < alllist.length; i++) {
         AttachList_model AttObject= AttachList_model(
@@ -153,6 +157,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
           _idxData.add(alllist[i]['idx'].toString());
           seqData.add(AttObject);
           _seqData.add(alllist[i]['boardIdx']);
+          _inData.add(alllist[i]['inserttime']);
+          _SaNData.add(alllist[i]['saveName']);
+
+
         });
       }
       debugPrint('Attatch data $ATCData length:${ATCData.length}' );
@@ -164,15 +172,61 @@ class _AppPage03ViewState extends State<AppPage03view> {
     }
   }
 
+///다운로드 get통신
+  Future downmh()async {
+    _dbnm = await  SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.MhData.hflag}&boardIdx=${widget.MhData.hseq}&idx=${_idxData.toString().substring(1,3)}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
+    // &inputdate=${_inData.toString().substring(1,3)}
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+
+    print('@@@@@@@@@@@@@@@데이터 테스트@@@@@@@@@@@@@@@@@@@@@');
+    print('값확인::: ${_ATCData.toString().substring(1).replaceAll(']', '')}');
+    final response = await http.get(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/octet-stream',
+      },
+    );
+    if(response.statusCode == 200){
+      await writeToFile(response);
+      print('저장됨');
+      return true;
+    }else {
+      // throw Exception('다운로드 통신 실패했습니다');
+      print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      print('다운로드 통신 실패했습니다.');
+      return false;
+
+    }
+  }
+
+  Future<void> writeToFile(http.Response response) async {
+    var externalStorageDirPath;
+    final directory = await getExternalStorageDirectory();
+    externalStorageDirPath = directory?.path;
+    final folder = await getExternalStorageDirectory();
+    final filename = _ATCData[0].toString();
+    final path = '${externalStorageDirPath}/$filename';
+    print(path);
+    final file = File(path);
+    await file.writeAsBytes(response.bodyBytes);
+  }
+
+  ///참고용, 외부저장소가 아닌 dir 설정시의 프로퍼티
+  // var externalStorageDirPath;
+  // final directory = await getApplicationDocumentsDirectory();
+  // externalStorageDirPath = directory?.path;
+
   ///다운로드
 
-  final ReceivePort _port = ReceivePort();
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-    send.send([id, status, downloadProgress]);
-  }
+  // final ReceivePort _port = ReceivePort();
+  // @pragma('vm:entry-point')
+  // static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress) {
+  //   final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
+  //   send.send([id, status, downloadProgress]);
+  // }
 
   @override
   void initState() {
@@ -182,22 +236,23 @@ class _AppPage03ViewState extends State<AppPage03view> {
     setData();
     super.initState();
 
-    ///다운로드
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState((){ });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
+    ///다운로드 콜백 (1)
+    // IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    // _port.listen((dynamic data) {
+    //   String id = data[0];
+    //   DownloadTaskStatus status = data[1];
+    //   int progress = data[2];
+    //   setState((){ });
+    // });
+    //
+    // FlutterDownloader.registerCallback(downloadCallback);
 
   }
 
   @override
   void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    ///다운로드 콜백 (2)
+    // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
 
@@ -469,25 +524,46 @@ Widget _buildFileList() {
                        ///왼쪽배열
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
-                           GestureDetector(
-                               onTap: () async{
-                                 var externalStorageDirPath;
-                                 final directory = await getApplicationDocumentsDirectory();
-                                 externalStorageDirPath = directory?.path;
-                                 String dir2 = "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH";
-                                 try{
-                                   await FlutterDownloader.enqueue(
-                                   url: dir2, 	// file url
-                                     savedDir: '$externalStorageDirPath',	// 저장할 dir
-                                     fileName: '${_ATCData[index]}',	// 파일명
-                                     showNotification: true, // show download progress in status bar (for Android)
-                                     saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-                                   );
-                                   print("파일 다운로드 완료");
-                                 }catch(e){
-                                   print("eerror :::: $e");
-                                 }
-                               },
+                         GestureDetector(
+                         onTap: () async{
+                  bool ap_down = await downmh();
+                  if (ap_down){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text('파일 저장'
+                              ),
+                              titleTextStyle: TextStyle(
+                                fontWeight: FontWeight.bold
+                              ),
+                              content: Text("저장소를 확인하세요."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ]
+                          );
+                        }
+                    );
+                  }else{
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                              content: Text("서버 관리자에게 문의하세요."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('확인'),
+                                ),
+                              ]
+                          );
+                        }
+                    );
+                  }
+                },
                                child: ConstrainedBox(
                                  constraints: BoxConstraints(minWidth: 105, ),
                                child:  Column(
@@ -501,7 +577,7 @@ Widget _buildFileList() {
                                     child: ClipRRect(
                                    borderRadius:
                                      BorderRadius.all(Radius.circular(14)),
-                                     child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH")
+                                     child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "")
                                      ),
                                  ),
                                    Text('${_ATCData[index]}',

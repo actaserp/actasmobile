@@ -38,8 +38,8 @@ class _AppPage03State extends State<AppPage03> {
 
   @override
   void initState() {
-    super.initState();
     mhlist_getdata();
+    super.initState();
   }
 
   @override
@@ -102,7 +102,6 @@ class _AppPage03State extends State<AppPage03> {
     var uritxt = CLOUD_URL + '/appmobile/mhlist';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
-    // try {
     final response = await http.post(
       uri,
       headers: <String, String>{

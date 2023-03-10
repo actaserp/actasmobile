@@ -128,54 +128,70 @@ bottomNavigationBar: SizedBox.shrink(),
 
   Widget _buildTop(){
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: () {
-              // Fluttertoast.showToast(msg: 'Click profile picture', toastLength: Toast.LENGTH_SHORT);
-            },
-            child: Hero(
-              tag: 'profilePicture',
-              child: ClipOval(
-                child: buildCacheNetworkImage(url: GLOBAL_URL+'/user/avatar.png', width: 50),
-              ),
-            ),
-          ),
-          Expanded(
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 12),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 7),
+                    child: Hero(
+                        tag: 'profilePicture',
+                        child: ClipOval(
+                          child: buildCacheNetworkImage(url: GLOBAL_URL+'/user/avatar.png', width: 30),
+                        ),
+                      ),
+                  ),
                   start(),
-                    Text(  _usernm + '님 반갑습니다.',
+                  Text(  _usernm ,
+                    style: TextStyle(
+                        color: SOFT_BLUE,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                    Text(' 님 반갑습니다.',
                       style: TextStyle(
                           color: _color2,
-                          fontWeight: FontWeight.bold,
                           fontSize: 16),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+
                 ],
+            ),
+          ),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(right: 17,),
+            child: Container(
+              width: 1,
+              height: 40,
+              color: Colors.grey[300],
+            ),
+          ),
+          Flexible(
+            flex: 0,
+            child: Container(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                },
+                child: Text(
+                    'Log Out',
+                    style: TextStyle(color: _color2, fontWeight: FontWeight.bold)),
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
-            width: 1,
-            height: 40,
-            color: Colors.grey[300],
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-            },
-            child: Text(
-                'Log Out',
-                style: TextStyle(color: _color2, fontWeight: FontWeight.bold)),
-          )
-        ],
+                 ],
       ),
     );
   }

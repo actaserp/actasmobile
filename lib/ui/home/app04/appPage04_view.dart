@@ -72,6 +72,33 @@ class _AppPage04ViewState extends State<AppPage04view> {
     }
 
   }
+
+  Future downmb() async {
+    String _dbnm = await SessionManager().get("dbnm");
+
+    var uritxt = CLOUD_URL + '/appmobile/Bdel';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    final response = await http.post(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      },
+      body: <String, String>{
+        'dbnm': _dbnm,
+        'bseq' : widget.BData.bseq.toString()
+      },
+    );
+    if (response.statusCode == 200) {
+      print('삭제됨');
+      return true;
+    } else {
+      throw Exception('불러오는데 실패했습니다');
+    }
+
+  }
+
   @override
   Future<bool> re_mbdata()async {
     _dbnm = await  SessionManager().get("dbnm");
@@ -117,7 +144,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
         'Accept' : 'application/json'
       },
       body: <String, String> {
-        ///data를 String으로 전달
         'dbnm': _dbnm,
         'flag':  widget.BData.bflag.toString(),
         'boardIdx' : widget.BData.bseq.toString(),
@@ -156,23 +182,12 @@ class _AppPage04ViewState extends State<AppPage04view> {
         });
       }
       debugPrint('Attatch data::: $ATCData length::::${ATCData.length}' );
-      // debugPrint('idxData data::: $idxData length::::${idxData.length}' );
-      // debugPrint('seqData data::: $seqData length::::${seqData.length}' );
       return
         ATCData;
     }else{
       //만약 응답이 ok가 아니면 에러를 던집니다.
-      throw Exception('불러오는데 실패했습니다');
+      throw Exception('첨부파일 리스트를 불러오는데 실패했습니다');
     }
-  }
-  ///다운로드콜백함수
-
-  final ReceivePort _port = ReceivePort();
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-    send.send([id, status, downloadProgress]);
   }
 
   @override
@@ -182,38 +197,12 @@ class _AppPage04ViewState extends State<AppPage04view> {
     attachMB();
     setData();
     super.initState();
-    ///다운로드
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState((){ });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
-    ///썸네일1
-    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
-      'custom/mimeType': FontAwesomeIcons.key,
-    });
-
   }
 
-  ///썸네일2
-  Future<File> copyTemp(String Tempfile) async{
-    Directory tempdir = await getTemporaryDirectory();
-    final byteData = await rootBundle.load(Tempfile);
-    File videoThumb = File("${tempdir.path}/$Tempfile")
-      ..createSync(recursive: true)
-      ..writeAsBytesSync(byteData.buffer
-          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    return videoThumb;
 
-  }
 
   @override
   void dispose() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
 
@@ -437,7 +426,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
   }
 
 
-//첨부파일리스트
   Widget _buildFileList() {
     final double boxImageSize = (MediaQuery.of(context).size.width / 5);
     return Container(
@@ -462,21 +450,7 @@ class _AppPage04ViewState extends State<AppPage04view> {
                       children: [
                         GestureDetector(
                           onTap: () async{
-                            var externalStorageDirPath;
-                            final directory = await getApplicationDocumentsDirectory();
-                            externalStorageDirPath = directory?.path;
-                            try{
-                              await FlutterDownloader.enqueue(
-                                url: "$CLOUD_URL" + "/appx3/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MB", 	// file url
-                                savedDir: "$externalStorageDirPath",	// 저장할 dir
-                                fileName: '${_ATCData[index]}',	// 파일명
-                                showNotification: true, // show download progress in status bar (for Android)
-                                saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-                              );
-                              print("파일 다운로드 완료");
-                            }catch(e){
-                              print("eerror :::: $e");
-                            }
+
                           },
                           child: ConstrainedBox(
                             constraints: BoxConstraints(minWidth: 105, ),
@@ -484,14 +458,14 @@ class _AppPage04ViewState extends State<AppPage04view> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InteractiveViewer(
-                                  ///이미지 확대기능
+                                  ///이미지 확대기능 ~ url을 가져오니 자꾸 바이너리로 인식하여 다운로드가 실행돼서 우선적으로 막아뒀다.
                                   boundaryMargin: const EdgeInsets.all(20.0),
                                   minScale: 0.5,
                                   maxScale: 2.6,
                                   child: ClipRRect(
                                       borderRadius:
                                       BorderRadius.all(Radius.circular(14)),
-                                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "$CLOUD_URL" + "/happx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MH")
+                                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "")
                                   ),
                                 ),
                                 Text('${_ATCData[index]}',
@@ -518,24 +492,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
 
     );
   }
-  
 
-///pdf try 1
-
-  Widget PdfThumb(){
-    return Thumbnail(
-        dataResolver: () async {
-          return (await DefaultAssetBundle.of(context)
-              .load("http://actascld.co.kr:8900/appx/download?actidxz=114&actboardz=202302002&actflagz=DD"))
-              .buffer
-              .asUint8List();
-        },
-        mimeType: 'application/pdf', widgetSize: 300,
-        decoration: WidgetDecoration(
-        wrapperBgColor:SOFT_BLUE,
-    ),
-        );
-
-  }
 
 }
