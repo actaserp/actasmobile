@@ -37,6 +37,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
+  ///다운로드 통신시 필요(1)
   final List<String> _inData = [];
   final List<String> _SaNData = [];
   ///여기서부터 blank
@@ -172,7 +173,8 @@ class _AppPage03ViewState extends State<AppPage03view> {
     }
   }
 
-///다운로드 get통신
+  ///다운로드 통신시 필요(2)
+  ///다운로드 get통신
   Future downmh()async {
     _dbnm = await  SessionManager().get("dbnm");
 
@@ -213,21 +215,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
     final file = File(path);
     await file.writeAsBytes(response.bodyBytes);
   }
-
-  ///참고용, 외부저장소가 아닌 dir 설정시의 프로퍼티
-  // var externalStorageDirPath;
-  // final directory = await getApplicationDocumentsDirectory();
-  // externalStorageDirPath = directory?.path;
-
-  ///다운로드
-
-  // final ReceivePort _port = ReceivePort();
-  // @pragma('vm:entry-point')
-  // static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress) {
-  //   final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-  //   send.send([id, status, downloadProgress]);
-  // }
-
   @override
   void initState() {
     _subject.text = widget.MhData.hsubject;
@@ -235,24 +222,10 @@ class _AppPage03ViewState extends State<AppPage03view> {
     attachMH();
     setData();
     super.initState();
-
-    ///다운로드 콜백 (1)
-    // IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    // _port.listen((dynamic data) {
-    //   String id = data[0];
-    //   DownloadTaskStatus status = data[1];
-    //   int progress = data[2];
-    //   setState((){ });
-    // });
-    //
-    // FlutterDownloader.registerCallback(downloadCallback);
-
   }
 
   @override
   void dispose() {
-    ///다운로드 콜백 (2)
-    // IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
   }
 
@@ -287,9 +260,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
                 Text('Date.${widget.MhData.hinputdate}', style: TextStyle(
                     fontSize: 16, fontWeight: FontWeight.w700, color: CHARCOAL
                 )),
-                // SizedBox( //여기수정
-                //   width: 275,
-                // ),
                 Visibility(
                   visible: false,
                   child: Text('${widget.MhData.hflag}', style: TextStyle(
@@ -501,7 +471,6 @@ class _AppPage03ViewState extends State<AppPage03view> {
   }
 
 
-//첨부파일리스트
 Widget _buildFileList() {
   final double boxImageSize = (MediaQuery.of(context).size.width / 5);
   return Container(
@@ -521,49 +490,49 @@ Widget _buildFileList() {
               {
                 return
                      Column(
-                       ///왼쪽배열
                        crossAxisAlignment: CrossAxisAlignment.start,
                        children: [
+                         ///다운로드 통신시 필요(3)
                          GestureDetector(
                          onTap: () async{
-                  bool ap_down = await downmh();
-                  if (ap_down){
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              title: Text('파일 저장'
-                              ),
-                              titleTextStyle: TextStyle(
-                                fontWeight: FontWeight.bold
-                              ),
-                              content: Text("저장소를 확인하세요."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('확인'),
-                                ),
-                              ]
-                          );
-                        }
-                    );
-                  }else{
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                              content: Text("서버 관리자에게 문의하세요."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('확인'),
-                                ),
-                              ]
-                          );
-                        }
-                    );
-                  }
-                },
+                        bool ap_down = await downmh();
+                            if (ap_down){
+                              showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: Text('파일 저장'
+                                  ),
+                                  titleTextStyle: TextStyle(
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                  content: Text("저장소를 확인하세요."),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('확인'),
+                                    ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }else{
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        content: Text("서버 관리자에게 문의하세요."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text('확인'),
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }
+                          },
                                child: ConstrainedBox(
                                  constraints: BoxConstraints(minWidth: 105, ),
                                child:  Column(

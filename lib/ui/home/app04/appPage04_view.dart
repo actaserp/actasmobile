@@ -35,8 +35,9 @@ class _AppPage04ViewState extends State<AppPage04view> {
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
-  String? _thumfile;
-  Uint8List? _thumdata;
+  final List<String> _inData = [];
+  final List<String> _SaNData = [];
+
   ///여기서부터 blank
   TextEditingController _memo = TextEditingController();
   TextEditingController _subject = TextEditingController();
@@ -70,33 +71,6 @@ class _AppPage04ViewState extends State<AppPage04view> {
     } else {
       throw Exception('불러오는데 실패했습니다');
     }
-
-  }
-
-  Future downmb() async {
-    String _dbnm = await SessionManager().get("dbnm");
-
-    var uritxt = CLOUD_URL + '/appmobile/Bdel';
-    var encoded = Uri.encodeFull(uritxt);
-    Uri uri = Uri.parse(encoded);
-    final response = await http.post(
-      uri,
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      },
-      body: <String, String>{
-        'dbnm': _dbnm,
-        'bseq' : widget.BData.bseq.toString()
-      },
-    );
-    if (response.statusCode == 200) {
-      print('삭제됨');
-      return true;
-    } else {
-      throw Exception('불러오는데 실패했습니다');
-    }
-
   }
 
   @override
@@ -158,6 +132,8 @@ class _AppPage04ViewState extends State<AppPage04view> {
       _idxData.clear();
       seqData.clear();
       _seqData.clear();
+      _inData.clear();
+      _SaNData.clear();
 
       for (int i = 0; i < alllist.length; i++) {
         AttachList_model AttObject= AttachList_model(
@@ -179,15 +155,52 @@ class _AppPage04ViewState extends State<AppPage04view> {
           _idxData.add(alllist[i]['idx'].toString());
           seqData.add(AttObject);
           _seqData.add(alllist[i]['boardIdx']);
+          _inData.add(alllist[i]['inserttime']);
+          _SaNData.add(alllist[i]['saveName']);
         });
       }
       debugPrint('Attatch data::: $ATCData length::::${ATCData.length}' );
       return
         ATCData;
     }else{
-      //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('첨부파일 리스트를 불러오는데 실패했습니다');
     }
+  }
+
+  Future downmb() async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.BData.bflag}&boardIdx=${widget.BData.bseq}&idx=${_idxData.toString().substring(1,3)}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print('@@@@@@@@@@@@@@@데이터 테스트@@@@@@@@@@@@@@@@@@@@@');
+    print('값확인::: ${_ATCData.toString().substring(1).replaceAll(']', '')}');
+    final response = await http.get(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/octet-stream',
+      },
+    );
+    if(response.statusCode == 200){
+      await writeToFile(response);
+      print('저장됨');
+      return true;
+    }else {
+      print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      print('다운로드 통신 실패했습니다.');
+      return false;
+    }
+  }
+
+  Future<void> writeToFile(http.Response response) async {
+    var externalStorageDirPath;
+    final directory = await getExternalStorageDirectory();
+    externalStorageDirPath = directory?.path;
+    final folder = await getExternalStorageDirectory();
+    final filename = _ATCData[0].toString();
+    final path = '${externalStorageDirPath}/$filename';
+    print(path);
+    final file = File(path);
+    await file.writeAsBytes(response.bodyBytes);
   }
 
   @override
@@ -445,12 +458,47 @@ class _AppPage04ViewState extends State<AppPage04view> {
                 {
                   return
                     Column(
-                      ///왼쪽배열
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
                           onTap: () async{
-
+                            bool ap_down = await downmb();
+                            if (ap_down){
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        title: Text('파일 저장'
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                        content: Text("저장소를 확인하세요."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text('확인'),
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }else{
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        content: Text("서버 관리자에게 문의하세요."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text('확인'),
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }
                           },
                           child: ConstrainedBox(
                             constraints: BoxConstraints(minWidth: 105, ),
