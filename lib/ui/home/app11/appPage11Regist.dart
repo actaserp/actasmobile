@@ -3,6 +3,7 @@ import 'dart:ffi';
 
 import 'package:actasm/config/constant.dart';
 import 'package:actasm/config/global_style.dart';
+import 'package:actasm/ui/home/app11/appPage11.dart';
 import 'package:actasm/ui/home/app11/appPage11Car.dart';
 import 'package:actasm/ui/home/app11/appPage11Equp.dart';
 import 'package:actasm/ui/reusable/reusable_widget.dart';
@@ -385,9 +386,13 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                         )
                     ),
                   ),
-                  onPressed: () {
-                    save_mhdata();
+                  onPressed: () async {
                     _reusableWidget.startLoading(context, '등록이 완료되었습니다.', 1);
+                    Navigator.pop(context);
+                    /*await update_plandata();*/
+                    await save_mhdata();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => AppPage11()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),

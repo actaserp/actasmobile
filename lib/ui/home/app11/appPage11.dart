@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../model/app02/plan_model.dart';
 import '../../../model/app04/E038List_model.dart';
+import 'appPage11Actnm.dart';
 import 'appPage11Detail.dart';
 import 'appPage11Regist.dart';
 //import 'appPage11_view.dart';
@@ -31,6 +32,11 @@ class _AppPage11State extends State<AppPage11> {
 
   bool chk = true;
   String perid = '';
+
+
+  TextEditingController _etactnm = TextEditingController();
+
+  TextEditingController _etactcd = TextEditingController();
 
 
 
@@ -74,7 +80,8 @@ class _AppPage11State extends State<AppPage11> {
       body: <String, String> {
         'dbnm': _dbnm,
         'date': _etDate.text,
-        'perid': perid
+        'perid': perid,
+        'actnm': _etactnm.text
       },
     );
     if(response.statusCode == 200){
@@ -161,43 +168,52 @@ class _AppPage11State extends State<AppPage11> {
           },
           child: Column(
             children: [
-              Container(
-
-                decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey[100]!,
-                        width: 1.0,
-                      )
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _etDate,
+                      readOnly: true,
+                      onTap: () {
+                        _selectDateWithMinMaxDate(context);
+                      },
+                      maxLines: 1,
+                      cursorColor: Colors.grey[600],
+                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[600]!),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[600]!),
+                        ),
+                        labelText: '조회일자',
+                        labelStyle: TextStyle(color: BLACK_GREY),
+                      ),
+                    ),
                   ),
-                ),
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
-                height: kToolbarHeight,
-                child: TextField(
-                  controller: _etDate,
-                  readOnly: true,
-                  onTap: () {
-                    _selectDateWithMinMaxDate(context);
-                  },
-                  maxLines: 1,
-                  cursorColor: Colors.grey[600],
-                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  decoration: InputDecoration(
-                      isDense: true,
-                      suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[600]!),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _etDate.text = "";
+                        _etactnm.text = "";
+
+                        chk = true;
+                        e038list_getdata();
+                      });
+                    },
+                    child: Text(
+                      '전체조회',
+                      style: TextStyle(
+                        color: Colors.pinkAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[600]!),
-                      ),
-                      labelText: '조회일자',
-                      labelStyle:
-                      TextStyle(color: BLACK_GREY)),
-                ),
-
-
-
+                    ),
+                  ),
+                ],
               ),
               Container(
                 margin: EdgeInsets.only(top: 5),
@@ -210,6 +226,21 @@ class _AppPage11State extends State<AppPage11> {
                     ),
                   ),
                 ),
+              ),
+              Container(child:
+              TextField(
+                controller: _etactnm,
+                readOnly: false,
+                maxLines: 1,
+                cursorColor: Colors.grey[600],
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                decoration: InputDecoration(
+                    hintText: '현장명을 입력 후 조회하기 버튼을 누르세요.',
+                    isDense: true,
+                    labelText: '현장명',
+                    labelStyle:
+                    TextStyle(color: BLACK_GREY)),
+              ),
               ),
 
 
