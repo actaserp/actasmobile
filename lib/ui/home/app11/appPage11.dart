@@ -11,6 +11,8 @@ import 'package:http/http.dart' as http;
 
 import '../../../model/app02/plan_model.dart';
 import '../../../model/app04/E038List_model.dart';
+import '../../account/tab_account.dart';
+import '../tab_home.dart';
 import 'appPage11Actnm.dart';
 import 'appPage11Detail.dart';
 import 'appPage11Regist.dart';
@@ -127,6 +129,7 @@ class _AppPage11State extends State<AppPage11> {
 
   @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 0;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -305,7 +308,39 @@ class _AppPage11State extends State<AppPage11> {
             ],
           ),
 
-        )
+        ),
+      bottomNavigationBar:  BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          if (index == 0) { // 1번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => AppPage11()));          }
+          if (index == 1) { // 2번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabHomePage()));          }
+          if (index == 2) { // 3번째 아이템을 눌렀을 때
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => TabAccountPage()));            }
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.refresh),
+            label: '새로고침',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+
 
     );
 
