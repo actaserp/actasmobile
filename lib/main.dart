@@ -9,13 +9,12 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void main() async {
+void main() {
 
  /// this function makes application always run in portrait mode
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.storage.request();
+  // await Permission.storage.request();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
-
     runApp(MyApp());
   });
 
