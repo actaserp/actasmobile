@@ -5,17 +5,14 @@ import 'dart:ui';
 import 'package:actasm/model/app02/mfixlist_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:thumbnailer/thumbnailer.dart';
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/app02/AttachListMB_model.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../reusable/cache_image_network.dart';
 import '../../reusable/reusable_widget.dart';
 import '../app03/Nav_right.dart';
@@ -130,14 +127,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
     }
   }
 
-  final ReceivePort _port = ReceivePort();
 
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress){
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-    send.send([id, status, downloadProgress]);
-
-  }
 
 
   @override
@@ -147,22 +137,6 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
     setData();
     // TODO: implement initState
     super.initState();
-
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data){
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState(() {
-
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
-    ///썸네일
-    Thumbnailer.addCustomMimeTypesToIconDataMappings(<String, IconData>{
-      'custom/mimeType': FontAwesomeIcons.key,
-    });
 
 
     if(widget.mfixData.fflag == "Y"){
@@ -621,20 +595,6 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                       children: [
                         GestureDetector(
                           onTap: () async {
-                            String dir = (await getApplicationDocumentsDirectory()).path;
-                            try{
-                              await FlutterDownloader.enqueue(
-                                  url: "$CLOUD_URL" + "/appx2/download2?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MF",
-                                  savedDir: '$dir',
-                                  fileName: '${_ATCData[index]}',
-                                  showNotification: true,
-                                  saveInPublicStorage: true,
-                              );
-                              print("파일 다운로드 완료");
-                            }catch(e){
-                              print("error :::: $e");
-                              print("idx :::: $_idxData seq :::: $_seqData" + " url 시작 ::: $CLOUD_URL + /appx2/download?actidxz=?${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MF");
-                            }
                           },
                           child: ConstrainedBox(
                             constraints: BoxConstraints(minWidth: 105, ),

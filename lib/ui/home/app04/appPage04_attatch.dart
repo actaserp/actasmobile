@@ -9,7 +9,6 @@ import 'package:actasm/model/app03/MhmanualList_model.dart';
 
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;

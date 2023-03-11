@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:actasm/ui/home/app5Home/appPager13.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:actasm/config/constant.dart';
 
 import 'package:actasm/ui/splash_screen.dart';
@@ -10,19 +9,10 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class DownloadClass {
-  static void callback(String id, DownloadTaskStatus status, int progress){
-    print("Down Status : $status");
-    print("Down Progress: $progress");
-  }
-}
-
 void main() async {
 
  /// this function makes application always run in portrait mode
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-  FlutterDownloader.registerCallback(DownloadClass.callback);
   await Permission.storage.request();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
 

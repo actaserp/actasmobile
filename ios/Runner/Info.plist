@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>ko_KR</string>
 	<key>CFBundleDisplayName</key>
 	<string>Actasm</string>
 	<key>CFBundleExecutable</key>
@@ -47,5 +47,36 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to provide location-based services.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to your location to provide location-based services.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is required for the app to work properly</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is required for the app to work properly</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is required for the app to work properly</string>
+    <key>NSSendUsageDescription</key>
+    <string>SMS permission is required to send messages.</string>
+    <key>NSReceiveUsageDescription</key>
+    <string>SMS permission is required to receive messages.</string>
+    <key>NSReadUsageDescription</key>
+    <string>SMS permission is required to read messages.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>The app needs access to your photo library to select photos</string>
+    <key>NSContactsUsageDescription</key>
+    <string>The app needs access to your contacts to display them</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>The app needs access to your health data to write new fitness and wellness information</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>The app needs access to your calendar to display your events</string>
+    <key>NSRemindersUsageDescription</key>
+    <string>The app needs access to your reminders to display them</string>
 </dict>
 </plist>

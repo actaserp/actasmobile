@@ -9,7 +9,6 @@ import 'package:actasm/model/app04/MmanualList_model.dart';
 
 import 'package:actasm/ui/reusable/reusable_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -109,17 +108,6 @@ class _AppPage10viewState extends State<AppPage10view> {
     attachfiles();
     setData();
     super.initState();
-
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
-    _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      setState((){ });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
-
   }
 
   @override
@@ -266,22 +254,6 @@ class _AppPage10viewState extends State<AppPage10view> {
                       children: [
                         GestureDetector(
                           onTap: () async{
-                            var externalStorageDirPath;
-                            final directory = await getApplicationDocumentsDirectory();
-                            externalStorageDirPath = directory?.path;
-                            String dir2 = "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=DD";
-                            try{
-                              await FlutterDownloader.enqueue(
-                                url: dir2, 	// file url
-                                savedDir: '$externalStorageDirPath',	// 저장할 dir
-                                fileName: '${_ATCData[index]}',	// 파일명
-                                showNotification: true, // show download progress in status bar (for Android)
-                                saveInPublicStorage: true ,	// 동일한 파일 있을 경우 덮어쓰기 없으면 오류발생함!
-                              );
-                              print("파일 다운로드 완료");
-                            }catch(e){
-                              print("eerror :::: $e");
-                            }
                           },
                           child: ConstrainedBox(
                             constraints: BoxConstraints(minWidth: 105, ),
@@ -318,12 +290,6 @@ class _AppPage10viewState extends State<AppPage10view> {
 
 
     );
-  }
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int downloadProgress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port')!;
-    send.send([id, status, downloadProgress]);
   }
 
 }
