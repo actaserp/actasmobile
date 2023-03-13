@@ -700,6 +700,9 @@ class _AppPager16registerState extends State<AppPager16register> {
         _etrecedate = TextEditingController(
             text: _selectedDate.toLocal().toString().split(' ')[0]);
 
+        _ethitchdate = TextEditingController(
+            text: _selectedDate.toLocal().toString().split(' ')[0]);
+
       });
     }
   }
@@ -745,15 +748,33 @@ class _AppPager16registerState extends State<AppPager16register> {
     if (picked != null)
       setState(() {
         selectedTime = picked;
+
+        //
+
+
+
+
+
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
         _time = _hour + ' : ' + _minute;
+
+
         _etrecetime.text = _time;
+        _ethitchtime.text = _time;
+
+
         _erecetime = _hour  + _minute;
         _erecetime =  _hour  + _minute;
+        _ehitchtime = _hour + _minute;
+
         _etrecetime.text = formatDate(
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, " ", am]).toString();
+
+        _ethitchtime.text = formatDate(DateTime(2019,08,1, selectedTime.hour, selectedTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+
       });
   }
 
