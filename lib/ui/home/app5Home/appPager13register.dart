@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
+
 
 import 'package:actasm/ui/home/app5Home/appPager13.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
 import '../../../model/shopping_cart_model.dart';
@@ -34,6 +38,12 @@ class _AppPager13registerState extends State<AppPager13register> {
   String _selectedValue = "";
   String ? _selectedValue2;
   var _usernm = "";
+
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _pickedImgs = [];
+
+
+
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
@@ -89,6 +99,16 @@ class _AppPager13registerState extends State<AppPager13register> {
     // 다른 데이터 설정
   }
 
+
+
+  Future<void> _pickImg() async {
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if(images != null){
+      setState(() {
+        _pickedImgs = images;
+      });
+    }
+  }
 
 
 
@@ -154,8 +174,30 @@ class _AppPager13registerState extends State<AppPager13register> {
   @override
   Widget build(BuildContext context){
 
-    setData();
-    final double boxImageSize = (MediaQuery.of(context).size.width / 5);
+    List<Widget> _boxContents = [
+      IconButton(onPressed: (){
+          _pickImg();
+      }, icon: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.6), shape: BoxShape.circle
+        ),
+        child: Icon(CupertinoIcons.camera, color: Colors.green,),
+      )),
+      Container(),
+      Container(),
+      _pickedImgs.length <= 4 ? Container() : FittedBox(child: Container(
+        padding: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.6),
+          shape: BoxShape.circle
+        ),
+        child: Text(
+          '+${(_pickedImgs.length - 4).toString()}',
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ),)
+    ];
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -350,12 +392,32 @@ class _AppPager13registerState extends State<AppPager13register> {
                 )
             ),
           ),
+          SizedBox(
+            height: 350,
+            child: GridView.count(
+              padding: EdgeInsets.all(2),
+              crossAxisCount: 2,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+              children: List.generate(4, (index) => DottedBorder(child: Container(
+                child: Center(child: _boxContents[index]),
+                decoration: index <= _pickedImgs.length - 1 ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(fit: BoxFit.cover, image: FileImage(File(_pickedImgs[index].path)))
+                ) : null,
+              ),
+              color: Colors.grey, dashPattern: [5, 3], borderType: BorderType.RRect, radius: Radius.circular(10))).toList(),
+            ),
+          )
 
         ],
       ),
 
     );
   }
+
+
+
 
 
   Future<Null> _selectDateWithMinMaxDate(BuildContext context) async {
