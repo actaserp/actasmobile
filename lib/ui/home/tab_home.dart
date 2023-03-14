@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'app04/appPage04.dart';
 import 'app05/appPage05.dart';
@@ -111,8 +112,13 @@ class _Home1PageState extends State<TabHomePage> {
             actions: <Widget>[
               IconButton(
                   icon: Icon(Icons.help_outline),
-                  onPressed: () {
-                    Fluttertoast.showToast(msg: 'Click setting', toastLength: Toast.LENGTH_SHORT);
+                  onPressed: () async {
+                    const url = 'http://emmsg.co.kr:8080/actas/about_privacy';
+                    if (await canLaunch(url)) {
+                    await launch(url);
+                    } else {
+                    throw 'Could not launch $url';
+                    }
                   })
             ]),
         body: ListView(
