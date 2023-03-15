@@ -54,6 +54,7 @@ dependencies:
   get: ^4.6.5
   image_picker: ^0.8.7
   dotted_border: ^2.0.0+3
+  onesignal_flutter: ^3.5.0
 
 dev_dependencies:
   flutter_test:

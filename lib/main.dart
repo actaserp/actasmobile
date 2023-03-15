@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:actasm/ui/home/app5Home/appPager13.dart';
 import 'package:actasm/config/constant.dart';
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:actasm/ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,9 +11,17 @@ import 'package:permission_handler/permission_handler.dart';
 
 void main() {
 
+
  /// this function makes application always run in portrait mode
   WidgetsFlutterBinding.ensureInitialized();
   // await Permission.storage.request();
+  //Remove this method to stop OneSignal Debugging
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  OneSignal.shared.setAppId("2f677e4f-4e90-439b-84af-29c8f75ba1e8");
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+    print("Accepted permission: $accepted");
+  });
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(MyApp());
   });
