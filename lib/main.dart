@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
 
@@ -15,20 +16,37 @@ void main() {
  /// this function makes application always run in portrait mode
   WidgetsFlutterBinding.ensureInitialized();
   // await Permission.storage.request();
-  //Remove this method to stop OneSignal Debugging
+  ///onsignal function
   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
   OneSignal.shared.setAppId("2f677e4f-4e90-439b-84af-29c8f75ba1e8");
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
     print("Accepted permission: $accepted");
   });
+  getID();
+  // print('OneSignal Player ID: $getID');
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(MyApp());
   });
 
 }
 
+Future<String> getID() async {
+  var userId;
+  // Get the user's OneSignal Player ID
+  String? playerId = await OneSignal.shared.getDeviceState().then((state) => state?.userId);
+  print('pushid check ::: ${playerId}');
 
+  // Save the playerId to SharedPreferences
+  await savePlayerId(playerId!);
+
+  return playerId;
+}
+
+Future<void> savePlayerId(String playerId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('playerId', playerId);
+  print('localstorage check ::: ${playerId}');
+}
 
 class MyCustomeScrollBehavior extends MaterialScrollBehavior{
   @override

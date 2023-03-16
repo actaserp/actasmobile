@@ -2,8 +2,19 @@ import 'dart:convert';
 import 'package:actasm/config/constant.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<Map> Usercheck(String userid, String userpw) async{
+// SharedPreferences 인스턴스 생성
+  final prefs = await SharedPreferences.getInstance();
+// playerId 가져오기
+  final _playerId = prefs.getString('playerId');
+  // if (playerId != null) {
+  //   // playerId를 사용하는 코드 작성
+  // } else {
+  //   // playerId가 저장되어 있지 않은 경우 처리하는 코드 작성
+  // }
+
   Map<String, dynamic> userinfo = {};
   var uritxt = CLOUD_URL + '/authm/loginmchk';
   var encoded = Uri.encodeFull(uritxt);
@@ -18,7 +29,8 @@ Future<Map> Usercheck(String userid, String userpw) async{
     },
     body: <String, String> {
       'userid': userid,
-      'userpw': userpw
+      'userpw': userpw,
+      'pushid': _playerId.toString(),
     },
   );
   if(response.statusCode == 200){
@@ -32,12 +44,16 @@ Future<Map> Usercheck(String userid, String userpw) async{
     await SessionManager().set("saupnum", userinfo['saupnum']);
     await SessionManager().set("phone", userinfo['phone']);
     await SessionManager().set("actcd", userinfo['actcd']);
+    ///int 불가능 String으로 변수 받아옴
+    // await SessionManager().set("seq", userinfo['seq']);
+    // await SessionManager().set("pushid", userinfo['pushid']);
     // await SessionManager().set("cltcd", userinfo['cltcd']);
     // await SessionManager().set("flag", userinfo['flag']);
     await SessionManager().set("dbnm", userinfo['dbnm']);
     await SessionManager().set("perid", userinfo['perid']);
     // await SessionManager().set("pernm", userinfo['pernm']);
     // dynamic user_saupnum = await SessionManager().get("saupnum");
+    print("제발~~~~~~~~~ ${userinfo['seq']}"); // userinfo['seq'] 값 출력
 
     //Update session
     //  await SessionManager().update();
@@ -50,6 +66,6 @@ Future<Map> Usercheck(String userid, String userpw) async{
   }else{
     // throw Exception('Failed to load data');
   }
-  // print(userinfo.length);
+
   return userinfo;
 }
