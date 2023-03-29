@@ -2,18 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ko_KR</string>
 	<key>CFBundleDisplayName</key>
-	<string>Actasm</string>
+	<string>ActasELV</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>com.actasm.actasmo</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>actasm</string>
+	<string>ActasELV</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -21,8 +23,31 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The app needs access to your calendar to display your events</string>
+	<key>NSContactsUsageDescription</key>
+	<string>The app needs access to your contacts to display them</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is required for the app to work properly</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The app needs access to your photo library to select photos</string>
+	<key>NSReadUsageDescription</key>
+	<string>SMS permission is required to read messages.</string>
+	<key>NSReceiveUsageDescription</key>
+	<string>SMS permission is required to receive messages.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>The app needs access to your reminders to display them</string>
+	<key>NSSendUsageDescription</key>
+	<string>SMS permission is required to send messages.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -43,40 +68,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs access to your location to provide location-based services.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs access to your location to provide location-based services.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Your location is required for the app to work properly</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your location is required for the app to work properly</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Your location is required for the app to work properly</string>
-    <key>NSSendUsageDescription</key>
-    <string>SMS permission is required to send messages.</string>
-    <key>NSReceiveUsageDescription</key>
-    <string>SMS permission is required to receive messages.</string>
-    <key>NSReadUsageDescription</key>
-    <string>SMS permission is required to read messages.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>The app needs access to your photo library to select photos</string>
-    <key>NSContactsUsageDescription</key>
-    <string>The app needs access to your contacts to display them</string>
-    <key>NSHealthUpdateUsageDescription</key>
-    <string>The app needs access to your health data to write new fitness and wellness information</string>
-    <key>NSCalendarsUsageDescription</key>
-    <string>The app needs access to your calendar to display your events</string>
-    <key>NSRemindersUsageDescription</key>
-    <string>The app needs access to your reminders to display them</string>
 </dict>
 </plist>
