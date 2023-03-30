@@ -86,6 +86,17 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+            mavenCentral()
+            maven {
+                url 'https://maven.google.com/'
+                name 'Google'
+            }
+        }
+    }
 }
 
 flutter {

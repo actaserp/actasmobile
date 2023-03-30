@@ -4,6 +4,11 @@ import 'package:actasm/ui/home.dart';
 import 'package:actasm/ui/authentication/usercheck.dart';
 import 'package:flutter/material.dart';
 import 'package:actasm/config/constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import '../home/tab_home.dart';
 class SigninPage extends StatefulWidget {
   @override
   _SigninPageState createState() => _SigninPageState();
@@ -15,6 +20,10 @@ class _SigninPageState extends State<SigninPage> {
   IconData _iconVisible = Icons.visibility_off;
   String _userid = '';
   String _userpw = '';
+  String? userInfo = ""; //user의 정보를 저장하기 위한 변수
+  static final storage =
+  new FlutterSecureStorage(); //flutter_secure_storage 사용을 위한 초기화 작업
+
   void _toggleObscureText() {
     setState(() {
       _obscureText = !_obscureText;
@@ -29,6 +38,30 @@ class _SigninPageState extends State<SigninPage> {
   @override
   void initState() {
     super.initState();
+
+    //비동기로 flutter secure storage 정보를 불러오는 작업.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
+
+
+  _asyncMethod() async {
+    //read 함수를 통하여 key값에 맞는 정보를 불러오게 됩니다. 이때 불러오는 결과의 타입은 String 타입임을 기억해야 합니다.
+    //(데이터가 없을때는 null을 반환을 합니다.)
+    userInfo = await storage.read(key: "login");
+    print(userInfo);
+
+    //user의 정보가 있다면 바로 로그아웃 페이지로 넝어가게 합니다.
+    if (userInfo != null) {
+      Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => TabHomePage(
+                id: userInfo!.split(" ")[1],
+                pass: userInfo!.split(" ")[3],
+              )));
+    }
   }
 
   @override
@@ -36,6 +69,8 @@ class _SigninPageState extends State<SigninPage> {
     _etEmail.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +179,23 @@ class _SigninPageState extends State<SigninPage> {
                       showAlertDialog(context, "사용자가 없습니다.");
                       return;
                     }else{
+                      await storage.write(
+                          key: "login",
+                          value: "id " +
+                              _etEmail.text.toString() +
+                              " " +
+                              "password " +
+                              _obscureText.toString());
+
+                      Navigator.pushReplacement(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => TabHomePage(
+                              id: _userid,
+                              pass: _userpw,
+                            )),
+                      );
+
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
 
                     }
@@ -194,4 +246,6 @@ class _SigninPageState extends State<SigninPage> {
       },
     );
   }
+
+
 }

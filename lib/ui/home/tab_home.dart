@@ -10,6 +10,7 @@ import 'package:actasm/ui/reusable/global_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,12 +33,20 @@ import 'appPage02.dart';
 import 'app03/appPage03.dart';
 
 class TabHomePage extends StatefulWidget {
+  final String? id;
+  final String? pass;
+  TabHomePage({this.id, this.pass});
+
   @override
   _Home1PageState createState() => _Home1PageState();
 }
 
 class _Home1PageState extends State<TabHomePage> {
+  static final storage = FlutterSecureStorage();
   // initialize global widget
+  late String id;
+  late String pass;
+
   final _globalWidget = GlobalWidget();
   Color _color1 = Color(0xFF005288);
   Color _color2 = Color(0xFF37474f);
@@ -189,6 +198,7 @@ bottomNavigationBar: SizedBox.shrink(),
             child: Container(
               child: GestureDetector(
                 onTap: () {
+                  storage.delete(key: "login");
                   Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
                 },
                 child: Text(
