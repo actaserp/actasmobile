@@ -84,21 +84,8 @@ class _Home1PageState extends State<Tab5HomePage> {
           centerTitle: true,
           systemOverlayStyle: SystemUiOverlayStyle.light,
           title: Image.asset(LOCAL_IMAGES_URL+'/logo.png', height: 24, color: Colors.white),
-          backgroundColor: _color1,
-          leading: IconButton(onPressed: (){
-            Fluttertoast.showToast(msg: 'Click about us', toastLength: Toast.LENGTH_SHORT);
-
-          }, icon: Icon(Icons.help_outline),),
-          actions: <Widget>[
-            IconButton(icon: _globalWidget.customNotifIcon(count: 8, notifColor: Colors.white),
-                onPressed: (){
-                  Fluttertoast.showToast(msg: 'Click notification', toastLength: Toast.LENGTH_SHORT);
-                }),
-            IconButton(icon: Icon(Icons.settings),
-                onPressed: (){
-                  Fluttertoast.showToast(msg: 'Click setting', toastLength: Toast.LENGTH_SHORT);
-                }),
-          ]),
+          backgroundColor: _color1
+          ),
       body: ListView(
         children: [
           _buildTop(),
@@ -179,7 +166,6 @@ class _Home1PageState extends State<Tab5HomePage> {
         ],
       ),
     );
-
   }
 
   Widget _buildTop(){
@@ -187,56 +173,27 @@ class _Home1PageState extends State<Tab5HomePage> {
       padding: EdgeInsets.all(20),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: (){
-              Fluttertoast.showToast(msg: 'Click profile picture', toastLength: Toast.LENGTH_SHORT);
-            },
-            child: Hero(tag: 'profilePicture',
-              child: ClipOval(
-                child: buildCacheNetworkImage(url: GLOBAL_URL+'/user/avatar.png', width: 50),
-              ),
-            ),
-          ),
           Expanded(child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: (){
-                      Fluttertoast.showToast(msg: 'Click name', toastLength: Toast.LENGTH_SHORT);
-                    },
-                    child: Text(
-                      _usernm + '님 반갑습니다.',
-                      style: TextStyle(
-                          color: _color2,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                   Center(
+                      child: Text(
+                        '고 장 통 계',
+                        style: TextStyle(
+                            color: _color2,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-
                 ],
               )
 
           ),
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 32),
-            width: 1,
-            height: 40,
-            color: Colors.grey[300],
-          ),
-          GestureDetector(
-            onTap: (){
-              Fluttertoast.showToast(msg: "Click log out",toastLength: Toast.LENGTH_SHORT );
-            },
-            child: Text(
-                'Log Out',
-                style: TextStyle(color: _color2, fontWeight: FontWeight.bold)),
-          )
-
         ],
       ),
     );

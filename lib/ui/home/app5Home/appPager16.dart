@@ -227,7 +227,7 @@ class _AppPager16State extends State<AppPager16> {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.615,
+              height: MediaQuery.of(context).size.height * 0.56,
               child: WillPopScope(
                   child: ListView.builder(
                     itemCount: e401receData.length,

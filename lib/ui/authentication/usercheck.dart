@@ -9,11 +9,8 @@ Future<Map> Usercheck(String userid, String userpw) async{
   final prefs = await SharedPreferences.getInstance();
 // playerId 가져오기
   final _playerId = prefs.getString('playerId');
-  // if (playerId != null) {
-  //   // playerId를 사용하는 코드 작성
-  // } else {
-  //   // playerId가 저장되어 있지 않은 경우 처리하는 코드 작성
-  // }
+  // print ('pushid있나요????????????????????????');
+  print (_playerId);
 
   Map<String, dynamic> userinfo = {};
   var uritxt = CLOUD_URL + '/authm/loginmchk';
@@ -53,7 +50,7 @@ Future<Map> Usercheck(String userid, String userpw) async{
     await SessionManager().set("perid", userinfo['perid']);
     // await SessionManager().set("pernm", userinfo['pernm']);
     // dynamic user_saupnum = await SessionManager().get("saupnum");
-    print("제발~~~~~~~~~ ${userinfo['seq']}"); // userinfo['seq'] 값 출력
+    // print("제발~~~~~~~~~ ${userinfo['seq']}"); // userinfo['seq'] 값 출력
 
     //Update session
     //  await SessionManager().update();

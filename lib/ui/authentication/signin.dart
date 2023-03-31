@@ -170,9 +170,6 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                   ),
                   onPressed: () async{
-                    // Fluttertoast.showToast(
-                    //     msg: 'Click login : ' + _userid + '/' + _userpw,
-                    //     toastLength: Toast.LENGTH_LONG);
                     var user = await Usercheck(_userid, _userpw);
                     if(user.length == 0){
                       print("사용자가 없음.");
@@ -199,8 +196,6 @@ class _SigninPageState extends State<SigninPage> {
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
 
                     }
-                    //Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage()), (Route<dynamic> route) => false);
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(_userid,_userpw)));
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),

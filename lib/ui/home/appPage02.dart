@@ -211,7 +211,8 @@ class _AppPage02State extends State<AppPage02> {
             child: Row(
               children: [
                 Container(
-                  width: 300,
+                  // width: 300,
+                  width: MediaQuery.of(context).size.width/1.3,
                   decoration: BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
@@ -266,7 +267,9 @@ class _AppPage02State extends State<AppPage02> {
 
                       e401list_getdata();
                     });
-                  }, child: Text('검색하기')),
+                  }, child: Container(
+                      width: MediaQuery.of(context).size.width/8,
+                      child: Center(child: Text('검색'+ '\n'+'하기')))),
                 )
               ],
             ),
@@ -276,7 +279,7 @@ class _AppPage02State extends State<AppPage02> {
         body: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.638,
+              height: MediaQuery.of(context).size.height * 0.56,
               child: WillPopScope(
                 onWillPop: (){
                   Navigator.pop(context);
@@ -291,8 +294,6 @@ class _AppPage02State extends State<AppPage02> {
                     return _buildListCard(e401Data[index]);
                   },
                 ),
-
-
               ),
             ),
             Container( ///노하우등록

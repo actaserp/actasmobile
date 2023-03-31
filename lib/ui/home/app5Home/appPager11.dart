@@ -327,7 +327,9 @@ class _AppPager11State extends State<AppPager11> {
 
 
                         },
-                        child: Text('조회하기'),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width/9,
+                            child: Center(child: Text('조회'+ '\n' +'하기'))),
                       ),
                     )
                   ],

@@ -322,6 +322,8 @@ class _AppPage05State extends State<AppPage05> {
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Container(
+                            // margin: EdgeInsets.all(20),
+                            margin: EdgeInsets.only( top: 20, bottom: 10, right: 20, left: 20),
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               border: Border(
@@ -336,11 +338,13 @@ class _AppPage05State extends State<AppPage05> {
                               ),
                             ),
                             width: 750,
-                            // height: MediaQuery.of(context).size.height/1.4,
+                            ///전체 listview의 길이이다.
+                            // height: MediaQuery.of(context).size.height/1.2,
                             ///크기 미지정시 기기마다 다르게 설정된다. 고민해야할 지점
-                            height: 750,
+                            height: 300,
                             child:
                             ListView.builder(
+                              // physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: SData.length,
                               itemBuilder: (BuildContext context, int index) {
@@ -349,7 +353,7 @@ class _AppPage05State extends State<AppPage05> {
                             ),
                           ),
                         ),
-                        ///칼럼으로 엮으면 안됨
+                        ///본문출력 listveiw
                         Cmemo(),
                       ],
                     ),
@@ -470,14 +474,12 @@ class _AppPage05State extends State<AppPage05> {
      ///헤더 제작
   Widget _buildHEAD(SmanualList_model SData){
     final double WidthSize = (MediaQuery.of(context).size.width*1);
-
     return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
+      children:[
                 Container(
                   width: WidthSize,
                   margin: EdgeInsets.only(top:15, bottom: 15),
-                  /// 질문 제목
                   child: Row(
                     children: [
                       Center(
@@ -503,7 +505,6 @@ class _AppPage05State extends State<AppPage05> {
                     ],
                   ),
                 ),
-                    ///질문 내용
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -524,6 +525,7 @@ class _AppPage05State extends State<AppPage05> {
                           Row(
                             children: [
                               Container(
+                                width: MediaQuery.of(context).size.width/2.1,
                                 padding:EdgeInsets.all(16),
                                 child: Text('${SData.smemo}', style: TextStyle(
                                     fontSize:14, fontWeight: FontWeight.bold, color: SOFT_BLUE
@@ -535,12 +537,12 @@ class _AppPage05State extends State<AppPage05> {
                         ],
                       ),
                     ),
-                ///댓글창 생성
                 Container(
                   margin: EdgeInsets.only(top:10, bottom: 10),
+                  width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height/12,
                   child: ListView.builder(
-                    padding: EdgeInsets.only( bottom: 10,),
+                    // padding: EdgeInsets.only( bottom: 5,),
                     // physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -553,7 +555,6 @@ class _AppPage05State extends State<AppPage05> {
                         return SizedBox.shrink();
                       }
                     }
-
                   ),
                 ),
                   ///댓글입력 토글
