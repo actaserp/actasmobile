@@ -15,7 +15,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import '../tab_home.dart';
-import 'appPage03_Edetail.dart';
 import 'appPage03_detail.dart';
 import 'appPage03_view.dart';
 
@@ -209,7 +208,6 @@ class _AppPage03State extends State<AppPage03> {
         isAlwaysShown: true,
         child: ListView(
           // physics: NeverScrollableScrollPhysics(),
-         ///막으면 전체화면
           children: [
             Container(
               padding:EdgeInsets.only(top:16, bottom: 2, left: 10),

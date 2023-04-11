@@ -36,7 +36,8 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
   TextEditingController _memo = TextEditingController();
   TextEditingController _subject = TextEditingController();
   TextEditingController _etCompdate = TextEditingController();
-
+  ///회원사공유 (2) 체크박스
+  bool _isChecked = false;
 
   @override
   void initState() {
@@ -192,9 +193,25 @@ class _AppPage04DetailState extends State<AppPage04Detail> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 20,
+                        Row(
+                          children: [
+                            Text( '회원사 공유',
+                              style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                            ),
+                            ///회원사공유(1)
+                            Checkbox(
+                              value: _isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  this._isChecked = value ?? false;
+                                  String checkvalue = this._isChecked ? 'Y' : '';
+                                  print('회원사 공유확인 :::'+ checkvalue.toString());
+                                });
+                              },
+                            ),
+                          ],
                         ),
+
             TextField(
               controller: _etCompdate,
               readOnly: true,

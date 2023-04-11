@@ -338,13 +338,9 @@ class _AppPage05State extends State<AppPage05> {
                               ),
                             ),
                             width: 750,
-                            ///전체 listview의 길이이다.
-                            // height: MediaQuery.of(context).size.height/1.2,
-                            ///크기 미지정시 기기마다 다르게 설정된다. 고민해야할 지점
                             height: 300,
                             child:
                             ListView.builder(
-                              // physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: SData.length,
                               itemBuilder: (BuildContext context, int index) {
@@ -360,7 +356,6 @@ class _AppPage05State extends State<AppPage05> {
 
 
                    ],
-        ///listview 하단에도 padding 값이 필요하다. 혹은 margin으로 조절
         ),
 
       bottomNavigationBar:  BottomNavigationBar(
@@ -542,8 +537,6 @@ class _AppPage05State extends State<AppPage05> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height/12,
                   child: ListView.builder(
-                    // padding: EdgeInsets.only( bottom: 5,),
-                    // physics: NeverScrollableScrollPhysics(),
                     itemCount: SCData.length,
                     itemBuilder: (BuildContext context, int index) {
                       final SCmanualList_model SCmemo = SCData[index];
@@ -601,25 +594,32 @@ class _AppPage05State extends State<AppPage05> {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: [
-                Flexible(
+                Container(
+                  padding: EdgeInsets.only(bottom: 4),
                   child: Text('${SCData.spernm}  ', style: TextStyle(
                       color: SOFT_BLUE, fontWeight: FontWeight.bold
                   )),
                 ),
-                Flexible(
+                Container(
+                  padding: EdgeInsets.only(bottom: 4),
                   child: Text('${SCData.smemo}', style: TextStyle(
                       color: CHARCOAL
                   )),
                 ),
-                Wrap(
-                  children: [
-                    SizedBox(width: 4),
-                    Icon(Icons.done_all, color: SOFT_BLUE, size: 11),
-                    SizedBox(width: 2),
-                    Text('${SCData.sinputdate}', style: TextStyle(
-                        color: SOFT_GREY, fontSize: 9
-                    )),
-                  ],
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 7),
+                    child: Wrap(
+                      children: [
+                        SizedBox(width: 4),
+                        Icon(Icons.done_all, color: SOFT_BLUE, size: 11),
+                        SizedBox(width: 2),
+                        Text('${SCData.sinputdate}', style: TextStyle(
+                            color: SOFT_GREY, fontSize: 9
+                        )),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

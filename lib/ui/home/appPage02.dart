@@ -279,7 +279,7 @@ class _AppPage02State extends State<AppPage02> {
         body: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.56,
+              height: MediaQuery.of(context).size.height * 0.48,
               child: WillPopScope(
                 onWillPop: (){
                   Navigator.pop(context);

@@ -210,11 +210,15 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                               Text( '님이 작성 중입니다.',
                                 style: TextStyle(color: BLACK_GREY ,fontSize: 18),
                               ),
-                              Text( '     회원사 공유 :::',
-                                style: TextStyle(color: BLACK_GREY ,fontSize: 18),
-                              ),
+                            ],
+                          ),
+                        Row(
+                          children: [
+                            Text( '회원사 공유',
+                              style: TextStyle(color: BLACK_GREY ,fontSize: 18),
+                            ),
                             ///회원사공유(1)
-                              Checkbox(
+                            Checkbox(
                               value: _isChecked,
                               onChanged: (bool? value) {
                                 setState(() {
@@ -224,10 +228,7 @@ class _AppPage03DetailState extends State<AppPage03Detail> {
                                 });
                               },
                             ),
-                            ],
-                          ),
-                        SizedBox(
-                          height: 20,
+                          ],
                         ),
                         TextField(
                           controller: _etCompdate,

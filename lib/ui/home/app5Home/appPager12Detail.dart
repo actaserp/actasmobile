@@ -95,7 +95,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
           Row(
             children: [
               Container(
-                width: 0.432 * MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width/2.9,
                 child: TextField(
                   controller: _etrecedate,
                   readOnly: true,
@@ -179,7 +179,7 @@ class _AppPager12DetailState extends State<AppPager12Detail> {
           Row(
             children: [
               Container(
-                width: 0.432 * MediaQuery.of(context).size.width,
+                width: MediaQuery.of(context).size.width/2.9,
                 child: TextField(
                   controller: _ethitchdate,
                   readOnly: true,
