@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:dio/dio.dart';
 
 import 'package:actasm/ui/home/app5Home/appPager13.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../config/constant.dart';
 import '../../../config/global_style.dart';
@@ -19,10 +19,6 @@ import '../../reusable/reusable_widget.dart';
 
 class AppPager13register extends StatefulWidget {
 
-
-  // final MhmanualList_model mhData;
-  // const AppPage03Detail({Key? key, required this.mhData}) : super(key: key);
-
   @override
   _AppPager13registerState createState() => _AppPager13registerState();
 }
@@ -31,6 +27,10 @@ class _AppPager13registerState extends State<AppPager13register> {
 
   final List<String> _C750Data = [];
   final _reusableWidget = ReusableWidget();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+
+
 
   int _maxgoodParts = 2;
   final List<String> _eGregiData = [];
@@ -42,6 +42,9 @@ class _AppPager13registerState extends State<AppPager13register> {
   final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
 
+  FormData formData = FormData();
+
+
 
 
 
@@ -49,7 +52,7 @@ class _AppPager13registerState extends State<AppPager13register> {
   DateTime _selectedDate = DateTime.now(), initialDate = DateTime.now();
   late String now;
   late String now2;
-
+  final dio = Dio();
   String _dbnm = '';
   String? _etGregicdTxt;
   String usernm = "";
@@ -57,6 +60,8 @@ class _AppPager13registerState extends State<AppPager13register> {
   TextEditingController _subject = TextEditingController();
 
   TextEditingController _etCompdate = TextEditingController();
+
+
 
 
   TextEditingController _etfintputdate = TextEditingController();
@@ -108,36 +113,83 @@ class _AppPager13registerState extends State<AppPager13register> {
         _pickedImgs = images;
       });
     }
+
   }
+
+
+
 
 
 
   //저장
   @override
-  Future<bool> save_mhdata()async {
+  Future<bool> save_mhdata() async {
+
+
+
+
+
+
+    /*for (int i = 0; i < _pickedImgs.length; i++) {
+      var pic = await MultipartFile.fromFile(_pickedImgs[i].path,
+          contentType: new MediaType("image", "jpg"));
+      multipartImgList.add(pic);
+    }*/
+
+/*
+    var formData = FormData.fromMap({
+      for (int i = 0; i < multipartImgList.length; i++)
+        'file': multipartImgList[i]
+    });
+*/
+
     _dbnm = await  SessionManager().get("dbnm");
     var uritxt = CLOUD_URL + '/apppgymobile/mfixbbssave';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print("----------------------------");
     ///null처리
-    if(_etfintputdate.text == null || _etfintputdate.text == "") {
-      showAlertDialog(context, "작성일자를 입력하세요");
+    if(_etfintputdate.text == "") {
+      showAlertDialog(context, '작성일자를 입력하세요');
+
       return false;
     }
-    if(_subject.text == null || _subject.text == "" ) {
-      showAlertDialog(context, "제목을 입력하세요");
+    if(_subject.text.isEmpty || _subject.text == "") {
+      showAlertDialog(context, '제목을 입력하세요');
       return false;
     }
-    if(_memo.text == null || _memo.text == "" ) {
-      showAlertDialog(context, "내용을 입력하세요");
+    if(_memo.text.isEmpty || _memo.text == "" ) {
+      showAlertDialog(context, '내용을 입력하세요');
       return false;
     }
-    if(_selectedValue == null || _selectedValue == "" ) {
-      showAlertDialog(context, "분류를 선택하세요");
+    if(_selectedValue.isEmpty || _selectedValue == "" ) {
+      showAlertDialog(context, '분류를 선택하세요');
       return false;
     }
-    final response = await http.post(
+
+
+
+    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
+    formData = FormData.fromMap({"file" : _files});
+
+
+    formData.fields.add(MapEntry('dbnm', _dbnm));
+    formData.fields.add(MapEntry('fseq', ""));
+    formData.fields.add(MapEntry('finputdate', _etfintputdate.text));
+    formData.fields.add(MapEntry('fpernm', _usernm.toString()));
+    formData.fields.add(MapEntry('fmemo', _memo.text));
+    formData.fields.add(MapEntry('fnsubject', _subject.text));
+    formData.fields.add(MapEntry('fgroupcd', _selectedValue));
+    formData.fields.add(MapEntry('fflag', 'Y'));
+
+    dio.options.contentType = 'multipart/form-data';
+
+    final response = await dio.postUri(uri,
+    data: formData
+    );
+
+
+    /*final response = await http.post(
       uri,
       headers: <String, String> {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -155,7 +207,8 @@ class _AppPager13registerState extends State<AppPager13register> {
         'fgroupcd': _selectedValue,
         'fflag': 'Y'
       },
-    );
+    );*/
+
     if(response.statusCode == 200){
       print("저장됨");
       return   true;
@@ -302,41 +355,62 @@ class _AppPager13registerState extends State<AppPager13register> {
           SizedBox(
             height: 20,
           ),
-          TextField(
-            controller: _subject,
-            autofocus: true,
-            decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintText: '제목을 작성하세요',
-                focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                    BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                ),
-                labelText: '제목 *',
-                labelStyle:
-                TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _subject,
+              validator: (value){
+                if(value != null  && value.isEmpty){
+                  return '값을 입력하세요';
+
+                }
+                return null;
+              },
+              autofocus: true,
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintText: '제목을 작성하세요',
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                  ),
+                  labelText: '제목 *',
+                  labelStyle:
+                  TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+
+            ),
           ),
           SizedBox(
             height: 20,
           ),
-          TextField(
-            autofocus: true,
-            controller: _memo,
-            decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintText: '내용을 작성하세요',
-                focusedBorder: UnderlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    borderSide:
-                    BorderSide(color: PRIMARY_COLOR, width: 2.0)),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFCCCCCC)),
-                ),
-                labelText: '내용 *',
-                labelStyle:
-                TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+          Form(
+            key: _formKey2,
+            child: TextFormField(
+              autofocus: true,
+              controller: _memo,
+              validator: (value){
+                if(value != null  && value.isEmpty){
+                  return '내용을 입력하세요';
+
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  hintText: '내용을 작성하세요',
+                  focusedBorder: UnderlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderSide:
+                      BorderSide(color: PRIMARY_COLOR, width: 2.0)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFFCCCCCC)),
+                  ),
+                  labelText: '내용 *',
+                  labelStyle:
+                  TextStyle(fontSize: 23,  fontWeight: FontWeight.bold, color: BLACK_GREY)),
+            ),
           ),
           SizedBox(
             height: 20,
@@ -354,29 +428,39 @@ class _AppPager13registerState extends State<AppPager13register> {
                       )
                   ),
                 ),
-                onPressed: () {
-                  save_mhdata();
-                  Get.off(AppPager13());
-                  showDialog(context: context, builder: (context){
-                    return AlertDialog(
-                      content: Text('저장되었습니다.'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
+                onPressed: ()  async {
+                  if(_formKey.currentState!.validate() && _formKey2.currentState!.validate()){
+                    showDialog(context: context, builder: (BuildContext context){
+                      return AlertDialog(
+                        content: Text('저장하시겠습니까?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () async {
 
-                            Navigator.pop(context);
-                            /* Navigator.pushReplacement(
+                              if(_formKey.currentState!.validate()){
+                                Navigator.pop(context);
+                                await save_mhdata();
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPager13()));
+                              }
+
+
+
+                              /* Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => AppPager13()),
                             );
                             Get.off(AppPager14());*/
-                          },
-                        ),
+                            },
+                          ),
+                          TextButton(onPressed: (){
+                            Navigator.pop(context, "취소");
+                          }, child: Text('Cancael')),
 
-                      ],
-                    );
-                  });
+                        ],
+                      );
+                    });
+                  }
                   /*_reusableWidget.startLoading(context, '등록 되었습니다.', 1);*/
                 },
                 child: Padding(
@@ -450,93 +534,11 @@ class _AppPager13registerState extends State<AppPager13register> {
   }
 
 
-  //  첨부파일리스트 ~ network로 가져와야함
-  Column _buildItem(index, boxImageSize){
-    int quantity = shoppingCartData[index].qty;
-    return Column(
-      children: [
-        Container(
-          child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: (){
-
-                  },
-                  child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(4)),
-                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: shoppingCartData[index].image)),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-
-                        },
-                        child: Text(
-                          shoppingCartData[index].name,
-                          style: GlobalStyle.productName.copyWith(fontSize: 14),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        // child: Text('\$ '+_globalFunction.removeDecimalZeroFormat(shoppingCartData[index].price),
-                        //     style: GlobalStyle.productPrice),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                // showPopupDelete(index, boxImageSize);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                height: 30,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        width: 1, color: Colors.grey[300]!)),
-                                child: Icon(Icons.delete,
-                                    color: BLACK_GREY, size: 20),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        (index == shoppingCartData.length - 1)
-            ? Wrap()
-            : Divider(
-          height: 32,
-          color: Colors.grey[400],
-        )
-      ],
-    );
-  }
 
 
   //저장시 confirm
   void showAlertDialog(BuildContext context, String as_msg) async {
+
     String result = await showDialog(
       context: context,
       barrierDismissible: false, // user must tap button!

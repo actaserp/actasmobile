@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:actasm/model/app02/mfixlist_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
@@ -22,6 +23,7 @@ import 'appPager13.dart';
 
 class AppPager13Detail extends StatefulWidget {
   final mfixlist_model mfixData;
+
   const AppPager13Detail({Key? key, required this.mfixData}) : super(key: key);
 
   // final MhmanualList_model mhData;
@@ -40,6 +42,15 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
   String _selectedValue = "";
   String ? _selectedValue2;
   String _shared = "N";
+
+  late List<Uint8List> imageDataList;
+
+  /* TODO: 기존
+  late List<Uint8List> imageDataList = [];
+  */
+
+
+
 
   late String _dbnm;
   late String _attachidx;
@@ -130,22 +141,96 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
 
 
 
+
+
+
+
   @override
   void initState() {
+    // TODO: implement initState
+    super.initState();
 
     comment();
     setData();
-    // TODO: implement initState
-    super.initState();
+
+    /* TODO: 아래꺼의 기존
+    Future.delayed(Duration.zero, () async {
+      await getImageData();
+
+    });*/
+
+     getImageData().then((value) {
+      setState(() {
+        imageDataList = value;
+
+      });
+    });
+
+
+
+
 
 
     if(widget.mfixData.fflag == "Y"){
       _goodParts.add("Y");
     }
-    /*print("$CLOUD_URL" + "/appx2/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MF");*/
-    print("${_idxData}");
+
+   /* print("${_idxData}");
     print("${_seqData}");
     print('object');
+*/
+
+  }
+  Future<void> _initalizeState() async {
+    await getImageData();
+  }
+
+
+
+  @override
+  Future<List<Uint8List>> getImageData() async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/apppgymobile/listup';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+
+    final body = {
+      'fflag':  'MF',
+      'fseq' : widget.mfixData.fseq.toString(),
+    };
+    final headers = {
+      'Content-Type' : 'application/json',
+
+    };
+
+
+    final response = await http.post(
+        uri,
+
+        body: jsonEncode(body),
+        headers: headers
+    );
+    if(response.statusCode == 200) {
+      final decodedJson = jsonDecode(response.body);
+/*
+      final imageDate = base64Decode(decodedJson["image"]);
+      imageData = imageDate;
+*/
+      List<dynamic> images = decodedJson["images"];
+      imageDataList = [];
+
+      for(var image in images){
+        final imageData = base64Decode(image);
+        imageDataList.add(imageData);
+
+      }
+
+      return imageDataList;
+    }else{
+      //만약 응답이 ok가 아니면 에러를 던집니다.
+      throw Exception('이미지 로드 실패');
+    }
+
 
   }
 
@@ -332,7 +417,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                         icon: Icon(Icons.keyboard_arrow_down),
                         dropdownColor: SOFT_BLUE,
                         iconEnabledColor: Colors.white,
-                       /* value: "aa",*/
+                        /* value: "aa",*/
                         hint: Text(widget.mfixData.cnam,  style: TextStyle(color: Colors.white)),
                         items: dropdownList.map((item) {
                           return DropdownMenuItem<String>(
@@ -341,24 +426,24 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                           );
                         }).toList(),
                         onChanged: (String? value) =>
-                          setState(() {
-                            if(value.toString() == "합격"){
-                              _selectedValue = "001";
-                            }
+                            setState(() {
+                              if(value.toString() == "합격"){
+                                _selectedValue = "001";
+                              }
 
-                            if(value.toString() == "불합격"){
-                              _selectedValue = "002";
-                            }
+                              if(value.toString() == "불합격"){
+                                _selectedValue = "002";
+                              }
 
-                            if(value.toString() == "조건부"){
-                              _selectedValue = "003";
-                            }
-                            this._selectedValue2 = value;
+                              if(value.toString() == "조건부"){
+                                _selectedValue = "003";
+                              }
+                              this._selectedValue2 = value;
 
-                          }),
-                          value: _selectedValue2,
+                            }),
+                        value: _selectedValue2,
 
-                          /*C751Data.clear();
+                        /*C751Data.clear();
                     _C751Data.clear();
                     pop_Com751();*/
 
@@ -367,30 +452,6 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                   ),
 
                 ),
-                /*Container(
-                  margin: EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      Text('작성자 <${widget.mfixData.fpernm}> , 구분 [${widget.mfixData.fgourpcd}]', style: TextStyle(
-                          fontSize: 11, color: CHARCOAL
-                      ))
-                    ],
-                  ),
-                ),*/
-                /*Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          _checboxgood(value: 'Y', primaryText: '회원사 공유 여부'),
-                        ],
-                      ),
-                    )
-                  ],
-                ),*/
-
                 Container(
                     margin: EdgeInsets.only(top: 8),
                     child:
@@ -436,6 +497,12 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                 SizedBox(
                   height: 20,
                 ),
+                /*Center(
+                  child: Image.network(
+                    'http://192.168.0.64:8900/appx2/download2?actidxz=122&actboardz=202302004&actflagz=MF,
+                    fit: BoxFit.contain,
+                  ),
+                )*/
               ],
             ),
           ),
@@ -456,7 +523,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
                           child: Text('OK'),
                           onPressed: () {
                             update_data();
-                           /* Navigator.pushReplacement(
+                            /* Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => AppPager13()),
                             );*/
@@ -528,7 +595,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
               _shared = "Y";
             }
           }
-            print(_shared);
+          print(_shared);
         });
       },
       child: Row(
@@ -578,46 +645,71 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
 
   Widget _buildFileList() {
     return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.all(2),
+      padding: EdgeInsets.all(8),
       width: MediaQuery.of(context).size.width,
       color: Colors.white,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(
-          child: ListView.builder(shrinkWrap: true,
+          child: ListView.builder(
+              shrinkWrap: true,
               itemCount: _ATCData.length,
               itemBuilder: (BuildContext context, int index)
-              {
-                return
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                          },
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(minWidth: 105, ),
-                            child:  Column(
-                              children: [
-                                ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(4)),
-                                    child: buildCacheNetworkImage(width: 320, height: 200, url: "$CLOUD_URL" + "/appx2/download2?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MF")
-                                ),
-                                Text('${_ATCData[index]}', style: TextStyle(
-                                    fontSize: 20,
-                                    color: SOFT_BLUE,
-                                    fontWeight: FontWeight.bold
-                                ),
-                                ),
-                              ],
-                            ),
+              {return
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                        },
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minWidth: 105, ),
+                          child:  Column(
+                            children: [
+                              Text('${_ATCData[index]}', style: TextStyle(
+                                  fontSize: 20,
+                                  color: SOFT_BLUE,
+                                  fontWeight: FontWeight.bold
+                              )),
+                              Column(
+                                children: [
+                                  //TODO: 추가한것
+                                  if(imageDataList == null)
+                                    Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  else
+                                  //TODO: 여기까지
+                                 /* for(var imageData in imageDataList)*/
+
+                                  Container(
+                                    height: 200,
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    /*decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: MemoryImage(imageData),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),*/
+                                    child: Image.memory(imageDataList[index], fit: BoxFit.cover,),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
+
                         ),
-                        Divider(),
-                      ],
-                    );
+                      ),
+                      /*Divider(),*/
+                      Container(
+                        /*child: CachedNetworkImage(imageUrl: 'http://192.168.0.64:8900/appx2/download2?actidxz=124&actboardz=202302006&actflagz=MF'),*/
+                        /*child: TextButton(onPressed: (){
+                            print("$CLOUD_URL" + "/appx2/download2?actidxz=${_idxData[0]}&actboardz=${_seqData[0]}&actflagz=MF");
+                          }, child: Text("data")),*/
+                      )
+                    ],
+                  );
               }),
         ),
       ),

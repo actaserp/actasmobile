@@ -106,7 +106,11 @@ class _AppPager13State extends State<AppPager13> {
   @override
   void initState() {
     super.initState();
+
+  setState(() {
     mfixlist_getdata();
+  });
+
   }
 
   @override
