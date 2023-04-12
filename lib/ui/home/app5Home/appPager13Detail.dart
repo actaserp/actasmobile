@@ -300,6 +300,7 @@ class _AppPager13DetailState extends State<AppPager13Detail> {
       body: <String, String>{
         'dbnm'    : _dbnm,
         'fseq'    :  widget.mfixData.fseq,
+        'fflag'   :  'MF'
 
       },
     );
