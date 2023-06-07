@@ -275,7 +275,10 @@ class _AppPager15State extends State<AppPager15> {
                             DataRow(
 
                                 onSelectChanged: (value){
-                                  Navigator.push(context, MaterialPageRoute(
+
+
+
+                                      Navigator.pushReplacement(context, MaterialPageRoute(
                                       builder: (context) => AppPager15Detail(planData: item)));
                                 },
                                 color: MaterialStateColor.resolveWith((states){
@@ -372,7 +375,7 @@ class _AppPager15State extends State<AppPager15> {
                   width: MediaQuery.of(context).size.width * 0.916,
                   child: OutlinedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AppPager15register()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPager15register()));
                       },
                       style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all(Colors.transparent),

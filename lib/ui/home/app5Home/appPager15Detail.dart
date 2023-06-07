@@ -151,26 +151,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
       chk = false;
       return false;
     }
-    if(equpcd == null  || equpcd == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
-      chk = false;
-      return false;
-    }
-    if(_etequpnm.text == null  || _etequpnm == ""){
-      showAlertDialog(context, "현장조회를 하십시오.");
-      chk = false;
-      return false;
-    }
-    if(_etPeridTxt == null || _etPeridTxt == "" ){
-      showAlertDialog(context, "담당자 선택을 하십시오.");
-      chk = false;
-      return false;
-    }
-    if(_etqty.text == "" || _etqty.text == null){
-      showAlertDialog(context, "관리대수를 입력해주세요. (숫자로만 입력)");
-      chk = false;
-      return false;
-    }*/
+    */
 
     final response = await http.post(
       uri,
@@ -278,6 +259,10 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
 
         ),
         elevation: GlobalStyle.appBarElevation,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => AppPager15()));
+        }, icon: Icon(Icons.arrow_back_ios)),
         title: Text('점검계획조회',
           style: GlobalStyle.appBarTitle,
         ),
@@ -366,27 +351,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
           SizedBox(
             height: 20,
           ),
-          /*TextField(
-            controller: _etequpnm,
-            readOnly: true,
-            maxLines: 1,
-            cursorColor: Colors.grey[600],
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            decoration: InputDecoration(
-                isDense: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                labelText: '동호기명',
-                labelStyle:
-                TextStyle(color: BLACK_GREY)),
-          ),
-          SizedBox(
-            height: 20,
-          ),*/
+
           Container(
             margin: EdgeInsets.only(top: 10),
             child: Text('담당자'),
@@ -424,45 +389,7 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
               ),
             ),
           ),
-          /*TextField(
-            controller: _etpernm,
-            readOnly: true,
-            maxLines: 1,
-            cursorColor: Colors.grey[600],
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            decoration: InputDecoration(
-                isDense: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                labelText: '담당자',
-                labelStyle:
-                TextStyle(color: BLACK_GREY)),
-          ),*/
-          /*SizedBox(
-            height: 20,
-          ),
-          TextField(
-            controller: _etkcpernm,
-            readOnly: true,
-            maxLines: 1,
-            cursorColor: Colors.grey[600],
-            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            decoration: InputDecoration(
-                isDense: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[600]!),
-                ),
-                labelText: '검사자',
-                labelStyle:
-                TextStyle(color: BLACK_GREY)),
-          ),*/
+
           SizedBox(
             height: 20,
           ),
@@ -545,8 +472,11 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                           onPressed: () async {
                             try{
                             await update_plandata();
+                            Navigator.pop(context);
 
-                            Get.off(AppPager15());
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPager15()));
+
+                            //Get.off(AppPager15());
                             if(chk == true) {
                               showDialog(context: context, builder: (context) {
                                 return AlertDialog(
@@ -555,11 +485,13 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                                     TextButton(
                                       child: Text('OK'),
                                       onPressed: () {
-                                        Navigator.pop(context);
-                                        /* Navigator.pushReplacement(
+                                         Navigator.pop(context);
+
+                                         /*Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => AppPager13()),
+                              MaterialPageRoute(builder: (context) => AppPager15()),
                             );
+
                             Get.off(AppPager14());*/
                                       },
                                     ),
@@ -576,10 +508,12 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
                                       child: Text('OK'),
                                       onPressed: () {
                                         Navigator.pop(context);
-                                        /* Navigator.pushReplacement(
+/*
+                                         Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(builder: (context) => AppPager13()),
+                              MaterialPageRoute(builder: (context) => AppPager15()),
                             );
+
                             Get.off(AppPager14());*/
                                       },
                                     ),
@@ -635,8 +569,10 @@ class _AppPager15DetailState extends State<AppPager15Detail> {
 
                             delete_data();
 
+                            Navigator.pop(context, "확인");
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AppPager15()));
 
-                            Get.off(AppPager15());
+                            //Get.off(AppPager15());
                             /*delete_data();
                              Navigator.pushReplacement(
                               context,
