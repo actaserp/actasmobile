@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../model/app03/MhmanualList_model.dart';
 import 'package:date_format/date_format.dart';
@@ -55,6 +56,9 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
 
   List<String> elvlrt = [];
 
+
+
+
   // 값매핑1
   TextEditingController _etactcd = TextEditingController();
   TextEditingController _etactnm = TextEditingController();
@@ -70,6 +74,10 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
   void initState() {
     sessionData();
     super.initState();
+
+    DateTime currentTime = DateTime.now();
+    String formattedTime = DateFormat('hh:mm a').format(currentTime);
+    _etfrtime.text = formattedTime;
 
     _etDate.text = DateTime.now().toString().substring(0,4)+DateTime.now().toString().substring(5,7)+DateTime.now().toString().substring(8,10);
 
@@ -203,9 +211,10 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                     ),
                     ).then((value) {
                       setState(() {
-                        _etactnm.text = value[1];
-                        _etactcd.text = value[0];
-
+                        if(value != null) {
+                          _etactnm.text = value[1];
+                          _etactcd.text = value[0];
+                        }
 
                       });
                     });
@@ -236,8 +245,8 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                   hintText: '현장코드를 조회한 후 조회하기 버튼을 누르세요.',
                   isDense: true,
                   suffixIcon: TextButton(onPressed: () async {
-                    if(_etactcd.text == null || _etactcd == "" || _etactnm.text ==null || _etactnm == ""){
-                      showAlertDialog(context, "현장조회를 하십시오.");
+                    if(_etactcd.text == null || _etactcd.text == "" || _etactnm.text == null || _etactnm.text == ""){
+                      showAlertDialog(context, "먼저 현장을 조회해주세요.");
                     }else {
                       Navigator.push(context,
                         MaterialPageRoute(builder: (context) =>
@@ -245,8 +254,10 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                         ),
                       ).then((value) {
                         setState(() {
-                          _etequpcd.text = value[0];
-                          _etequpnm.text = value[1];
+                          if(value != null) {
+                            _etequpcd.text = value[0];
+                            _etequpnm.text = value[1];
+                          }
                         });
                       });
                     }
