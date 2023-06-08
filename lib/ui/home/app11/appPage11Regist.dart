@@ -160,7 +160,6 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
                     )
                 ),
               ),
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
               height: kToolbarHeight,
               child: TextField(
                 controller: _etDate,
@@ -266,7 +265,6 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
               height: 20,
             ),
             Container(
-              margin: EdgeInsets.only(left: 20),
               width: MediaQuery.of(context).size.width * 0.381,
               child: TextField(
                 controller: _etfrtime,
@@ -295,7 +293,6 @@ class _AppPage11RegistState extends State<AppPage11Regist> {
               height: 20,
             ),
             Container(
-              margin: EdgeInsets.only(left: 20),
               width: MediaQuery.of(context).size.width * 0.381,
               child: TextField(
                 controller: _ettotime,

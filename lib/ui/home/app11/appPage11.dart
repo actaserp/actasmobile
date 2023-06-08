@@ -163,151 +163,156 @@ class _AppPage11State extends State<AppPage11> {
 
         ),
         body:
+        Padding(
+        padding: EdgeInsets.all(16.0),
+        child:
+          WillPopScope(
+            onWillPop: (){
+              Navigator.pop(context);
+              return Future.value(true);
+            },
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _etDate,
+                        readOnly: true,
+                        onTap: () {
+                          _selectDateWithMinMaxDate(context);
+                        },
+                        maxLines: 1,
+                        cursorColor: Colors.grey[600],
+                        style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[600]!),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey[600]!),
+                          ),
+                          labelText: '조회일자',
+                          labelStyle: TextStyle(color: BLACK_GREY),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          _etDate.text = "";
+                          _etactnm.text = "";
 
-        WillPopScope(
-          onWillPop: (){
-            Navigator.pop(context);
-            return Future.value(true);
-          },
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _etDate,
-                      readOnly: true,
-                      onTap: () {
-                        _selectDateWithMinMaxDate(context);
+                          chk = true;
+                          e038list_getdata();
+                        });
                       },
-                      maxLines: 1,
-                      cursorColor: Colors.grey[600],
-                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                      decoration: InputDecoration(
-                        isDense: true,
-                        suffixIcon: Icon(Icons.date_range, color: Colors.pinkAccent),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey[600]!),
+                      child: Text(
+                        '전체조회',
+                        style: TextStyle(
+                          color: Colors.pinkAccent,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey[600]!),
-                        ),
-                        labelText: '조회일자',
-                        labelStyle: TextStyle(color: BLACK_GREY),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Color(0xffcccccc),
+                        width: 1.0,
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _etDate.text = "";
-                        _etactnm.text = "";
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child:
+                TextField(
+                  controller: _etactnm,
+                  readOnly: false,
+                  maxLines: 1,
+                  cursorColor: Colors.grey[600],
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  decoration: InputDecoration(
+                      hintText: '현장명을 입력 후 조회하기 버튼을 누르세요.',
+                      isDense: true,
+                      labelText: '현장명',
+                      labelStyle:
+                      TextStyle(color: BLACK_GREY)),
+                ),
+                ),
 
-                        chk = true;
-                        e038list_getdata();
-                      });
+
+
+
+                chk ? Expanded(
+
+                  child: ListView.builder(itemCount: e038Datas.length,
+                    // padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    physics: AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index){
+                      return _buildListCard(e038Datas[index]);
                     },
-                    child: Text(
-                      '전체조회',
-                      style: TextStyle(
-                        color: Colors.pinkAccent,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
                   ),
-                ],
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Color(0xffcccccc),
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              Container(child:
-              TextField(
-                controller: _etactnm,
-                readOnly: false,
-                maxLines: 1,
-                cursorColor: Colors.grey[600],
-                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                decoration: InputDecoration(
-                    hintText: '현장명을 입력 후 조회하기 버튼을 누르세요.',
-                    isDense: true,
-                    labelText: '현장명',
-                    labelStyle:
-                    TextStyle(color: BLACK_GREY)),
-              ),
-              ),
-
-
-
-
-              chk ? Expanded(
-
-                child: ListView.builder(itemCount: e038Datas.length,
-                  padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  physics: AlwaysScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index){
-                    return _buildListCard(e038Datas[index]);
-                  },
-                ),
-              ) : Text("자료를 검색하세요."),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                      child: Container( ///노하우등록
-                        margin: EdgeInsets.only(top: 10),
-                        padding: EdgeInsets.all(12),
-                        child: OutlinedButton(
-                            onPressed: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => AppPage11Regist()));
-                            },
-                            style: ButtonStyle(
-                                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    )
-                                ),
-                                side: MaterialStateProperty.all(
-                                  BorderSide(
-                                      color: SOFT_BLUE,
-                                      width: 1.0
+                ) : Text("자료를 검색하세요."),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                        child: Container( ///노하우등록
+                          margin: EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.all(12),
+                          child: OutlinedButton(
+                              onPressed: () {
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage03Detail(MhData: MhData, MhData: null,)));
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => AppPage11Regist()));
+                              },
+                              style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                      )
                                   ),
-                                )
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12.0),
-                              child: Text(
-                                '작업일보 등록',
-                                style: TextStyle(
-                                    color: SOFT_BLUE,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13
-                                ),
-                                textAlign: TextAlign.center,
+                                  side: MaterialStateProperty.all(
+                                    BorderSide(
+                                        color: SOFT_BLUE,
+                                        width: 1.0
+                                    ),
+                                  )
                               ),
-                            )
-                        ),
-                      )
-                  )
-                ]
-              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Text(
+                                  '작업일보 등록',
+                                  style: TextStyle(
+                                      color: SOFT_BLUE,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                          ),
+                        )
+                    )
+                  ]
+                ),
 
 
-            ],
+              ],
+            ),
+
           ),
-
         ),
       bottomNavigationBar:  BottomNavigationBar(
         currentIndex: _selectedIndex,
@@ -387,7 +392,7 @@ class _AppPage11State extends State<AppPage11> {
         child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: (){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail(E038Data: e038Data)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AppPage11Detail(E038Data: e038Data)));
         },
         child: Container(
           padding: EdgeInsets.all(16),
