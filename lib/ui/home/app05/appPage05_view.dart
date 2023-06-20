@@ -121,7 +121,7 @@ class _AppPage05ViewState extends State<AppPage05view> {
 
       ),
       body:ListView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: ClampingScrollPhysics(),
         padding: EdgeInsets.all(12),
         children: [
           Row(
@@ -160,7 +160,7 @@ class _AppPage05ViewState extends State<AppPage05view> {
                   ),
               Container(
                 margin: EdgeInsets.only(bottom: 10),
-                height: 650,
+                height: 300,
                 child: ListView.builder(
                     padding: EdgeInsets.only( bottom: 10),
                     itemCount: SCData.length,
