@@ -267,7 +267,7 @@ class _AppPage11State extends State<AppPage11> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                        child: Container( ///노하우등록
+                        child: Container(
                           margin: EdgeInsets.only(top: 10),
                           padding: EdgeInsets.all(12),
                           child: OutlinedButton(

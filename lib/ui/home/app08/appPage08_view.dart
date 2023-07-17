@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 // import 'dart:js';
@@ -32,6 +33,9 @@ class _AppPage08viewState extends State<AppPage08view> {
   final List<String> _ATCData = [];
   final List<String> _idxData = [];
   final List<String> _seqData = [];
+  ///다운로드 통신시 필요(1)
+  final List<String> _inData = [];
+  final List<String> _SaNData = [];
 
   @override
   void setData() {
@@ -66,6 +70,8 @@ class _AppPage08viewState extends State<AppPage08view> {
       _idxData.clear();
       seqData.clear();
       _seqData.clear();
+      _inData.clear();
+      _SaNData.clear();
 
       for (int i = 0; i < alllist.length; i++) {
         AttachList_model AttObject= AttachList_model(
@@ -87,6 +93,8 @@ class _AppPage08viewState extends State<AppPage08view> {
           _idxData.add(alllist[i]['idx'].toString());
           seqData.add(AttObject);
           _seqData.add(alllist[i]['boardIdx']);
+          _inData.add(alllist[i]['inserttime']);
+          _SaNData.add(alllist[i]['saveName']);
         });
       }
       debugPrint('Attatch data $ATCData length:${ATCData.length}' );
@@ -96,6 +104,42 @@ class _AppPage08viewState extends State<AppPage08view> {
       //만약 응답이 ok가 아니면 에러를 던집니다.
       throw Exception('불러오는데 실패했습니다');
     }
+  }
+
+  Future downmb() async {
+    _dbnm = await  SessionManager().get("dbnm");
+    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.MData.mflag}&boardIdx=${widget.MData.mseq}&idx=${_idxData.toString().substring(1,3)}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
+    var encoded = Uri.encodeFull(uritxt);
+    Uri uri = Uri.parse(encoded);
+    print('@@@@@@@@@@@@@@@데이터 테스트@@@@@@@@@@@@@@@@@@@@@');
+    print('값확인::: ${_ATCData.toString().substring(1).replaceAll(']', '')}');
+    final response = await http.get(
+      uri,
+      headers: <String, String> {
+        'Content-Type': 'application/octet-stream',
+      },
+    );
+    if(response.statusCode == 200){
+      await writeToFile(response);
+      print('저장됨');
+      return true;
+    }else {
+      print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      print('다운로드 통신 실패했습니다.');
+      return false;
+    }
+  }
+
+  Future<void> writeToFile(http.Response response) async {
+    var externalStorageDirPath;
+    final directory = await getExternalStorageDirectory();
+    externalStorageDirPath = directory?.path;
+    final folder = await getExternalStorageDirectory();
+    final filename = _ATCData[0].toString();
+    final path = '${externalStorageDirPath}/$filename';
+    print(path);
+    final file = File(path);
+    await file.writeAsBytes(response.bodyBytes);
   }
 
   @override
@@ -247,11 +291,47 @@ class _AppPage08viewState extends State<AppPage08view> {
                 {
                   return
                     Column(
-                      ///왼쪽배열
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         GestureDetector(
                           onTap: () async{
+                            bool ap_down = await downmb();
+                            if (ap_down){
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        title: Text('파일 저장'
+                                        ),
+                                        titleTextStyle: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                        content: Text("저장소를 확인하세요."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text('확인'),
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }else{
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                        content: Text("서버 관리자에게 문의하세요."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: Text('확인'),
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              );
+                            }
                           },
                           child: ConstrainedBox(
                             constraints: BoxConstraints(minWidth: 105, ),
@@ -259,14 +339,14 @@ class _AppPage08viewState extends State<AppPage08view> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 InteractiveViewer(
-                                  ///이미지 확대기능
+                                  ///이미지 확대기능 ~ url을 가져오니 자꾸 바이너리로 인식하여 다운로드가 실행돼서 우선적으로 막아뒀다.
                                   boundaryMargin: const EdgeInsets.all(20.0),
                                   minScale: 0.5,
                                   maxScale: 2.6,
                                   child: ClipRRect(
                                       borderRadius:
                                       BorderRadius.all(Radius.circular(14)),
-                                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "$CLOUD_URL" + "/appx/download?actidxz=${_idxData[index]}&actboardz=${_seqData[index]}&actflagz=MM")
+                                      child: buildCacheNetworkImage(width: boxImageSize, height: boxImageSize, url: "")
                                   ),
                                 ),
                                 Text('${_ATCData[index]}',
@@ -280,8 +360,12 @@ class _AppPage08viewState extends State<AppPage08view> {
                             ),
                           ),
                         ),
+
+
                       ],
-                    );}
+                    );
+
+                }
             ),
           ),
         )
