@@ -108,7 +108,7 @@ class _AppPage08viewState extends State<AppPage08view> {
 
   Future downmb() async {
     _dbnm = await  SessionManager().get("dbnm");
-    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.MData.mflag}&boardIdx=${widget.MData.mseq}&idx=${_idxData.toString().substring(1,3)}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
+    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=MM&boardIdx=${widget.MData.mseq}&idx=${_idxData.toString().replaceAll('[', '').replaceAll(']', '')}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
     print('@@@@@@@@@@@@@@@데이터 테스트@@@@@@@@@@@@@@@@@@@@@');

@@ -178,7 +178,7 @@ class _AppPage03ViewState extends State<AppPage03view> {
   Future downmh()async {
     _dbnm = await  SessionManager().get("dbnm");
 
-    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.MhData.hflag}&boardIdx=${widget.MhData.hseq}&idx=${_idxData.toString().substring(1,3)}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
+    var uritxt = CLOUD_URL + '/mobile/download?dbnm=$_dbnm&flag=${widget.MhData.hflag}&boardIdx=${widget.MhData.hseq}&idx=${_idxData.toString().replaceAll('[', '').replaceAll(']', '')}&inputdate=${_inData.toString().substring(1,11).replaceAll('-', '')}&svn=${_SaNData.toString().substring(1).replaceAll(']', '')}&ori=${_ATCData.toString().substring(1).replaceAll(']', '')}';
     // &inputdate=${_inData.toString().substring(1,3)}
     var encoded = Uri.encodeFull(uritxt);
     Uri uri = Uri.parse(encoded);
